@@ -1,19 +1,17 @@
-﻿Der Buildvorgang wurde am 25.10.2016 14:43:51 gestartet.
-     1>Projekt "T:\Temp\MCI-Anwendungen\MCI-Anwendungen\MCI-Anwendungen.vcxproj" auf Knoten "2", Build Ziel(e).
+﻿Der Buildvorgang wurde am 01.11.2016 12:50:43 gestartet.
+     1>Projekt "C:\Users\s72682\Desktop\AVGP_Prakt-master\MCI-Anwendungen.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\MCI-Anwendungen.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "MCI-AnwendungenDlg.cpp"
          MCI-AnwendungenDlg.cpp
-       ResourceCompile:
-         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0407" /IDebug\ /nologo /fo"Debug\MCI-Anwendungen.res" MCI-Anwendungen.rc 
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"T:\Temp\MCI-Anwendungen\Debug\MCI-Anwendungen.exe" /INCREMENTAL /NOLOGO winmm.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"T:\Temp\MCI-Anwendungen\Debug\MCI-Anwendungen.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"T:\Temp\MCI-Anwendungen\Debug\MCI-Anwendungen.lib" /MACHINE:X86 "Debug\MCI-Anwendungen.res"
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Debug\MCI-Anwendungen.exe" /INCREMENTAL /NOLOGO winmm.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Debug\MCI-Anwendungen.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Debug\MCI-Anwendungen.lib" /MACHINE:X86 "Debug\MCI-Anwendungen.res"
          "Debug\MCI-Anwendungen.obj"
          "Debug\MCI-AnwendungenDlg.obj"
          Debug\MCIObject.obj
          Debug\stdafx.obj
-         MCI-Anwendungen.vcxproj -> T:\Temp\MCI-Anwendungen\Debug\MCI-Anwendungen.exe
-     1>Die Erstellung des Projekts "T:\Temp\MCI-Anwendungen\MCI-Anwendungen\MCI-Anwendungen.vcxproj" ist abgeschlossen, Build Ziel(e).
+         MCI-Anwendungen.vcxproj -> C:\Users\s72682\Desktop\AVGP_Prakt-master\Debug\MCI-Anwendungen.exe
+     1>Die Erstellung des Projekts "C:\Users\s72682\Desktop\AVGP_Prakt-master\MCI-Anwendungen.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:00.46
+Verstrichene Zeit 00:00:01.73

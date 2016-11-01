@@ -86,13 +86,17 @@ void CMCIObject::Close()
 			MCIError();
 		m_op.wDeviceID = 0;
 	}
-}void CMCIObject::Play()
+	played = false;
+}
+
+void CMCIObject::Play()
 {
 	MCI_PLAY_PARMS play;
 	if (m_op.wDeviceID == 0) return; // Not open
 	if ((m_Result = mciSendCommand(m_op.wDeviceID,
 		MCI_PLAY, 0, (DWORD_PTR)&play)) != 0)
 		MCIError();
+	played = true;
 }
 
 void CMCIObject::Stop()
@@ -101,13 +105,19 @@ void CMCIObject::Stop()
 	if ((m_Result = mciSendCommand(m_op.wDeviceID,
 		MCI_STOP, MCI_WAIT, 0)) != 0)
 		MCIError();
-}void CMCIObject::Pause()
+	played = false;
+}
+
+void CMCIObject::Pause()
 {
 	if (m_op.wDeviceID == 0) return; // Not open
 	if ((m_Result = mciSendCommand(m_op.wDeviceID,
 		MCI_PAUSE, MCI_WAIT, 0)) != 0)
 		MCIError();
-}void CMCIObject::MCIError()
+	played = false;
+}
+
+void CMCIObject::MCIError()
 {
 	char buf[256];
 	buf[0] = '\0';
@@ -135,7 +145,9 @@ bool CMCIObject::SetAviPosition(HWND hwnd, CRect rect) {
 		return false;
 	}
 	return true;
-}bool CMCIObject::TMSFSeek(BYTE track, BYTE min, BYTE sek, BYTE frame) {
+}
+
+bool CMCIObject::TMSFSeek(BYTE track, BYTE min, BYTE sek, BYTE frame) {
 	if (m_op.wDeviceID == 0) return 0; // Not open
 	MCI_STATUS_PARMS status; // ask for current time format
 	status.dwItem = MCI_STATUS_TIME_FORMAT;
@@ -166,24 +178,82 @@ bool CMCIObject::SetAviPosition(HWND hwnd, CRect rect) {
 
 bool CMCIObject::GetTrackLength(BYTE track, BYTE &min, BYTE &sek, BYTE &frame) {
 	if (m_op.wDeviceID == 0) return false; // Not open
+
 	MCI_STATUS_PARMS length; // ask for Track length
 	length.dwTrack = track;
 	length.dwItem = MCI_STATUS_LENGTH;
-	if ((m_Result = mciSendCommand(m_op.wDeviceID, MCI_STATUS,
-		MCI_STATUS_ITEM | MCI_TRACK,
-		(DWORD_PTR)(LPMCI_STATUS_PARMS)&length)) != 0) {
-		MCIError();
+
+	MCI_STATUS_PARMS status; // ask for current time format
+	status.dwItem = MCI_STATUS_TIME_FORMAT;
+	if ((m_Result = mciSendCommand(m_op.wDeviceID,
+		MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&status)) != 0)
 		return false;
-	}
+
 	// calculate return value using MSF-Format
-	m_Result = length.dwReturn & 0x000000FF; min = (BYTE)m_Result;
-	m_Result = length.dwReturn & 0x0000FF00; sek = (BYTE)(m_Result >> 8);
-	m_Result = length.dwReturn & 0x00FF0000; frame = (BYTE)(m_Result >> 16);
+	switch (status.dwReturn) {
+	case MCI_FORMAT_TMSF:
+
+		if ((m_Result = mciSendCommand(m_op.wDeviceID, MCI_STATUS,
+			MCI_STATUS_ITEM | MCI_TRACK,
+			(DWORD_PTR)(LPMCI_STATUS_PARMS)&length)) != 0) {
+			//MCIError();
+			return false;
+		}
+
+		m_Result = length.dwReturn & 0x000000FF; min = (BYTE)m_Result;
+		m_Result = length.dwReturn & 0x0000FF00; sek = (BYTE)(m_Result >> 8);
+		m_Result = length.dwReturn & 0x00FF0000; frame = (BYTE)(m_Result >> 16);
+		break;
+
+	case MCI_FORMAT_MILLISECONDS:
+
+		if ((m_Result = mciSendCommand(m_op.wDeviceID, MCI_STATUS,
+			MCI_STATUS_ITEM,
+			(DWORD_PTR)(LPMCI_STATUS_PARMS)&length)) != 0) {
+			//MCIError();
+			return false;
+		}
+
+		sek = (BYTE)((length.dwReturn / 1000) % 60);
+		min = (BYTE)((length.dwReturn / 1000) / 60);
+		break;
+	}
 	return true;
 }
 
-// Use: OutputDebugString(getFirstAudioCDDrive());
+bool CMCIObject::getPlayed() {
+	return played;
+}
 
+bool CMCIObject::GetTMSFPosition(BYTE &track, BYTE &min, BYTE &sek, BYTE &frame) {
+	track = min = sek = frame = 0;
+	if (m_op.wDeviceID == 0) return false; // Not open
+	MCI_STATUS_PARMS status; // ask for current time format
+	status.dwItem = MCI_STATUS_TIME_FORMAT;
+	if ((m_Result = mciSendCommand(m_op.wDeviceID,
+		MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&status)) != 0)
+		return false;
+	MCI_STATUS_PARMS pos; // ask for current position
+	pos.dwItem = MCI_STATUS_POSITION;
+	if ((m_Result = mciSendCommand(m_op.wDeviceID,
+		MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&pos)) != 0)
+		return false;
+	switch (status.dwReturn) { // calculate return values
+	case MCI_FORMAT_TMSF:
+		m_Result = pos.dwReturn & 0x000000FF; track = (BYTE)m_Result;
+		m_Result = pos.dwReturn & 0x0000FF00; min = (BYTE)(m_Result >> 8);
+		m_Result = pos.dwReturn & 0x00FF0000; sek = (BYTE)(m_Result >> 16);
+		m_Result = pos.dwReturn & 0xFF000000; frame = (BYTE)(m_Result >> 24);
+		return true;
+	case MCI_FORMAT_MILLISECONDS:
+		sek = (BYTE)((pos.dwReturn / 1000) % 60);
+		min = (BYTE)((pos.dwReturn / 1000) / 60);
+		return true;
+	}
+	return false; // don't count not supported media
+}
+
+// Use: OutputDebugString(getFirstAudioCDDrive());
 CString getFirstAudioCDDrive() {
 
 	CString drive;

@@ -36,6 +36,11 @@ BEGIN_MESSAGE_MAP(CMCIAnwendungenDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMCIAnwendungenDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMCIAnwendungenDlg::OnBnClickedButton5)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CMCIAnwendungenDlg::OnLbnSelchangeList1)
+	ON_BN_CLICKED(IDC_BUTTON6, &CMCIAnwendungenDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CMCIAnwendungenDlg::OnBnClickedButton7)
+	ON_BN_CLICKED(IDC_BUTTON8, &CMCIAnwendungenDlg::OnBnClickedButton8)
+	ON_BN_CLICKED(IDC_BUTTON9, &CMCIAnwendungenDlg::OnBnClickedButton9)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -50,7 +55,7 @@ BOOL CMCIAnwendungenDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Großes Symbol verwenden
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
-	// TODO: Hier zusätzliche Initialisierung einfügen
+	SetTimer(1, 200, NULL);
 
 	return TRUE;  // TRUE zurückgeben, wenn der Fokus nicht auf ein Steuerelement gesetzt wird
 }
@@ -102,29 +107,38 @@ void CMCIAnwendungenDlg::OnBnClickedButton1()
 
 void CMCIAnwendungenDlg::OnBnClickedButton2()
 {
+	/*
 	mci.OpenFile(L"Bombe.avi");
 	mci.SetAviPosition(GetSafeHwnd(), CRect(30, 60, 210, 140));
-	mci.Play();
+	*/
+
+	CRect r;
+	GetDlgItem(IDC_DESTIN)->GetWindowRect(r);
+	ScreenToClient(r);
+	mci.OpenFile(L"Bombe.avi");
+	mci.SetAviPosition(GetSafeHwnd(), CRect(r.left, r.top, r.Width(), r.Height()));
+	GetDlgItem(IDC_Name)->SetWindowText(L"Bombe.avi");
 }
 
 
 void CMCIAnwendungenDlg::OnBnClickedButton3()
 {
-	// TODO: Open WAV	mci.OpenFile(L"XYLOPHON.wav");
-	mci.Play();
+	// TODO: Open WAV
+	LPCWSTR filename = L"XYLOPHON.wav";
+	mci.OpenFile(filename);
+	SetDlgItemText(IDC_Name, filename);
 }
 
 void CMCIAnwendungenDlg::OnBnClickedButton4()
 {
-	mci.OpenAudioCD(L"e:", t);
-	mci.TMSFSeek(2, 0, 0, 0); // zweiter Titel auf der Audio-CD
-	mci.Play();
+	mci.OpenAudioCD(0, t);
+	mci.TMSFSeek(1, 0, 0, 0); // erster Titel auf der Audio-CD
 
 	BYTE min, sek, frame;
 	CString text;
 	for (int i = 1; i <= t; i++) {
 		mci.GetTrackLength(i, min, sek, frame);
-		text.Format(L"Track %d [%d:%d]", i, min, sek);
+		text.Format(L"Track %02d [%02d:%02d]", i, min, sek);
 		((CListBox*)GetDlgItem(IDC_LIST1))->AddString(text);
 		// z.B. Eintrag in eine ListBox :-)
 	}
@@ -133,7 +147,7 @@ void CMCIAnwendungenDlg::OnBnClickedButton4()
 
 void CMCIAnwendungenDlg::OnBnClickedButton5()
 {
-	// TODO: Open MIDI
+	//mci.Play();
 }
 
 
@@ -141,4 +155,69 @@ void CMCIAnwendungenDlg::OnLbnSelchangeList1()
 {
 	mci.TMSFSeek(((CListBox*)GetDlgItem(IDC_LIST1))->GetCurSel() + 1, 0, 0, 0);
 	mci.Play();
+}
+
+
+void CMCIAnwendungenDlg::OnBnClickedButton6()
+{
+	if (mci.getPlayed())
+		mci.Pause();
+	else
+		mci.Play();
+}
+
+
+void CMCIAnwendungenDlg::OnBnClickedButton7()
+{
+	mci.Stop();
+	mci.TMSFSeek(0, 0, 0, 0);
+}
+
+
+void CMCIAnwendungenDlg::OnBnClickedButton8()
+{
+	mci.Close();
+	// TODO: Alles reseten
+}
+
+
+void CMCIAnwendungenDlg::OnBnClickedButton9()
+{
+	// TODO: Eject
+}
+
+
+void CMCIAnwendungenDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// Abfrage des Abspielstandes
+	CString str;
+	unsigned char t, m, s, f;
+	mci.GetTMSFPosition(t, m, s, f);
+	int akt = m * 60 + s;
+
+	// Abfrage der Trackinformationen
+	BYTE min, sek, frame;
+	mci.GetTrackLength(t, min, sek, frame);
+	int ges = min * 60 + sek;
+
+	// Berechnen des Fortschritts
+	int progress;
+	if (ges > 0) {
+		progress = 100 * akt / ges;
+	}
+	else {
+		progress = 0;
+	}
+
+
+	// Ausgabe der Abspielzeit
+	str.Format(L"%02d:%02d/%02d:%02d - %d%%", m, s, min, sek, progress);
+	SetDlgItemText(IDC_AKTUELL, str);
+
+	// TODO: Scrollbar fixen
+	((CScrollBar*)GetDlgItem(IDC_SCROLLBAR))->SetScrollRange(0, ges);
+	((CScrollBar*)GetDlgItem(IDC_SCROLLBAR))->SetScrollPos(0, akt);
+
+	// Weitergabe des Events
+	CDialog::OnTimer(nIDEvent);
 }

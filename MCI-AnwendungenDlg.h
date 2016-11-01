@@ -24,7 +24,6 @@ protected:
 	HICON m_hIcon;
 	CMCIObject mci;
 	BYTE t;
-	BYTE trackcount;
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
@@ -38,4 +37,9 @@ public:
 	afx_msg void OnBnClickedButton4();
 	afx_msg void OnBnClickedButton5();
 	afx_msg void OnLbnSelchangeList1();
+	afx_msg void OnBnClickedButton6();
+	afx_msg void OnBnClickedButton7();
+	afx_msg void OnBnClickedButton8();
+	afx_msg void OnBnClickedButton9();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

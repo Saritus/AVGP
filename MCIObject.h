@@ -15,8 +15,10 @@ public:
 	bool GetTrackLength(BYTE track, BYTE &min, BYTE &sek, BYTE &frame);
 	bool TMSFSeek(BYTE track, BYTE min, BYTE sek, BYTE frame);
 	CString getFirstAudioCDDrive();
+	bool getPlayed();
 private:
 	void MCIError();
 	MCI_OPEN_PARMS m_op;
 	DWORD m_Result;
+	bool played = false;
 };
