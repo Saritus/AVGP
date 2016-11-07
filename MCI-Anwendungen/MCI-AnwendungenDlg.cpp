@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(CMCIAnwendungenDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON8, &CMCIAnwendungenDlg::OnBnClickedButton8)
 	ON_BN_CLICKED(IDC_BUTTON9, &CMCIAnwendungenDlg::OnBnClickedButton9)
 	ON_WM_TIMER()
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SCROLLBAR, &CMCIAnwendungenDlg::OnNMCustomdrawScrollbar)
 END_MESSAGE_MAP()
 
 
@@ -54,6 +55,8 @@ BOOL CMCIAnwendungenDlg::OnInitDialog()
 	//  wenn das Hauptfenster der Anwendung kein Dialogfeld ist
 	SetIcon(m_hIcon, TRUE);			// Großes Symbol verwenden
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
+
+	slider = ((CSliderCtrl*)GetDlgItem(IDC_SCROLLBAR));
 
 	SetTimer(1, 200, NULL);
 
@@ -156,7 +159,7 @@ void CMCIAnwendungenDlg::OnBnClickedButton5()
 
 void CMCIAnwendungenDlg::OnLbnSelchangeList1()
 {
-	mci.TMSFSeek(((CListBox*)GetDlgItem(IDC_LIST1))->GetCurSel() + 1, 0, 0, 0);
+	mci.TMSFSeek(t_akt = ((CListBox*)GetDlgItem(IDC_LIST1))->GetCurSel() + 1, 0, 0, 0);
 	mci.Play();
 }
 
@@ -218,9 +221,22 @@ void CMCIAnwendungenDlg::OnTimer(UINT_PTR nIDEvent)
 	SetDlgItemText(IDC_AKTUELL, str);
 
 	// TODO: Scrollbar fixen
-	((CScrollBar*)GetDlgItem(IDC_SCROLLBAR))->SetScrollRange(0, ges);
-	((CScrollBar*)GetDlgItem(IDC_SCROLLBAR))->SetScrollPos(0, akt);
+	slider->SetRangeMin(0);
+	slider->SetRangeMax(ges);
+	slider->SetPos(akt);
 
 	// Weitergabe des Events
 	CDialog::OnTimer(nIDEvent);
+}
+
+
+void CMCIAnwendungenDlg::OnNMCustomdrawScrollbar(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+
+	if (!mci.getPlayed()) {
+		int akt = slider->GetPos();
+		mci.TMSFSeek(t_akt, akt / 60, akt % 60, 0);
+	}
+	*pResult = 0;
 }

@@ -23,7 +23,8 @@ public:
 protected:
 	HICON m_hIcon;
 	CMCIObject mci;
-	BYTE t;
+	BYTE t, t_akt;
+	CSliderCtrl* slider;
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
@@ -42,4 +43,5 @@ public:
 	afx_msg void OnBnClickedButton8();
 	afx_msg void OnBnClickedButton9();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnNMCustomdrawScrollbar(NMHDR *pNMHDR, LRESULT *pResult);
 };

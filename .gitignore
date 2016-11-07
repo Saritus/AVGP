@@ -1,4 +1,4 @@
-MCI-Anwendungen/MCI-Anwendungen.sdf
 MCI-Anwendungen/Debug/
 MCI-Anwendungen/Release/
-MCI-Anwendungen/MCI-Anwendungen.opensdf
+*.opensdf
+*.sdf
