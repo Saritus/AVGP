@@ -1,17 +1,27 @@
-﻿Der Buildvorgang wurde am 01.11.2016 12:50:43 gestartet.
-     1>Projekt "C:\Users\s72682\Desktop\AVGP_Prakt-master\MCI-Anwendungen.vcxproj" auf Knoten "2", Build Ziel(e).
+﻿Der Buildvorgang wurde am 07.11.2016 20:17:53 gestartet.
+     1>Projekt "D:\Documents\Studium\AVGP\MCI-Anwendungen\MCI-Anwendungen.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\MCI-Anwendungen.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "MCI-AnwendungenDlg.cpp"
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\MCI-Anwendungen.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\MCI-Anwendungen.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "MCI-Anwendungen.cpp" "MCI-AnwendungenDlg.cpp" MCIObject.cpp
+         MCIObject.cpp
+     1>d:\documents\studium\avgp\mci-anwendungen\mciobject.cpp(126): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\string.h(112): Siehe Deklaration von 'strcpy'
          MCI-AnwendungenDlg.cpp
+         MCI-Anwendungen.cpp
+         Code wird generiert...
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0407" /IDebug\ /nologo /fo"Debug\MCI-Anwendungen.res" MCI-Anwendungen.rc 
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Debug\MCI-Anwendungen.exe" /INCREMENTAL /NOLOGO winmm.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Debug\MCI-Anwendungen.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Debug\MCI-Anwendungen.lib" /MACHINE:X86 "Debug\MCI-Anwendungen.res"
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Documents\Studium\AVGP\MCI-Anwendungen\Debug\MCI-Anwendungen.exe" /INCREMENTAL /NOLOGO winmm.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"D:\Documents\Studium\AVGP\MCI-Anwendungen\Debug\MCI-Anwendungen.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Documents\Studium\AVGP\MCI-Anwendungen\Debug\MCI-Anwendungen.lib" /MACHINE:X86 "Debug\MCI-Anwendungen.res"
          "Debug\MCI-Anwendungen.obj"
          "Debug\MCI-AnwendungenDlg.obj"
          Debug\MCIObject.obj
          Debug\stdafx.obj
-         MCI-Anwendungen.vcxproj -> C:\Users\s72682\Desktop\AVGP_Prakt-master\Debug\MCI-Anwendungen.exe
-     1>Die Erstellung des Projekts "C:\Users\s72682\Desktop\AVGP_Prakt-master\MCI-Anwendungen.vcxproj" ist abgeschlossen, Build Ziel(e).
+         LINK : D:\Documents\Studium\AVGP\MCI-Anwendungen\Debug\MCI-Anwendungen.exe wurde nicht gefunden oder beim letzten inkrementellen Linkvorgang nicht erstellt; vollständiger Link wird durchgeführt.
+         MCI-Anwendungen.vcxproj -> D:\Documents\Studium\AVGP\MCI-Anwendungen\Debug\MCI-Anwendungen.exe
+     1>Die Erstellung des Projekts "D:\Documents\Studium\AVGP\MCI-Anwendungen\MCI-Anwendungen.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:01.73
+Verstrichene Zeit 00:00:04.26
