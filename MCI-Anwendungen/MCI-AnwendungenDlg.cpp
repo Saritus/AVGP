@@ -159,17 +159,24 @@ void CMCIAnwendungenDlg::OnBnClickedButton5()
 
 void CMCIAnwendungenDlg::OnLbnSelchangeList1()
 {
-	mci.TMSFSeek(t_akt = ((CListBox*)GetDlgItem(IDC_LIST1))->GetCurSel() + 1, 0, 0, 0);
-	mci.Play();
+	t_akt = ((CListBox*)GetDlgItem(IDC_LIST1))->GetCurSel() + 1;
 }
 
 
 void CMCIAnwendungenDlg::OnBnClickedButton6()
 {
-	if (mci.getPlayed())
+	if (mci.getPlayed()) {
 		mci.Pause();
-	else
+		mci.GetTMSFPosition(t_akt, m_akt, s_akt, f_akt);
+		slider->EnableWindow(1);
+		SetDlgItemText(IDC_BUTTON6, L"Play");
+	}
+	else {
+		mci.TMSFSeek(t_akt, m_akt, s_akt, f_akt);
 		mci.Play();
+		slider->EnableWindow(0);
+		SetDlgItemText(IDC_BUTTON6, L"Pause");
+	}
 }
 
 
@@ -236,7 +243,7 @@ void CMCIAnwendungenDlg::OnNMCustomdrawScrollbar(NMHDR *pNMHDR, LRESULT *pResult
 
 	if (!mci.getPlayed()) {
 		int akt = slider->GetPos();
-		mci.TMSFSeek(t_akt, akt / 60, akt % 60, 0);
+		mci.TMSFSeek(t_akt, m_akt = akt / 60, s_akt = akt % 60, 0);
 	}
 	*pResult = 0;
 }
