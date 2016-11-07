@@ -25,6 +25,7 @@ protected:
 	CMCIObject mci;
 	BYTE t, t_akt = 0, m_akt = 0, s_akt = 0, f_akt = 0;
 	CSliderCtrl* slider;
+	CListBox* box;
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();

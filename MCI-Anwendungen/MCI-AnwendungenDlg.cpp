@@ -57,6 +57,7 @@ BOOL CMCIAnwendungenDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
 	slider = ((CSliderCtrl*)GetDlgItem(IDC_SCROLLBAR));
+	box = ((CListBox*)GetDlgItem(IDC_LIST1));
 
 	SetTimer(1, 200, NULL);
 
@@ -134,16 +135,19 @@ void CMCIAnwendungenDlg::OnBnClickedButton3()
 
 void CMCIAnwendungenDlg::OnBnClickedButton4()
 {
-	mci.OpenAudioCD(0, t);
-	mci.TMSFSeek(1, 0, 0, 0); // erster Titel auf der Audio-CD
+	box->ResetContent();
+	if (mci.OpenAudioCD(0, t)) {
+		mci.TMSFSeek(1, 0, 0, 0); // erster Titel auf der Audio-CD
 
-	BYTE min, sek, frame;
-	CString text;
-	for (int i = 1; i <= t; i++) {
-		mci.GetTrackLength(i, min, sek, frame);
-		text.Format(L"Track %02d [%02d:%02d]", i, min, sek);
-		((CListBox*)GetDlgItem(IDC_LIST1))->AddString(text);
-		// z.B. Eintrag in eine ListBox :-)
+		BYTE min, sek, frame;
+		CString text;
+		for (int i = 1; i <= t; i++) {
+			mci.GetTrackLength(i, min, sek, frame);
+			text.Format(L"Track %02d [%02d:%02d]", i, min, sek);
+			box->AddString(text);
+			// z.B. Eintrag in eine ListBox :-)
+		}
+		box->SelectString(1, L"");
 	}
 }
 
@@ -159,7 +163,7 @@ void CMCIAnwendungenDlg::OnBnClickedButton5()
 
 void CMCIAnwendungenDlg::OnLbnSelchangeList1()
 {
-	t_akt = ((CListBox*)GetDlgItem(IDC_LIST1))->GetCurSel() + 1;
+	t_akt = box->GetCurSel() + 1;
 }
 
 
@@ -183,7 +187,9 @@ void CMCIAnwendungenDlg::OnBnClickedButton6()
 void CMCIAnwendungenDlg::OnBnClickedButton7()
 {
 	mci.Stop();
+	m_akt = s_akt = f_akt = 0;
 	mci.TMSFSeek(0, 0, 0, 0);
+	SetDlgItemText(IDC_BUTTON6, L"Play");
 }
 
 
