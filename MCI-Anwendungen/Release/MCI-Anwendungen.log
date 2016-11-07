@@ -1,19 +1,9 @@
-﻿Der Buildvorgang wurde am 01.11.2016 13:22:37 gestartet.
-     1>Projekt "C:\Users\s72682\Desktop\AVGP_Prakt-master\MCI-Anwendungen.vcxproj" auf Knoten "2", Build Ziel(e).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\MCI-Anwendungen.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "MCI-AnwendungenDlg.cpp"
-         MCI-AnwendungenDlg.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Release\MCI-Anwendungen.exe" /INCREMENTAL:NO /NOLOGO winmm.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Release\MCI-Anwendungen.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\s72682\Desktop\AVGP_Prakt-master\Release\MCI-Anwendungen.lib" /MACHINE:X86 /SAFESEH "Release\MCI-Anwendungen.res"
-         "Release\MCI-Anwendungen.obj"
-         "Release\MCI-AnwendungenDlg.obj"
-         Release\MCIObject.obj
-         Release\stdafx.obj
-         Code wird generiert.
-         Codegenerierung ist abgeschlossen.
-         MCI-Anwendungen.vcxproj -> C:\Users\s72682\Desktop\AVGP_Prakt-master\Release\MCI-Anwendungen.exe
-     1>Die Erstellung des Projekts "C:\Users\s72682\Desktop\AVGP_Prakt-master\MCI-Anwendungen.vcxproj" ist abgeschlossen, Build Ziel(e).
+﻿Der Buildvorgang wurde am 07.11.2016 21:17:42 gestartet.
+     1>Projekt "D:\Documents\Studium\AVGP\MCI-Anwendungen\MCI-Anwendungen.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>Link:
+         MCI-Anwendungen.vcxproj -> D:\Documents\Studium\AVGP\MCI-Anwendungen\Release\MCI-Anwendungen.exe
+     1>Die Erstellung des Projekts "D:\Documents\Studium\AVGP\MCI-Anwendungen\MCI-Anwendungen.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:02.35
+Verstrichene Zeit 00:00:00.05
