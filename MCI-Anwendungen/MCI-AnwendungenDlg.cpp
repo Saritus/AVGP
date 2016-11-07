@@ -151,7 +151,7 @@ void CMCIAnwendungenDlg::OnBnClickedButton4()
 void CMCIAnwendungenDlg::OnBnClickedButton5()
 {
 	// TODO: Open MIDI
-	LPCWSTR filename = L"XYLOPHON.wav"; // TODO: MIDI-File einfügen
+	LPCWSTR filename = L"KeinMidiFile.midi"; // TODO: MIDI-File einfügen
 	mci.OpenFile(filename);
 	SetDlgItemText(IDC_Name, filename);
 }
