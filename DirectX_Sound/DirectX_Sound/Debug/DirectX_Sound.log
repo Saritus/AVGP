@@ -1,8 +1,12 @@
-﻿Der Buildvorgang wurde am 08.11.2016 10:19:32 gestartet.
+﻿Der Buildvorgang wurde am 08.11.2016 10:44:55 gestartet.
      1>Projekt "T:\Temp\DirectX_Sound\DirectX_Sound\DirectX_Sound.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\DirectX_Sound.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DirectSound.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\DirectX_Sound.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DirectSound.cpp DirectX_Sound.cpp DirectX_SoundDlg.cpp
          DirectSound.cpp
+         Code wird generiert...
+         Überspringen... (keine relevanten Änderungen gefunden)
+         DirectX_SoundDlg.cpp
+         DirectX_Sound.cpp
        ResourceCompile:
          C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0407" /IDebug\ /nologo /fo"Debug\DirectX_Sound.res" DirectX_Sound.rc 
        Link:
@@ -16,4 +20,4 @@
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:01.15
+Verstrichene Zeit 00:00:04.53
