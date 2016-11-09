@@ -126,7 +126,8 @@ void CDirectX_SoundDlg::OnBnClickedButton1()
 		return; // false;
 
 	if (!m_ds.Play(lpDSBSecondary, true))
-		OnCancel();
+		OnCancel();
+
 }
 
 

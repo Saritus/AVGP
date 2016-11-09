@@ -44,7 +44,9 @@ bool CDirectSound::Create(CWnd* wnd) {
 		}
 	}
 	return true;
-}LPDIRECTSOUNDBUFFER CDirectSound::CreateSoundBuffer(WORD Channels, WORD BitsPerSample,
+}
+
+LPDIRECTSOUNDBUFFER CDirectSound::CreateSoundBuffer(WORD Channels, WORD BitsPerSample,
 	DWORD SamplesPerSec, WORD seconds) {
 	if (!lpds) return 0;
 	WAVEFORMATEX pcmwf; LPDIRECTSOUNDBUFFER lpDSBuffer;
@@ -65,7 +67,9 @@ bool CDirectSound::Create(CWnd* wnd) {
 		return 0;
 	}
 	return lpDSBuffer;
-}bool CDirectSound::GetWaveFormat(LPDIRECTSOUNDBUFFER buf, WAVEFORMATEX *pcmwf)
+}
+
+bool CDirectSound::GetWaveFormat(LPDIRECTSOUNDBUFFER buf, WAVEFORMATEX *pcmwf)
 {
 	if (!buf) return false;
 	if (buf->GetFormat(pcmwf, sizeof *pcmwf, NULL) != DS_OK) {
@@ -73,7 +77,9 @@ bool CDirectSound::Create(CWnd* wnd) {
 		return false;
 	}
 	return true;
-}bool CDirectSound::LockBuffer(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD size,
+}
+
+bool CDirectSound::LockBuffer(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD size,
 	void **ptr1, DWORD *bytes1, void **ptr2, DWORD *bytes2) {
 	WAVEFORMATEX pcmwf;
 	if (!buf) return false;
@@ -98,7 +104,9 @@ bool CDirectSound::UnlockBuffer(LPDIRECTSOUNDBUFFER buf,
 		return false;
 	}
 	return true;
-}bool CDirectSound::Play(LPDIRECTSOUNDBUFFER buf, bool looped)
+}
+
+bool CDirectSound::Play(LPDIRECTSOUNDBUFFER buf, bool looped)
 {
 	if (!buf) return false;
 	if (buf->Play(0, 0, looped ? DSBPLAY_LOOPING : 0) != DS_OK) {
@@ -152,7 +160,9 @@ bool CDirectSound::SetPlaybackVolume(LPDIRECTSOUNDBUFFER buf, LONG db)
 		return false;
 	}
 	return true;
-}bool CDirectSound::SetBalance(LPDIRECTSOUNDBUFFER buf, LONG db)
+}
+
+bool CDirectSound::SetBalance(LPDIRECTSOUNDBUFFER buf, LONG db)
 {
 	if (!buf) return false;
 	if (buf->SetPan(db) != DS_OK) {
@@ -160,7 +170,9 @@ bool CDirectSound::SetPlaybackVolume(LPDIRECTSOUNDBUFFER buf, LONG db)
 		return false;
 	}
 	return true;
-}int CDirectSound::GetPlayPosition(LPDIRECTSOUNDBUFFER buf) {
+}
+
+int CDirectSound::GetPlayPosition(LPDIRECTSOUNDBUFFER buf) {
 	DSBCAPS caps;
 	caps.dwSize = sizeof(DSBCAPS);
 	if (buf->GetCaps(&caps) != DS_OK) {
