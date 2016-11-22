@@ -6,6 +6,7 @@
 #include "DirectX_Sound.h"
 #include "DirectX_SoundDlg.h"
 #include "afxdialogex.h"
+#include <fstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -33,6 +34,19 @@ BEGIN_MESSAGE_MAP(CDirectX_SoundDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDirectX_SoundDlg::OnBnClickedButton1)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER2, &CDirectX_SoundDlg::OnNMCustomdrawSlider2)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER3, &CDirectX_SoundDlg::OnNMCustomdrawSlider3)
+	ON_BN_CLICKED(IDC_BUTTON2, &CDirectX_SoundDlg::OnBnClickedButton2)
+	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_C, &CDirectX_SoundDlg::OnBnClickedC)
+	ON_BN_CLICKED(IDC_D, &CDirectX_SoundDlg::OnBnClickedD)
+	ON_BN_CLICKED(IDC_E, &CDirectX_SoundDlg::OnBnClickedE)
+	ON_BN_CLICKED(IDC_F, &CDirectX_SoundDlg::OnBnClickedF)
+	ON_BN_CLICKED(IDC_G, &CDirectX_SoundDlg::OnBnClickedG)
+	ON_BN_CLICKED(IDC_A, &CDirectX_SoundDlg::OnBnClickedA)
+	ON_BN_CLICKED(IDC_H, &CDirectX_SoundDlg::OnBnClickedH)
+	ON_BN_CLICKED(IDC_C2, &CDirectX_SoundDlg::OnBnClickedC2)
+	ON_BN_CLICKED(IDC_BUTTON5, &CDirectX_SoundDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON4, &CDirectX_SoundDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON3, &CDirectX_SoundDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -47,6 +61,16 @@ BOOL CDirectX_SoundDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Groﬂes Symbol verwenden
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
+	ton[0] = c;
+	ton[1] = c * 9 / 8.;
+	ton[2] = c * 5 / 4.;
+	ton[3] = c * 4 / 3.;
+	ton[4] = c * 3 / 2.;
+	ton[5] = c * 5 / 3.;
+	ton[6] = c * 15 / 8.;
+	ton[7] = c * 2;
+	ton[8] = 0;
+
 	// creates a DirectSound object
 	if (!m_ds.Create(this))
 		OnCancel();
@@ -54,6 +78,20 @@ BOOL CDirectX_SoundDlg::OnInitDialog()
 	// create a 4 second sound buffer
 	if ((lpDSBSecondary = m_ds.CreateSoundBuffer(2, 16, 22050, 4)) == 0)
 		OnCancel();
+
+	// create 3 sound buffers
+	for (int i = 0; i < 3; i++) {
+		if ((lpDSBTri[i] = m_ds.CreateSoundBuffer(2, 16, 22050, 2)) == 0)
+			OnCancel();
+		m_ds.GenerateSound(lpDSBTri[i], 0, 2, ton[2 * i]);
+	}
+
+	// create 9 sound buffers
+	for (int i = 0; i < 9; i++) {
+		if ((lpDSBPiano[i] = m_ds.CreateSoundBuffer(2, 16, 22050, 1)) == 0)
+			OnCancel();
+		m_ds.GenerateSound(lpDSBPiano[i], 0, 1, ton[i]);
+	}
 
 	// set values for sliders
 	((CSliderCtrl*)GetDlgItem(IDC_SLIDER2))->SetRange(-5000, 0);
@@ -104,6 +142,7 @@ HCURSOR CDirectX_SoundDlg::OnQueryDragIcon()
 
 void CDirectX_SoundDlg::OnBnClickedButton1()
 {
+	/* // Frequenzen einzeln in Soundbuffer schreiben
 	void *lpvPtr1, *lpvPtr2; DWORD dwBytes1, dwBytes2;
 	if (!m_ds.LockBuffer(lpDSBSecondary, 0, 2, // we use the first 2 seconds
 		&lpvPtr1, // get pointer 1
@@ -124,10 +163,12 @@ void CDirectX_SoundDlg::OnBnClickedButton1()
 		lpvPtr2, // pointer 2
 		dwBytes2)) // bytes written there
 		return; // false;
+	*/
+
+	m_ds.GenerateSound(lpDSBSecondary, 0, 2, 264);
 
 	if (!m_ds.Play(lpDSBSecondary, true))
 		OnCancel();
-
 }
 
 
@@ -138,6 +179,16 @@ void CDirectX_SoundDlg::OnNMCustomdrawSlider2(NMHDR *pNMHDR, LRESULT *pResult)
 	int volume = ((CSliderCtrl*)GetDlgItem(IDC_SLIDER2))->GetPos();
 	if (!m_ds.SetPlaybackVolume(lpDSBSecondary, volume))
 		OnCancel();
+
+	for (int i = 0; i < 3; i++) {
+		if (!m_ds.SetPlaybackVolume(lpDSBTri[i], volume))
+			OnCancel();
+	}
+
+	for (int i = 0; i < 9; i++) {
+		if (!m_ds.SetPlaybackVolume(lpDSBPiano[i], volume))
+			OnCancel();
+	}
 
 	*pResult = 0;
 }
@@ -150,5 +201,183 @@ void CDirectX_SoundDlg::OnNMCustomdrawSlider3(NMHDR *pNMHDR, LRESULT *pResult)
 	int balance = ((CSliderCtrl*)GetDlgItem(IDC_SLIDER3))->GetPos();
 	if (!m_ds.SetBalance(lpDSBSecondary, balance))
 		OnCancel();
+
+	for (int i = 0; i < 3; i++) {
+		if (!m_ds.SetBalance(lpDSBTri[i], balance))
+			OnCancel();
+	}
+
+	for (int i = 0; i < 9; i++) {
+		if (!m_ds.SetBalance(lpDSBPiano[i], balance))
+			OnCancel();
+	}
 	*pResult = 0;
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedButton2()
+{
+	SetTimer(1, 700, NULL);
+
+	m_ds.GenerateSound(lpDSBSecondary, 0, 2, 264);
+
+	if (!m_ds.Play(lpDSBSecondary, true))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	/*// TODO: F¸gen Sie hier Ihren Meldungsbehandlungscode ein, und/oder benutzen Sie den Standard.
+	if (m_ds.GetPlayPosition(lpDSBSecondary) < 50 && currentSound % 2 == 0) {
+		m_ds.GenerateSound(lpDSBSecondary, 2, 2, cDur[++currentSound]);
+	}
+	else if (m_ds.GetPlayPosition(lpDSBSecondary) > 50 && currentSound % 2 == 1) {
+		m_ds.GenerateSound(lpDSBSecondary, 0, 2, cDur[++currentSound]);
+	}
+	if (currentSound < 8) {
+		m_ds.Stop(lpDSBSecondary);
+	}
+	CDialogEx::OnTimer(nIDEvent);*/
+
+	static int j = 0, buffnr = 1, playpos;
+	if ((playpos = m_ds.GetPlayPosition(lpDSBSecondary)) == -1) {
+		KillTimer(1); return;
+	}
+	if (((playpos > 50) && (buffnr == 0)) || ((playpos < 50) && (buffnr == 1))) {
+		if ((++j) == 9) { // major scale finished
+			KillTimer(1);
+			j = 0;
+			if (!m_ds.Stop(lpDSBSecondary))
+				return;
+			return;
+		}
+		m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, ton[j]);
+		if (buffnr == 1) buffnr = 0; // change buffer
+		else buffnr = 1;
+	}
+	CDialog::OnTimer(nIDEvent);
+
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedC()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	if (!m_ds.Play(lpDSBPiano[0]))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedD()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	if (!m_ds.Play(lpDSBPiano[1]))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedE()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	if (!m_ds.Play(lpDSBPiano[2]))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedF()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	if (!m_ds.Play(lpDSBPiano[3]))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedG()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	if (!m_ds.Play(lpDSBPiano[4]))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedA()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	if (!m_ds.Play(lpDSBPiano[5]))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedH()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	if (!m_ds.Play(lpDSBPiano[6]))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedC2()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	if (!m_ds.Play(lpDSBPiano[7]))
+		OnCancel();
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedButton5()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	m_ds.Stop(lpDSBSecondary);
+	m_ds.GenerateSound(lpDSBSecondary, 0, 4, 0);
+	
+	for (int i = 0; i < 3; i++) {
+		m_ds.Stop(lpDSBTri[i]);
+	}
+
+	for (int i = 0; i < 9; i++) {
+		m_ds.Stop(lpDSBPiano[i]);
+	}
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedButton4()
+{
+	// TODO: F¸gen Sie hier Ihren Kontrollbehandlungscode f¸r die Benachrichtigung ein.
+	for (int i = 0; i < 3; i++) {
+		if (!m_ds.Play(lpDSBTri[i], true))
+			OnCancel();
+	}
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedButton3()
+{
+	static int j = 0, buffnr = 1, playpos;
+	if ((playpos = m_ds.GetPlayPosition(lpDSBSecondary)) == -1) {
+		KillTimer(1); return;
+	}
+
+	FILE *fileptr;
+	long filelen;
+	fileptr = fopen("Sound_22050_stereo_16Bit.pcm", "rb");  // Open the file in binary mode
+	fseek(fileptr, 0, SEEK_END);          // Jump to the end of the file
+	filelen = ftell(fileptr);             // Get the current byte offset in the file
+	rewind(fileptr);                      // Jump back to the beginning of the file
+
+	/*
+	if (((playpos > 50) && (buffnr == 0)) || ((playpos < 50) && (buffnr == 1))) {
+		if ((++j) == 9) { // major scale finished
+			KillTimer(1);
+			j = 0;
+			if (!m_ds.Stop(lpDSBSecondary))
+				return;
+			return;
+		}
+		m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, ton[j]);
+		if (buffnr == 1) buffnr = 0; // change buffer
+		else buffnr = 1;
+	}
+	*/
+	
 }

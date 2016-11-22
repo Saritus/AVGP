@@ -24,6 +24,12 @@ protected:
 	HICON m_hIcon;
 	CDirectSound m_ds;
 	LPDIRECTSOUNDBUFFER lpDSBSecondary;
+	LPDIRECTSOUNDBUFFER lpDSBTri[3];
+	LPDIRECTSOUNDBUFFER lpDSBPiano[9];
+
+	int currentSound = -1;
+
+	double ton[9]; int c = 264; //Hz
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
@@ -34,4 +40,17 @@ public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnNMCustomdrawSlider2(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnNMCustomdrawSlider3(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnBnClickedC();
+	afx_msg void OnBnClickedD();
+	afx_msg void OnBnClickedE();
+	afx_msg void OnBnClickedF();
+	afx_msg void OnBnClickedG();
+	afx_msg void OnBnClickedA();
+	afx_msg void OnBnClickedH();
+	afx_msg void OnBnClickedC2();
+	afx_msg void OnBnClickedButton5();
+	afx_msg void OnBnClickedButton4();
+	afx_msg void OnBnClickedButton3();
 };

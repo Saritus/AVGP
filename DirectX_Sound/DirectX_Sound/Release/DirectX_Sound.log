@@ -1,0 +1,28 @@
+﻿Der Buildvorgang wurde am 22.11.2016 10:49:53 gestartet.
+     1>Projekt "C:\Users\s72682\Desktop\AVGP-master\DirectX_Sound\DirectX_Sound\DirectX_Sound.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\DirectX_Sound.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DirectSound.cpp DirectX_Sound.cpp DirectX_SoundDlg.cpp
+         DirectSound.cpp
+         DirectX_Sound.cpp
+         DirectX_SoundDlg.cpp
+     1>DirectX_SoundDlg.cpp(86): warning C4244: 'Argument': Konvertierung von 'double' in 'int', möglicher Datenverlust
+     1>DirectX_SoundDlg.cpp(93): warning C4244: 'Argument': Konvertierung von 'double' in 'int', möglicher Datenverlust
+     1>DirectX_SoundDlg.cpp(255): warning C4244: 'Argument': Konvertierung von 'double' in 'int', möglicher Datenverlust
+     1>DirectX_SoundDlg.cpp(363): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211): Siehe Deklaration von 'fopen'
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D NDEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0407" /IRelease\ /nologo /fo"Release\DirectX_Sound.res" DirectX_Sound.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\s72682\Desktop\AVGP-master\DirectX_Sound\Release\DirectX_Sound.exe" /INCREMENTAL:NO /NOLOGO dsound.lib dxguid.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\s72682\Desktop\AVGP-master\DirectX_Sound\Release\DirectX_Sound.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\s72682\Desktop\AVGP-master\DirectX_Sound\Release\DirectX_Sound.lib" /MACHINE:X86 /SAFESEH Release\DirectX_Sound.res
+         Release\DirectSound.obj
+         Release\DirectX_Sound.obj
+         Release\DirectX_SoundDlg.obj
+         Release\stdafx.obj
+         Code wird generiert.
+         Codegenerierung ist abgeschlossen.
+         DirectX_Sound.vcxproj -> C:\Users\s72682\Desktop\AVGP-master\DirectX_Sound\Release\DirectX_Sound.exe
+     1>Die Erstellung des Projekts "C:\Users\s72682\Desktop\AVGP-master\DirectX_Sound\DirectX_Sound\DirectX_Sound.vcxproj" ist abgeschlossen, Build Ziel(e).
+
+Build erfolgreich.
+
+Verstrichene Zeit 00:00:02.98
