@@ -218,9 +218,9 @@ void CDirectX_SoundDlg::OnNMCustomdrawSlider3(NMHDR *pNMHDR, LRESULT *pResult)
 void CDirectX_SoundDlg::OnBnClickedButton2()
 {
 	SetTimer(1, 700, NULL);
+	mode = 0; // 0 - Tonleiter, 1 - PCM-Datei
 
 	m_ds.GenerateSound(lpDSBSecondary, 0, 2, 264);
-
 	if (!m_ds.Play(lpDSBSecondary, true))
 		OnCancel();
 }
@@ -228,18 +228,21 @@ void CDirectX_SoundDlg::OnBnClickedButton2()
 
 void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	/*// TODO: Fügen Sie hier Ihren Meldungsbehandlungscode ein, und/oder benutzen Sie den Standard.
-	if (m_ds.GetPlayPosition(lpDSBSecondary) < 50 && currentSound % 2 == 0) {
-		m_ds.GenerateSound(lpDSBSecondary, 2, 2, cDur[++currentSound]);
+	switch (mode) {
+	case 0:
+		Tonleiter();
+		break;
+	case 1:
+		PCM();
+		m_ds.Play(lpDSBSecondary);
+		break;
+	default:
+		break;
 	}
-	else if (m_ds.GetPlayPosition(lpDSBSecondary) > 50 && currentSound % 2 == 1) {
-		m_ds.GenerateSound(lpDSBSecondary, 0, 2, cDur[++currentSound]);
-	}
-	if (currentSound < 8) {
-		m_ds.Stop(lpDSBSecondary);
-	}
-	CDialogEx::OnTimer(nIDEvent);*/
+	CDialog::OnTimer(nIDEvent);
+}
 
+void CDirectX_SoundDlg::Tonleiter() {
 	static int j = 0, buffnr = 1, playpos;
 	if ((playpos = m_ds.GetPlayPosition(lpDSBSecondary)) == -1) {
 		KillTimer(1); return;
@@ -256,10 +259,26 @@ void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
 		if (buffnr == 1) buffnr = 0; // change buffer
 		else buffnr = 1;
 	}
-	CDialog::OnTimer(nIDEvent);
-
 }
 
+void CDirectX_SoundDlg::PCM() {
+	static int j = 0, buffnr = 1, playpos;
+	if ((playpos = m_ds.GetPlayPosition(lpDSBSecondary)) == -1) {
+		KillTimer(1); return;
+	}
+	if (((playpos > 50) && (buffnr == 0)) || ((playpos < 50) && (buffnr == 1))) {
+		if ((++j) == 9) { // major scale finished
+			KillTimer(1);
+			j = 0;
+			if (!m_ds.Stop(lpDSBSecondary))
+				return;
+			return;
+		}
+		m_ds.ReadSound(lpDSBSecondary, buffnr * 2, 2, fileptr, j);
+		if (buffnr == 1) buffnr = 0; // change buffer
+		else buffnr = 1;
+	}
+}
 
 void CDirectX_SoundDlg::OnBnClickedC()
 {
@@ -353,31 +372,11 @@ void CDirectX_SoundDlg::OnBnClickedButton4()
 
 void CDirectX_SoundDlg::OnBnClickedButton3()
 {
-	static int j = 0, buffnr = 1, playpos;
-	if ((playpos = m_ds.GetPlayPosition(lpDSBSecondary)) == -1) {
-		KillTimer(1); return;
-	}
-
-	FILE *fileptr;
-	long filelen;
 	fileptr = fopen("Sound_22050_stereo_16Bit.pcm", "rb");  // Open the file in binary mode
 	fseek(fileptr, 0, SEEK_END);          // Jump to the end of the file
 	filelen = ftell(fileptr);             // Get the current byte offset in the file
 	rewind(fileptr);                      // Jump back to the beginning of the file
 
-	/*
-	if (((playpos > 50) && (buffnr == 0)) || ((playpos < 50) && (buffnr == 1))) {
-		if ((++j) == 9) { // major scale finished
-			KillTimer(1);
-			j = 0;
-			if (!m_ds.Stop(lpDSBSecondary))
-				return;
-			return;
-		}
-		m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, ton[j]);
-		if (buffnr == 1) buffnr = 0; // change buffer
-		else buffnr = 1;
-	}
-	*/
-	
+	SetTimer(1, 700, NULL);
+	mode = 1; // 0 - Tonleiter, 1 - PCM-Datei
 }

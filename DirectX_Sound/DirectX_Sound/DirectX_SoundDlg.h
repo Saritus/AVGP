@@ -27,15 +27,19 @@ protected:
 	LPDIRECTSOUNDBUFFER lpDSBTri[3];
 	LPDIRECTSOUNDBUFFER lpDSBPiano[9];
 
-	int currentSound = -1;
-
 	double ton[9]; int c = 264; //Hz
+	int mode = -1;
+
+	FILE *fileptr;
+	long filelen;
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+	void Tonleiter();
+	void PCM();
 public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnNMCustomdrawSlider2(NMHDR *pNMHDR, LRESULT *pResult);
