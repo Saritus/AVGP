@@ -5,6 +5,7 @@ CDirectSound::CDirectSound() {
 	CoInitialize(NULL); // init COM-Interface
 	lpds = 0; lpDSBPrimary = 0;
 }
+
 CDirectSound::~CDirectSound() {
 	if (lpds) {
 		lpDSBPrimary->Release();
@@ -46,8 +47,7 @@ bool CDirectSound::Create(CWnd* wnd) {
 	return true;
 }
 
-LPDIRECTSOUNDBUFFER CDirectSound::CreateSoundBuffer(WORD Channels, WORD BitsPerSample,
-	DWORD SamplesPerSec, WORD seconds) {
+LPDIRECTSOUNDBUFFER CDirectSound::CreateSoundBuffer(WORD Channels, WORD BitsPerSample, DWORD SamplesPerSec, WORD seconds) {
 	if (!lpds) return 0;
 	WAVEFORMATEX pcmwf; LPDIRECTSOUNDBUFFER lpDSBuffer;
 	memset(&pcmwf, 0, sizeof(PCMWAVEFORMAT));
@@ -79,8 +79,7 @@ bool CDirectSound::GetWaveFormat(LPDIRECTSOUNDBUFFER buf, WAVEFORMATEX *pcmwf)
 	return true;
 }
 
-bool CDirectSound::LockBuffer(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD size,
-	void **ptr1, DWORD *bytes1, void **ptr2, DWORD *bytes2) {
+bool CDirectSound::LockBuffer(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD size, void **ptr1, DWORD *bytes1, void **ptr2, DWORD *bytes2) {
 	WAVEFORMATEX pcmwf;
 	if (!buf) return false;
 	if (!GetWaveFormat(buf, &pcmwf)) return false;
@@ -96,8 +95,8 @@ bool CDirectSound::LockBuffer(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD size,
 	}
 	return true;
 }
-bool CDirectSound::UnlockBuffer(LPDIRECTSOUNDBUFFER buf,
-	void *ptr1, DWORD bytes1, void *ptr2, DWORD bytes2) {
+
+bool CDirectSound::UnlockBuffer(LPDIRECTSOUNDBUFFER buf, void *ptr1, DWORD bytes1, void *ptr2, DWORD bytes2) {
 	if (!buf) return false;
 	if (buf->Unlock(ptr1, bytes1, ptr2, bytes2) != DS_OK) {
 		AfxMessageBox(L"Cannot unlock the secondary buffer");
