@@ -1,27 +1,13 @@
-﻿Der Buildvorgang wurde am 29.11.2016 11:30:05 gestartet.
+﻿Der Buildvorgang wurde am 29.11.2016 12:01:46 gestartet.
      1>Projekt "C:\Users\s72682\Desktop\AVGP-master\DirectX_3D\DirectX_3D\DirectX_3D.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\DirectX_3D.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Direct3D.cpp Direct3DLight.cpp Direct3DObject.cpp
-         Direct3DObject.cpp
-     1>c:\users\s72682\desktop\avgp-master\directx_3d\directx_3d\direct3dobject.cpp(23): warning C4018: '<': Konflikt zwischen 'signed' und 'unsigned'
-     1>c:\users\s72682\desktop\avgp-master\directx_3d\directx_3d\direct3dobject.cpp(240): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(211): Siehe Deklaration von 'fopen'
-     1>c:\users\s72682\desktop\avgp-master\directx_3d\directx_3d\direct3dobject.cpp(251): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(230): Siehe Deklaration von 'fscanf'
-     1>c:\users\s72682\desktop\avgp-master\directx_3d\directx_3d\direct3dobject.cpp(264): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(230): Siehe Deklaration von 'fscanf'
-     1>c:\users\s72682\desktop\avgp-master\directx_3d\directx_3d\direct3dobject.cpp(277): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(230): Siehe Deklaration von 'fscanf'
-     1>c:\users\s72682\desktop\avgp-master\directx_3d\directx_3d\direct3dobject.cpp(284): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(230): Siehe Deklaration von 'fscanf'
-     1>c:\users\s72682\desktop\avgp-master\directx_3d\directx_3d\direct3dobject.cpp(301): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(230): Siehe Deklaration von 'fscanf'
-         Direct3DLight.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\DirectX_3D.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DirectX_3D.cpp DirectX_3DDlg.cpp
+         DirectX_3DDlg.cpp
          Code wird generiert...
-         Kompilieren...
-         Direct3D.cpp
-     1>c:\users\s72682\desktop\avgp-master\directx_3d\directx_3d\direct3d.cpp(91): warning C4101: 'hMainFont': Unreferenzierte lokale Variable
-         Code wird generiert...
+         Überspringen... (keine relevanten Änderungen gefunden)
+         DirectX_3D.cpp
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0407" /IDebug\ /nologo /fo"Debug\DirectX_3D.res" DirectX_3D.rc 
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\s72682\Desktop\AVGP-master\DirectX_3D\Debug\DirectX_3D.exe" /INCREMENTAL /NOLOGO d3d9.lib d3dx9.lib winmm.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\s72682\Desktop\AVGP-master\DirectX_3D\Debug\DirectX_3D.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\s72682\Desktop\AVGP-master\DirectX_3D\Debug\DirectX_3D.lib" /MACHINE:X86 Debug\DirectX_3D.res
          Debug\Direct3D.obj
@@ -35,4 +21,4 @@
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:01.98
+Verstrichene Zeit 00:00:02.03

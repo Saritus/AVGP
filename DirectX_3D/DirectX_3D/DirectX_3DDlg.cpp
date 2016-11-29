@@ -30,6 +30,7 @@ void CDirectX_3DDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDirectX_3DDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CDirectX_3DDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -85,3 +86,109 @@ HCURSOR CDirectX_3DDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CDirectX_3DDlg::OnBnClickedButton1()
+{
+	// TODO: Add your control notification handler code here
+	MSG msg;
+
+	if (!m_d3d.Create(GetDlgItem(IDC_OUTPUT), 0x00000000)) { // color as ARGB
+		AfxMessageBox(L"Direct3D nicht verfügbar"); return;
+	}
+	//DisableButtons();
+	// Set up our view matrix. A view matrix can be defined given an eye point,
+    // a point to lookat, and a direction for which way is up. Here, we look at the
+    // origin, and define "up" to be in the y-direction.
+    D3DXVECTOR3 vEyePt( 0.0f, 3.0f, -8.0f ),
+				vLookatPt( 0.0f, 0.0f, 0.0f ),
+				vUpVec( 0.0f, 1.0f, 0.0f );
+	if (!m_d3d.ViewTransform(vEyePt, vLookatPt, vUpVec))  {
+		AfxMessageBox(L"ViewPoint konnte nicht initialisiert werden"); return;
+	}	
+	LPD3DXFONT font = m_d3d.CreateD3DFont(12, L"Verdana", 0xffffffff);
+
+	// 3 Beispielobjekte als "Modell"	
+	D3DXVECTOR3 vertices[] = {
+		D3DXVECTOR3(-1.0f,-1.0f, 0.0f), // 0
+        D3DXVECTOR3( 1.0f,-1.0f, 0.0f), // 1
+        D3DXVECTOR3( 0.0f, 1.0f, 0.0f), // 2
+        D3DXVECTOR3(-1.0f, 1.0f, 0.0f), // 3
+        D3DXVECTOR3( 1.0f, 1.0f, 0.0f), // 4
+        D3DXVECTOR3(-1.0f,-1.0f, 2.0f), // 5
+        D3DXVECTOR3( 1.0f,-1.0f, 2.0f), // 6
+        D3DXVECTOR3(-1.0f, 1.0f, 2.0f), // 7
+        D3DXVECTOR3( 1.0f, 1.0f, 2.0f)  // 8
+	};
+	D3DXVECTOR2 textures[] = {
+		D3DXVECTOR2( 0.0f, 0.0f), // 0
+		D3DXVECTOR2( 1.0f, 0.0f), // 1
+		D3DXVECTOR2( 0.0f, 1.0f), // 2
+		D3DXVECTOR2( 1.0f, 1.0f), // 3
+	};
+	DWORD colors[] = { 0xffff0000,      // 0 - rot  
+		               0xff0000ff,      // 1 - blau 
+				   	   0xff00ff00,      // 2 - grün 
+				   	   0xffffffff,      // 3 - weiss 
+				   	   0xff000000,      // 4 - schwarz
+				   	   0xffffff00,      // 5 - gelb    (blau+rot)
+				   	   0xff00ff00,      // 6 - magenda (grün+blau)
+				   	   0xff00ff00       // 7 - cyan    (grün+rot)
+    }; 
+	int modell1[][2] = {                // Modell 1 (Dreieck) 
+		{ 0, 0} , { 1, 1} , { 2, 2} };  // {vertex_nr, color_nr}
+	int modell2[][2] = {                // Modell 2 (Würfel) 
+		{ 0, 4} , { 1, 0} , { 3, 1},
+		{ 1, 0} , { 3, 1} , { 4, 5},
+		{ 1, 0} , { 4, 5} , { 6, 7},
+		{ 6, 7} , { 4, 5} , { 8, 3},
+		{ 5, 2} , { 7, 6} , { 6, 7},
+		{ 6, 7} , { 7, 6} , { 8, 3},
+		{ 0, 4} , { 3, 1} , { 5, 2},
+		{ 3, 1} , { 5, 2} , { 7, 6},
+		{ 0, 4} , { 1, 0} , { 5, 2},
+		{ 1, 0} , { 5, 2} , { 6, 7},
+		{ 3, 1} , { 4, 5} , { 7, 6},
+		{ 4, 5} , { 7, 6} , { 8, 3}	     // {vertex_nr, color_nr}
+	}; 
+	int modell3[][2] = {                 // Modell 3 (Rechteck mit Textur) 
+		{ 0, 2} , { 1, 3} , { 3, 0},
+		{ 1, 3} , { 3, 0} , { 4, 1},     // {vertex_nr, textur_nr}
+	}; 
+	o[0].BuildColoredVertexes(m_d3d.m_pd3dDevice, vertices, colors, modell1, 1);
+	o[0].Move(-1.5f, 1.0f, 1.0f);
+	o[1].BuildColoredVertexes(m_d3d.m_pd3dDevice, vertices, colors, modell2, 12);
+    o[1].Move( 1.5f, 1.0f, 1.0f);
+	if (((CButton*)GetDlgItem(IDC_CHECK))->GetCheck()) {
+		o[2].BuildTexturedVertexes(m_d3d.m_pd3dDevice, vertices, textures, modell3, 2);
+		o[2].SetTextureFromFile(L"textur.jpg");
+		o[2].ScaleTexture(1 / 3.f, 1 / 2.f);
+		o[2].Move(0.0f, -1.0f, 0.0f);
+	}
+	else {
+		o[0].BuildColoredVertexes(m_d3d.m_pd3dDevice, vertices, colors, modell3, 2);
+		o[2].Move(0.0f, -1.0f, 0.0f);
+	}
+ 
+	for(m_run=true;m_run;) {              // animation loop
+		o[0].Rotate(0.0f, 0.01f, 0.0f);
+		o[1].Rotate(-0.01f, -0.01f, 0.0f);
+		o[1].Scale(0.999f, 0.999f, 0.999f);
+		o[2].Rotate(-0.01f, 0.0f, 0.0f);
+		m_d3d.BeginRender();		
+			if (!m_d3d.Render(o,3)) {
+				AfxMessageBox(L"Szene konnte nicht gerendert werden"); return;
+			}
+			CString s;
+			s.Format(L"%.2f fps\nDirect3D-Beispielanwendung", m_d3d.m_fps);
+			m_d3d.TextOut(20,20,s,font);	
+		m_d3d.EndRender();
+
+		// process messages if there any
+		while (PeekMessage(&msg,0,0,0,PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
+	font->Release();
+}

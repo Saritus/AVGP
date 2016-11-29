@@ -23,6 +23,11 @@ public:
 protected:
 	HICON m_hIcon;
 
+	CDirect3D m_d3d;
+	CDirect3DObject o[5];
+	bool m_run;
+	CPoint m_p;
+
 	LPDIRECT3D9 m_pD3D; // Used to create the D3DDevice
 	LPDIRECT3DDEVICE9 m_pd3dDevice; // Our rendering device
 	IDirect3DVertexBuffer9* m_pVB; // vertex buffer
@@ -32,4 +37,6 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedButton1();
 };
