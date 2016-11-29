@@ -150,8 +150,9 @@ bool CDirectSound::GenerateSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD le
 	return true;
 }
 
-bool CDirectSound::ReadSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD length, FILE *fileptr, int start) {
+bool CDirectSound::LoadPCMSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD length, FILE *fileptr, int start) {
 	WAVEFORMATEX pcmwf;
+	BOOL result;
 	if (!buf) return false;
 	if (!GetWaveFormat(buf, &pcmwf))
 		return false;
@@ -161,19 +162,14 @@ bool CDirectSound::ReadSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD length
 		&lpvPtr2, &dwBytes2)) // get pointer 2 (the buffer is circular)
 		return false;
 	// write a sinus sound now
-	DWORD i; char *t; // points to 16 Bit
-	for (i = 0, t = (char*)lpvPtr1; i<(dwBytes1 + dwBytes2); i += 4, t += 2) {
-		if (i == dwBytes1)
-			t = (char*)lpvPtr2;
-		//*t = *(t + 1) = (short int)(sin(i / (pcmwf.nAvgBytesPerSec / (6.283185*f))) * 30000);
-		fgets(t, pcmwf.nAvgBytesPerSec * length, fileptr);
-	}
+	result = (fread(lpvPtr1, 1, dwBytes1, fileptr) == dwBytes1);
+
 	// unlock memory
 	if (!this->UnlockBuffer(buf,
 		lpvPtr1, dwBytes1, // pointer 1
 		lpvPtr2, dwBytes2)) // pointer 2
 		return false;
-	return true;
+	return result;
 }
 
 bool CDirectSound::SetPlaybackVolume(LPDIRECTSOUNDBUFFER buf, LONG db)

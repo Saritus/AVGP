@@ -95,8 +95,10 @@ BOOL CDirectX_SoundDlg::OnInitDialog()
 
 	// set values for sliders
 	((CSliderCtrl*)GetDlgItem(IDC_SLIDER2))->SetRange(-5000, 0);
+	((CSliderCtrl*)GetDlgItem(IDC_SLIDER2))->SetPos(-5000);
 	((CSliderCtrl*)GetDlgItem(IDC_SLIDER2))->SetPos(0);
 	((CSliderCtrl*)GetDlgItem(IDC_SLIDER3))->SetRange(-5000, 5000);
+	((CSliderCtrl*)GetDlgItem(IDC_SLIDER3))->SetPos(5000);
 	((CSliderCtrl*)GetDlgItem(IDC_SLIDER3))->SetPos(0);
 
 	return TRUE;  // TRUE zurückgeben, wenn der Fokus nicht auf ein Steuerelement gesetzt wird
@@ -263,18 +265,20 @@ void CDirectX_SoundDlg::Tonleiter() {
 
 void CDirectX_SoundDlg::PCM() {
 	static int j = 0, buffnr = 1, playpos;
+	BOOL end;
 	if ((playpos = m_ds.GetPlayPosition(lpDSBSecondary)) == -1) {
 		KillTimer(1); return;
 	}
 	if (((playpos > 50) && (buffnr == 0)) || ((playpos < 50) && (buffnr == 1))) {
-		if ((++j) == 9) { // major scale finished
+		m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, 0);
+		end = m_ds.LoadPCMSound(lpDSBSecondary, buffnr * 2, 2, fileptr, j);
+		if (!end) { // major scale finished
 			KillTimer(1);
 			j = 0;
 			if (!m_ds.Stop(lpDSBSecondary))
 				return;
 			return;
 		}
-		m_ds.ReadSound(lpDSBSecondary, buffnr * 2, 2, fileptr, j);
 		if (buffnr == 1) buffnr = 0; // change buffer
 		else buffnr = 1;
 	}
