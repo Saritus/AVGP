@@ -150,7 +150,7 @@ bool CDirectSound::GenerateSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD le
 	return true;
 }
 
-bool CDirectSound::LoadPCMSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD length, FILE *fileptr, int start) {
+bool CDirectSound::LoadPCMSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD length, FILE *fileptr) {
 	WAVEFORMATEX pcmwf;
 	BOOL result;
 	if (!buf) return false;

@@ -47,6 +47,7 @@ BEGIN_MESSAGE_MAP(CDirectX_SoundDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON5, &CDirectX_SoundDlg::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON4, &CDirectX_SoundDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON3, &CDirectX_SoundDlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_CHECK1, &CDirectX_SoundDlg::OnBnClickedCheck1)
 END_MESSAGE_MAP()
 
 
@@ -257,24 +258,31 @@ void CDirectX_SoundDlg::Tonleiter() {
 				return;
 			return;
 		}
-		m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, ton[j]);
+		
+		if (((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck()) {
+			// TODO: Use guitar sound for major scale
+			m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, ton[j]);
+		}
+		else {
+			m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, ton[j]);
+		}
+
 		if (buffnr == 1) buffnr = 0; // change buffer
 		else buffnr = 1;
 	}
 }
 
 void CDirectX_SoundDlg::PCM() {
-	static int j = 0, buffnr = 1, playpos;
+	static int buffnr = 1, playpos;
 	BOOL end;
 	if ((playpos = m_ds.GetPlayPosition(lpDSBSecondary)) == -1) {
 		KillTimer(1); return;
 	}
 	if (((playpos > 50) && (buffnr == 0)) || ((playpos < 50) && (buffnr == 1))) {
 		m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, 0);
-		end = m_ds.LoadPCMSound(lpDSBSecondary, buffnr * 2, 2, fileptr, j);
+		end = m_ds.LoadPCMSound(lpDSBSecondary, buffnr * 2, 2, fileptr);
 		if (!end) { // major scale finished
 			KillTimer(1);
-			j = 0;
 			if (!m_ds.Stop(lpDSBSecondary))
 				return;
 			return;
@@ -367,6 +375,21 @@ void CDirectX_SoundDlg::OnBnClickedButton5()
 void CDirectX_SoundDlg::OnBnClickedButton4()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	FILE *file[3];
+
+	file[0] = fopen("C.raw", "rb");
+	file[1] = fopen("E.raw", "rb");
+	file[2] = fopen("G.raw", "rb");
+
+	for (int i = 0; i < 3; i++) {
+		if (((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck()) {
+			m_ds.LoadPCMSound(lpDSBTri[i], 0, 2, file[i]);
+		}
+		else {
+			m_ds.GenerateSound(lpDSBTri[i], 0, 2, ton[2 * i]);
+		}
+	}
+	
 	for (int i = 0; i < 3; i++) {
 		if (!m_ds.Play(lpDSBTri[i], true))
 			OnCancel();
@@ -381,6 +404,34 @@ void CDirectX_SoundDlg::OnBnClickedButton3()
 	filelen = ftell(fileptr);             // Get the current byte offset in the file
 	rewind(fileptr);                      // Jump back to the beginning of the file
 
-	SetTimer(1, 700, NULL);
+	SetTimer(1, 200, NULL);
 	mode = 1; // 0 - Tonleiter, 1 - PCM-Datei
+}
+
+
+void CDirectX_SoundDlg::OnBnClickedCheck1()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	if (((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck()) {
+		FILE *file[9];
+
+		file[0] = fopen("C.raw", "rb");
+		file[1] = fopen("D.raw", "rb");
+		file[2] = fopen("E.raw", "rb");
+		file[3] = fopen("F.raw", "rb");
+		file[4] = fopen("G.raw", "rb");
+		file[5] = fopen("A.raw", "rb");
+		file[6] = fopen("H.raw", "rb");
+		file[7] = fopen("C_hoch.raw", "rb");
+		file[8] = fopen("G.raw", "rb");
+
+		for (int i = 0; i < 9; i++) {
+			m_ds.LoadPCMSound(lpDSBPiano[i], 0, 1, file[i]);
+		}
+	}
+	else {
+		for (int i = 0; i < 9; i++) {
+			m_ds.GenerateSound(lpDSBPiano[i], 0, 1, ton[i]);
+		}
+	}
 }
