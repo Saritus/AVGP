@@ -32,6 +32,8 @@ BEGIN_MESSAGE_MAP(CDirectX_3DDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CDirectX_3DDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CDirectX_3DDlg::OnBnClickedButton2)
+	ON_WM_CLOSE()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -242,4 +244,37 @@ void CDirectX_3DDlg::OnBnClickedButton2()
 		}
 	}
 	font->Release();
+}
+
+
+void CDirectX_3DDlg::OnClose()
+{
+	m_run = false;
+	CDialog::OnClose();
+}
+
+
+void CDirectX_3DDlg::OnMouseMove(UINT nFlags, CPoint point)
+{
+	float rotaspeed = 0.05f;
+	if (nFlags & MK_LBUTTON) {
+		if (point.x < m_p.x) {
+			o[0].Rotate(0.0f, rotaspeed, 0.0f);
+			o[1].Rotate(0.0f, rotaspeed, 0.0f);
+		}
+		if (point.x > m_p.x) {
+			o[0].Rotate(0.0f, -rotaspeed, 0.0f);
+			o[1].Rotate(0.0f, -rotaspeed, 0.0f);
+		}
+		if (point.y < m_p.y) {
+			o[0].Rotate(rotaspeed, 0.0f, 0.0f);
+			o[1].Rotate(rotaspeed, 0.0f, 0.0f);
+		}
+		if (point.y > m_p.y) {
+			o[0].Rotate(-rotaspeed, 0.0f, 0.0f);
+			o[1].Rotate(-rotaspeed, 0.0f, 0.0f);
+		}
+		m_p = point;
+	}
+	CDialogEx::OnMouseMove(nFlags, point);
 }
