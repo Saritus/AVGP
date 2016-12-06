@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(CDirectX_3DDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CDirectX_3DDlg::OnBnClickedButton2)
 	ON_WM_CLOSE()
 	ON_WM_MOUSEMOVE()
+	ON_BN_CLICKED(IDC_BUTTON3, &CDirectX_3DDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -277,4 +278,51 @@ void CDirectX_3DDlg::OnMouseMove(UINT nFlags, CPoint point)
 		m_p = point;
 	}
 	CDialogEx::OnMouseMove(nFlags, point);
+}
+
+
+void CDirectX_3DDlg::OnBnClickedButton3()
+{
+	MSG msg;
+
+	if (!m_d3d.Create(GetDlgItem(IDC_OUTPUT), 0x00000000)) { // color as ARGB
+		AfxMessageBox(L"Direct3D nicht verfügbar"); return;
+	}
+	//DisableButtons();
+
+	// Set up our view matrix. A view matrix can be defined given an eye point,
+	// a point to lookat, and a direction for which way is up. Here, we look at the
+	// origin, and define "up" to be in the y-direction.
+	D3DXVECTOR3 vEyePt(0.0f, 3.0f, -8.0f),
+		vLookatPt(0.0f, 0.0f, 0.0f),
+		vUpVec(0.0f, 1.0f, 0.0f);
+	if (!m_d3d.ViewTransform(vEyePt, vLookatPt, vUpVec))  {
+		AfxMessageBox(L"ViewPoint konnte nicht initialisiert werden"); return;
+	}
+	LPD3DXFONT font = m_d3d.CreateD3DFont(12, L"Verdana", 0xffffffff);
+
+	o[0].BuildFromObtFile(m_d3d.m_pd3dDevice, "m_fish1.obt", 0.0025f);
+	o[0].Rotate(-1.55f, 0.0f, 0.0f);
+	o[0].Move(1.f, 0.0f, 0.0f);
+	o[0].SetMaterial(0.0f, 0.0f, 1.0f);
+	o[0].RenderWired(true);
+
+	for (m_run = true; m_run;) {              // animation loop
+		//o[0].Rotate(0.0f, 0.01f, 0.0f);
+		m_d3d.BeginRender();
+		if (!m_d3d.Render(o, 1)) {
+			AfxMessageBox(L"Szene konnte nicht gerendert werden"); return;
+		}
+		CString s;
+		s.Format(L"%.2f fps", m_d3d.m_fps);
+		m_d3d.TextOut(20, 20, s, font);
+		m_d3d.EndRender();
+
+		// process messages if there any
+		while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
+	font->Release();
 }

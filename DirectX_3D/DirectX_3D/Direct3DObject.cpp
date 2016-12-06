@@ -226,7 +226,7 @@ bool CDirect3DObject::ScaleTexture(float su, float sv) {
 	return true;
 }
 
-bool CDirect3DObject::BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice,char* fname, float scale)
+bool CDirect3DObject::BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice, char* fname, float scale)
 {	
 	FILE *fp;
 	char header[7];
