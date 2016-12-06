@@ -258,6 +258,7 @@ void CDirectX_3DDlg::OnClose()
 void CDirectX_3DDlg::OnMouseMove(UINT nFlags, CPoint point)
 {
 	float rotaspeed = 0.05f;
+	float movespeed = 0.05f;
 	if (nFlags & MK_LBUTTON) {
 		if (point.x < m_p.x) {
 			o[0].Rotate(0.0f, rotaspeed, 0.0f);
@@ -274,6 +275,25 @@ void CDirectX_3DDlg::OnMouseMove(UINT nFlags, CPoint point)
 		if (point.y > m_p.y) {
 			o[0].Rotate(-rotaspeed, 0.0f, 0.0f);
 			o[1].Rotate(-rotaspeed, 0.0f, 0.0f);
+		}
+		m_p = point;
+	}
+	else if (nFlags & MK_RBUTTON) {
+		if (point.x < m_p.x) {
+			o[0].Move(-movespeed, 0.0f, 0.0f);
+			o[1].Move(-movespeed, 0.0f, 0.0f);
+		}
+		if (point.x > m_p.x) {
+			o[0].Move(movespeed, 0.0f, 0.0f);
+			o[1].Move(movespeed, 0.0f, 0.0f);
+		}
+		if (point.y < m_p.y) {
+			o[0].Move(0.0, movespeed, 0.0f);
+			o[1].Move(0.0, movespeed, 0.0f);
+		}
+		if (point.y > m_p.y) {
+			o[0].Move(0.0, -movespeed, 0.0f);
+			o[1].Move(0.0, -movespeed, 0.0f);
 		}
 		m_p = point;
 	}
