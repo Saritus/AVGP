@@ -216,13 +216,13 @@ void CDirectX_3DDlg::OnBnClickedButton2()
 	};
 	//o[0].BuildColoredVertexes(m_d3d.m_pd3dDevice, vertices, colors, modell1, 1);
 	o[0].BuildTexturedVertexes(m_d3d.m_pd3dDevice, vertices, textures, modell1, 2);
-	o[0].SetTextureFromFile(L"chesstextur.jpg");
-	o[0].ScaleTexture(1 / 3.f, 1 / 2.f);
+	o[0].SetTextureFromFile(L"chesstexture3.jpg");
+	o[0].ScaleTexture(1 / 2.f, 1 / 2.f);
 	o[0].Rotate(0.0f, 0.0f, 0.0f);
 	//o[0].Move(0.0f, -1.0f, 0.0f);
 	o[1].BuildTexturedVertexes(m_d3d.m_pd3dDevice, vertices, textures, modell1, 2);
-	o[1].SetTextureFromFile(L"chesstextur.jpg");
-	o[1].ScaleTexture(1 / 3.f, 1 / 2.f);
+	o[1].SetTextureFromFile(L"chesstexture3.jpg");
+	o[1].ScaleTexture(1 / 2.f, 1 / 2.f);
 	o[1].Rotate(1.57079632679f, 0.0f, 0.0f);
 	//o[1].Move(0.0f, -2.0f, 0.0f);
 
