@@ -7,6 +7,12 @@
 #include "DirectX_3DDlg.h"
 #include "afxdialogex.h"
 
+using namespace std;
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -35,6 +41,8 @@ BEGIN_MESSAGE_MAP(CDirectX_3DDlg, CDialogEx)
 	ON_WM_CLOSE()
 	ON_WM_MOUSEMOVE()
 	ON_BN_CLICKED(IDC_BUTTON3, &CDirectX_3DDlg::OnBnClickedButton3)
+	ON_WM_KEYDOWN()
+	ON_WM_SYSKEYDOWN()
 END_MESSAGE_MAP()
 
 
@@ -140,16 +148,16 @@ void CDirectX_3DDlg::OnBnClickedButton1()
 		{ 1, 1 }, { 2, 2 }, { 0, 0 },
 		{ 3, 3 }, { 0, 0 }, { 2, 2 },     // {vertex_nr, textur_nr}
 	};
+	int modell2[][2] = {                 // Modell 2 (Rechteck mit Textur) 
+		{ 5, 1 }, { 6, 2 }, { 4, 0 },
+		{ 7, 3 }, { 4, 0 }, { 6, 2 },     // {vertex_nr, textur_nr}
+	};
 	o[0].BuildColoredVertexes(m_d3d.m_pd3dDevice, vertices, colors, modell1, 2);
-	o[0].Rotate(0.0f, 0.0f, 0.0f);
-	//o[0].Move(0.0f, -1.0f, 0.0f);
-	o[1].BuildColoredVertexes(m_d3d.m_pd3dDevice, vertices, colors, modell1, 2);
-	o[1].Rotate(1.57079632679f, 0.0f, 0.0f);
-	//o[1].Move(0.0f, -2.0f, 0.0f);
+	o[1].BuildColoredVertexes(m_d3d.m_pd3dDevice, vertices, colors, modell2, 2);
 
 	for (m_run = true; m_run;) {              // animation loop
-		o[0].Rotate(-0.01f, 0.0f, 0.0f);
-		o[1].Rotate(-0.01f, 0.0f, 0.0f);
+		o[0].Rotate(-0.01f, -0.01f, 0.0f);
+		o[1].Rotate(-0.01f, -0.01f, 0.0f);
 		m_d3d.BeginRender();
 		if (!m_d3d.Render(o, 2)) {
 			AfxMessageBox(L"Szene konnte nicht gerendert werden"); return;
@@ -167,6 +175,52 @@ void CDirectX_3DDlg::OnBnClickedButton1()
 	}
 	font->Release();
 }
+
+/*void CDirectX_3DDlg::evaluate_keys() {
+
+	float rotaspeed = 0.05f;
+	o[0].Rotate(0.0f, rotaspeed, 0.0f);
+	o[1].Rotate(0.0f, rotaspeed, 0.0f);
+
+	int c = 0;
+	switch ((c = getch())) {
+	case KEY_UP:
+		cout << endl << "Up" << endl;//key up
+		break;
+	case KEY_DOWN:
+		cout << endl << "Down" << endl;   // key down
+		break;
+	case KEY_LEFT:
+		cout << endl << "Left" << endl;  // key left
+		break;
+	case KEY_RIGHT:
+		o[0].Rotate(0.0f, rotaspeed, 0.0f);
+		o[1].Rotate(0.0f, rotaspeed, 0.0f);  // key right
+		break;
+	default:
+		cout << endl << "null" << endl;  // not arrow
+		break;
+	}
+
+	
+	if (point.x < m_p.x) {
+		o[0].Rotate(0.0f, rotaspeed, 0.0f);
+		o[1].Rotate(0.0f, rotaspeed, 0.0f);
+	}
+	if (point.x > m_p.x) {
+		o[0].Rotate(0.0f, -rotaspeed, 0.0f);
+		o[1].Rotate(0.0f, -rotaspeed, 0.0f);
+	}
+	if (point.y < m_p.y) {
+		o[0].Rotate(rotaspeed, 0.0f, 0.0f);
+		o[1].Rotate(rotaspeed, 0.0f, 0.0f);
+	}
+	if (point.y > m_p.y) {
+		o[0].Rotate(-rotaspeed, 0.0f, 0.0f);
+		o[1].Rotate(-rotaspeed, 0.0f, 0.0f);
+	}
+	
+}*/
 
 
 void CDirectX_3DDlg::OnBnClickedButton2()
@@ -214,27 +268,26 @@ void CDirectX_3DDlg::OnBnClickedButton2()
 		{ 1, 1 }, { 2, 2 }, { 0, 0 },
 		{ 3, 3 }, { 0, 0 }, { 2, 2 },     // {vertex_nr, textur_nr}
 	};
-	//o[0].BuildColoredVertexes(m_d3d.m_pd3dDevice, vertices, colors, modell1, 1);
+	int modell2[][2] = {                 // Modell 2 (Rechteck mit Textur) 
+		{ 5, 1 }, { 6, 2 }, { 4, 0 },
+		{ 7, 3 }, { 4, 0 }, { 6, 2 },     // {vertex_nr, textur_nr}
+	};
 	o[0].BuildTexturedVertexes(m_d3d.m_pd3dDevice, vertices, textures, modell1, 2);
-	o[0].SetTextureFromFile(L"chesstexture3.jpg");
+	o[0].SetTextureFromFile(L"chesstexture2.jpg");
 	o[0].ScaleTexture(1 / 2.f, 1 / 2.f);
-	o[0].Rotate(0.0f, 0.0f, 0.0f);
-	//o[0].Move(0.0f, -1.0f, 0.0f);
-	o[1].BuildTexturedVertexes(m_d3d.m_pd3dDevice, vertices, textures, modell1, 2);
-	o[1].SetTextureFromFile(L"chesstexture3.jpg");
+	o[1].BuildTexturedVertexes(m_d3d.m_pd3dDevice, vertices, textures, modell2, 2);
+	o[1].SetTextureFromFile(L"chesstexture2.jpg");
 	o[1].ScaleTexture(1 / 2.f, 1 / 2.f);
-	o[1].Rotate(1.57079632679f, 0.0f, 0.0f);
-	//o[1].Move(0.0f, -2.0f, 0.0f);
 
 	for (m_run = true; m_run;) {              // animation loop
-		o[0].Rotate(-0.01f, 0.0f, 0.0f);
-		o[1].Rotate(-0.01f, 0.0f, 0.0f);
+		o[0].Rotate(-0.01f, -0.01f, 0.0f);
+		o[1].Rotate(-0.01f, -0.01f, 0.0f);
 		m_d3d.BeginRender();
 		if (!m_d3d.Render(o, 2)) {
 			AfxMessageBox(L"Szene konnte nicht gerendert werden"); return;
 		}
 		CString s;
-		s.Format(L"%.2f fps\nDirect3D-Beispielanwendung", m_d3d.m_fps);
+		s.Format(L"%.2f fps", m_d3d.m_fps);
 		m_d3d.TextOut(20, 20, s, font);
 		m_d3d.EndRender();
 

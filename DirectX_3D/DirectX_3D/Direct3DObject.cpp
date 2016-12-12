@@ -308,7 +308,7 @@ bool CDirect3DObject::BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice, char* fname
 			pVertices[i+j].x = vertexes[polygons[j]].x;
 			pVertices[i+j].y = vertexes[polygons[j]].y;
 			pVertices[i+j].z = vertexes[polygons[j]].z;
-			pVertices[i+j].color = 0xFFFFFFFF;
+			pVertices[i+j].color = 0xFFAAAAFF; // color of the 3d-model
 		}
 	}
 	m_pVB->Unlock(); 

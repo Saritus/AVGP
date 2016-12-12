@@ -36,3 +36,5 @@
 #include <d3dx9math.h>
 
 #include "Direct3D.h"
+#include <iostream>
+#include <conio.h>
