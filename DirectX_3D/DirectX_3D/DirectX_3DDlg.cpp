@@ -58,6 +58,7 @@ BOOL CDirectX_3DDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
 	// TODO: Hier zusätzliche Initialisierung einfügen
+	if (!m_key.Create(this))AfxMessageBox(L"DirectInput nicht verfügbar");
 
 	return TRUE;  // TRUE zurückgeben, wenn der Fokus nicht auf ein Steuerelement gesetzt wird
 }
@@ -158,6 +159,9 @@ void CDirectX_3DDlg::OnBnClickedButton1()
 	for (m_run = true; m_run;) {              // animation loop
 		o[0].Rotate(-0.01f, -0.01f, 0.0f);
 		o[1].Rotate(-0.01f, -0.01f, 0.0f);
+
+		evaluate_keys();
+
 		m_d3d.BeginRender();
 		if (!m_d3d.Render(o, 2)) {
 			AfxMessageBox(L"Szene konnte nicht gerendert werden"); return;
@@ -176,52 +180,33 @@ void CDirectX_3DDlg::OnBnClickedButton1()
 	font->Release();
 }
 
-/*void CDirectX_3DDlg::evaluate_keys() {
-
+void CDirectX_3DDlg::evaluate_keys() {
 	float rotaspeed = 0.05f;
-	o[0].Rotate(0.0f, rotaspeed, 0.0f);
-	o[1].Rotate(0.0f, rotaspeed, 0.0f);
-
-	int c = 0;
-	switch ((c = getch())) {
-	case KEY_UP:
-		cout << endl << "Up" << endl;//key up
-		break;
-	case KEY_DOWN:
-		cout << endl << "Down" << endl;   // key down
-		break;
-	case KEY_LEFT:
-		cout << endl << "Left" << endl;  // key left
-		break;
-	case KEY_RIGHT:
-		o[0].Rotate(0.0f, rotaspeed, 0.0f);
-		o[1].Rotate(0.0f, rotaspeed, 0.0f);  // key right
-		break;
-	default:
-		cout << endl << "null" << endl;  // not arrow
-		break;
+	if (m_key.KeyPressed(DIK_A)) {
+		o[0].Rotate(0.00f, rotaspeed, 0.0f);
+		o[1].Rotate(0.00f, rotaspeed, 0.0f);
 	}
-
-	
-	if (point.x < m_p.x) {
-		o[0].Rotate(0.0f, rotaspeed, 0.0f);
-		o[1].Rotate(0.0f, rotaspeed, 0.0f);
+	if (m_key.KeyPressed(DIK_D)) {
+		o[0].Rotate(0.00f, -rotaspeed, 0.0f);
+		o[1].Rotate(0.00f, -rotaspeed, 0.0f);
 	}
-	if (point.x > m_p.x) {
-		o[0].Rotate(0.0f, -rotaspeed, 0.0f);
-		o[1].Rotate(0.0f, -rotaspeed, 0.0f);
-	}
-	if (point.y < m_p.y) {
+	if (m_key.KeyPressed(DIK_W)) {
 		o[0].Rotate(rotaspeed, 0.0f, 0.0f);
 		o[1].Rotate(rotaspeed, 0.0f, 0.0f);
 	}
-	if (point.y > m_p.y) {
+	if (m_key.KeyPressed(DIK_S)) {
 		o[0].Rotate(-rotaspeed, 0.0f, 0.0f);
 		o[1].Rotate(-rotaspeed, 0.0f, 0.0f);
 	}
-	
-}*/
-
+	if (m_key.KeyPressed(DIK_NUMPADPLUS)) {
+		o[0].Scale(1.1f, 1.1f, 1.1f);
+		o[1].Scale(1.1f, 1.1f, 1.1f);
+	}
+	if (m_key.KeyPressed(DIK_NUMPADMINUS)) {
+		o[0].Scale(0.9f, 0.9f, 0.9f);
+		o[1].Scale(0.9f, 0.9f, 0.9f);
+	}
+}
 
 void CDirectX_3DDlg::OnBnClickedButton2()
 {
@@ -282,6 +267,9 @@ void CDirectX_3DDlg::OnBnClickedButton2()
 	for (m_run = true; m_run;) {              // animation loop
 		o[0].Rotate(-0.01f, -0.01f, 0.0f);
 		o[1].Rotate(-0.01f, -0.01f, 0.0f);
+
+		evaluate_keys();
+			
 		m_d3d.BeginRender();
 		if (!m_d3d.Render(o, 2)) {
 			AfxMessageBox(L"Szene konnte nicht gerendert werden"); return;
@@ -374,7 +362,7 @@ void CDirectX_3DDlg::OnBnClickedButton3()
 	}
 	LPD3DXFONT font = m_d3d.CreateD3DFont(12, L"Verdana", 0xffffffff);
 
-	o[0].BuildFromObtFile(m_d3d.m_pd3dDevice, "m_fish1.obt", 0.0025f);
+	o[0].BuildFromObtFile(m_d3d.m_pd3dDevice, "m_fish1.obt", 0.0025f, 0xFF0000FF);
 	o[0].Rotate(-1.55f, 0.0f, 0.0f);
 	o[0].Move(1.f, 0.0f, 0.0f);
 	o[0].SetMaterial(0.0f, 0.0f, 1.0f);
@@ -382,6 +370,9 @@ void CDirectX_3DDlg::OnBnClickedButton3()
 
 	for (m_run = true; m_run;) {              // animation loop
 		//o[0].Rotate(0.0f, 0.01f, 0.0f);
+
+		evaluate_keys();
+
 		m_d3d.BeginRender();
 		if (!m_d3d.Render(o, 1)) {
 			AfxMessageBox(L"Szene konnte nicht gerendert werden"); return;

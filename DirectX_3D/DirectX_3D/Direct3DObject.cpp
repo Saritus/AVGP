@@ -228,6 +228,11 @@ bool CDirect3DObject::ScaleTexture(float su, float sv) {
 
 bool CDirect3DObject::BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice, char* fname, float scale)
 {	
+	return BuildFromObtFile(pd3dDevice, fname, scale, 0xFFFFFFFF);
+}
+
+bool CDirect3DObject::BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice, char* fname, float scale, DWORD color)
+{
 	FILE *fp;
 	char header[7];
 	int points;
@@ -237,52 +242,52 @@ bool CDirect3DObject::BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice, char* fname
 	m_colored = true; m_textured = m_lighted = false; // Objekttyp
 
 	m_pd3dDevice = pd3dDevice;
-	if ((fp=fopen(fname,"r")) == NULL) {
-		err.Format(L"Fehler beim Öffnen von %s",fname);
+	if ((fp = fopen(fname, "r")) == NULL) {
+		err.Format(L"Fehler beim Öffnen von %s", fname);
 		AfxMessageBox(err);
 		return false;
 	}
-	if (strcmp(fgets(header,7,fp),"HM_OBT") != 0) {
-		err.Format(L"Ungültiges Dateiformat in %s",fname);
+	if (strcmp(fgets(header, 7, fp), "HM_OBT") != 0) {
+		err.Format(L"Ungültiges Dateiformat in %s", fname);
 		AfxMessageBox(err);
 		fclose(fp);
 		return false;
 	}
-	if (fscanf(fp,"%f",&fdummy) != 1) {
-		err.Format(L"Fehler beim Lesen der Punktkoordinaten aus %s",fname);
+	if (fscanf(fp, "%f", &fdummy) != 1) {
+		err.Format(L"Fehler beim Lesen der Punktkoordinaten aus %s", fname);
 		AfxMessageBox(err);
 		fclose(fp);
 		return false;
 	}
 	if (fdummy != 1.0f) {
-		err.Format(L"Ungültige Version des Dateiformates in %s",fname);
+		err.Format(L"Ungültige Version des Dateiformates in %s", fname);
 		AfxMessageBox(err);
 		fclose(fp);
 		return false;
 	}
 
-	if (fscanf(fp,"%d",&points) != 1) {
-		err.Format(L"Fehler beim Lesen in %s",fname);
+	if (fscanf(fp, "%d", &points) != 1) {
+		err.Format(L"Fehler beim Lesen in %s", fname);
 		AfxMessageBox(err);
 		fclose(fp);
 		return false;
 	}
-	if ((vertexes=(D3DXVECTOR3*)malloc(points*sizeof(D3DXVECTOR3))) == NULL) {
-		err.Format(L"Speicher in der Größe von\n%d Bytes nicht allocierbar",points*sizeof(D3DXVECTOR3));
+	if ((vertexes = (D3DXVECTOR3*)malloc(points*sizeof(D3DXVECTOR3))) == NULL) {
+		err.Format(L"Speicher in der Größe von\n%d Bytes nicht allocierbar", points*sizeof(D3DXVECTOR3));
 		AfxMessageBox(err);
 		fclose(fp);
 		return false;
 	}
-	for (int i=0; i<points; i++)
-		if (fscanf(fp,"%f %f %f",&(vertexes[i].x), &(vertexes[i].y), &(vertexes[i].z)) != 3) {
-			err.Format(L"Fehler beim Lesen der Punktkoordinaten aus %s",fname);
+	for (int i = 0; i<points; i++)
+		if (fscanf(fp, "%f %f %f", &(vertexes[i].x), &(vertexes[i].y), &(vertexes[i].z)) != 3) {
+			err.Format(L"Fehler beim Lesen der Punktkoordinaten aus %s", fname);
 			AfxMessageBox(err);
 			fclose(fp);
 			return false;
 		}
-	
-	if (fscanf(fp,"%d",&m_primcount) != 1) {
-		err.Format(L"Fehler beim Lesen in %s",fname);
+
+	if (fscanf(fp, "%d", &m_primcount) != 1) {
+		err.Format(L"Fehler beim Lesen in %s", fname);
 		AfxMessageBox(err);
 		fclose(fp);
 		return false;
@@ -290,28 +295,28 @@ bool CDirect3DObject::BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice, char* fname
 
 	int polygons[4];
 	// Puffer für 3D-Modell anlegen
-	if( FAILED( m_pd3dDevice->CreateVertexBuffer( 3*m_primcount*sizeof(CUSTOMVERTEX),
-			 0 /*Usage*/, D3DFVF_XYZ|D3DFVF_DIFFUSE, D3DPOOL_DEFAULT, &m_pVB, NULL ) ) )
+	if (FAILED(m_pd3dDevice->CreateVertexBuffer(3 * m_primcount*sizeof(CUSTOMVERTEX),
+		0 /*Usage*/, D3DFVF_XYZ | D3DFVF_DIFFUSE, D3DPOOL_DEFAULT, &m_pVB, NULL)))
 		return false;
 	// Puffer sperren und 3D-Modell hineinkopieren
 	CUSTOMVERTEX* pVertices;
-	if( FAILED( m_pVB->Lock( 0, 0, (void**)&pVertices, 0 ) ) )
+	if (FAILED(m_pVB->Lock(0, 0, (void**)&pVertices, 0)))
 		return false;
-	for(int i=0; i<(m_primcount*3); i+=3) {
-		if (fscanf(fp,"%d %d %d %d",&polygons[0],&polygons[1],&polygons[2],&polygons[3]) != 4) {
-			err.Format(L"Fehler beim Lesen der Polygoninformationen aus %s",fname);
+	for (int i = 0; i<(m_primcount * 3); i += 3) {
+		if (fscanf(fp, "%d %d %d %d", &polygons[0], &polygons[1], &polygons[2], &polygons[3]) != 4) {
+			err.Format(L"Fehler beim Lesen der Polygoninformationen aus %s", fname);
 			AfxMessageBox(err);
 			fclose(fp); free(vertexes);
 			return false;
 		}
-		for(int j=0; j<3; j++) {
-			pVertices[i+j].x = vertexes[polygons[j]].x;
-			pVertices[i+j].y = vertexes[polygons[j]].y;
-			pVertices[i+j].z = vertexes[polygons[j]].z;
-			pVertices[i+j].color = 0xFFAAAAFF; // color of the 3d-model
+		for (int j = 0; j<3; j++) {
+			pVertices[i + j].x = vertexes[polygons[j]].x;
+			pVertices[i + j].y = vertexes[polygons[j]].y;
+			pVertices[i + j].z = vertexes[polygons[j]].z;
+			pVertices[i + j].color = vertexes[polygons[j]].x;// color; // color of the 3d-model
 		}
 	}
-	m_pVB->Unlock(); 
+	m_pVB->Unlock();
 	fclose(fp); free(vertexes);
 	Scale(scale, scale, scale, true);
 	return true;

@@ -1,6 +1,7 @@
 
 // DirectX_3DDlg.h: Headerdatei
 //
+#include "KeyInput.h"
 
 #pragma once
 
@@ -27,6 +28,7 @@ protected:
 	CDirect3DObject o[5];
 	bool m_run;
 	CPoint m_p;
+	CKeyInput m_key;
 
 	LPDIRECT3D9 m_pD3D; // Used to create the D3DDevice
 	LPDIRECT3DDEVICE9 m_pd3dDevice; // Our rendering device
@@ -43,4 +45,5 @@ public:
 	afx_msg void OnClose();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnBnClickedButton3();
+	void evaluate_keys();
 };

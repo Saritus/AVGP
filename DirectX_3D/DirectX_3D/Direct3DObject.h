@@ -41,6 +41,7 @@ public:
 							  D3DXVECTOR3 *normalvek,
 							  int modell[][2], int count);
 	bool BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice, char* fname, float scale);
+	bool BuildFromObtFile(LPDIRECT3DDEVICE9 pd3dDevice, char* fname, float scale, DWORD color);
 	bool BuildFromXFile(LPDIRECT3DDEVICE9 pd3dDevice, CString filename);
 	bool SetTextureFromFile(LPCWSTR fname);
 	bool ScaleTexture(float su, float sv);

@@ -42,6 +42,9 @@
     <ClInclude Include="Direct3DObject.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="KeyInput.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX_3D.cpp">
@@ -60,6 +63,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Direct3DObject.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyInput.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
