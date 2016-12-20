@@ -30,6 +30,7 @@ void CDirectX_ShowDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CDirectX_ShowDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CDirectX_ShowDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -85,3 +86,25 @@ HCURSOR CDirectX_ShowDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CDirectX_ShowDlg::OnBnClickedButton1()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+
+	
+	CoInitialize(NULL); // zur Initialisierung des COM-Interfaces
+	CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
+		IID_IGraphBuilder, (void **)&pGraph);
+
+	pGraph->QueryInterface(IID_IMediaControl, (void **)&pMediaControl);
+	pGraph->QueryInterface(IID_IMediaEvent, (void **)&pEvent);	pGraph->QueryInterface(IID_IVideoWindow, (void **)&pVidWin);	pGraph->RenderFile(L"Confused.avi", NULL);	pVidWin->put_Owner((OAHWND)GetSafeHwnd());
+	pVidWin->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS);
+	pVidWin->put_Visible(OATRUE);	pVidWin->SetWindowPosition(10, 70, 300, 200);	pMediaControl->Run(); long evCode;
+	pEvent->WaitForCompletion(INFINITE, &evCode);	pVidWin->put_Visible(OAFALSE);
+	pVidWin->put_Owner(NULL);
+	pVidWin->Release();	pMediaControl->Release(); // COM-Interface freigeben
+	pEvent->Release();
+	pGraph->Release();
+	CoUninitialize(); // COM freigeben
+}

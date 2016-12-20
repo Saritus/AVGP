@@ -32,13 +32,5 @@
 
 #include <afxcontrolbars.h>     // MFC-Unterstützung für Menübänder und Steuerleisten
 
-
-
-
-
-
-
-
-
-
-
+// DirectShow
+#include <dshow.h>

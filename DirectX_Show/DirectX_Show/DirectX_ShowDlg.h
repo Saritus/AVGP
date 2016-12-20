@@ -23,9 +23,16 @@ public:
 protected:
 	HICON m_hIcon;
 
+	IGraphBuilder *pGraph; // ein Zeiger auf das COM-Interface
+	IMediaControl *pMediaControl;
+	IMediaEvent *pEvent;
+	IVideoWindow *pVidWin = NULL;
+
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedButton1();
 };
