@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "DirectShow.h"
+
 
 // CDirectX_ShowDlg-Dialogfeld
 class CDirectX_ShowDlg : public CDialogEx
@@ -23,13 +25,7 @@ public:
 protected:
 	HICON m_hIcon;
 
-	IGraphBuilder *pGraph; // ein Zeiger auf das COM-Interface
-	IMediaControl *pMediaControl;
-	IMediaEventEx *pEvent;
-	IVideoWindow *pVidWin = NULL;
-	IMediaSeeking *pSeek = NULL;
-
-	CString filename = L"Confused.avi";
+	CDirectShow directshow;
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
@@ -40,11 +36,7 @@ public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg LONG GetIt(UINT wparam, LONG lparam);
 
-	void OnStop();
-	void OnResume();
-	void OnPause();
-	void CleanUp();
-	void Vollbild(bool v);
+
 	
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);

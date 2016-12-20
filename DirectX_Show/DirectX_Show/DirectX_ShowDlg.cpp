@@ -56,9 +56,8 @@ BOOL CDirectX_ShowDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Großes Symbol verwenden
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
-	// TODO: Hier zusätzliche Initialisierung einfügen
-
-	
+	// TODO: Hier zusätzliche Initialisierung einfügen	
+	directshow = new CDirectShow((OAHWND)GetSafeHwnd());
 
 	return TRUE;  // TRUE zurückgeben, wenn der Fokus nicht auf ein Steuerelement gesetzt wird
 }
@@ -104,117 +103,35 @@ HCURSOR CDirectX_ShowDlg::OnQueryDragIcon()
 void CDirectX_ShowDlg::OnBnClickedButton1()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
-	CoInitialize(NULL); // zur Initialisierung des COM-Interfaces
-	CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
-		IID_IGraphBuilder, (void **)&pGraph);
-
-	pGraph->QueryInterface(IID_IMediaControl, (void **)&pMediaControl);
-	pGraph->QueryInterface(IID_IMediaEventEx, (void **)&pEvent);
-	pGraph->QueryInterface(IID_IVideoWindow, (void **)&pVidWin);
-	pGraph->QueryInterface(IID_IMediaSeeking, (void**)&pSeek);
-
-	// Nachrichtenbehandlung (Maus, Keyboard)
-	pVidWin->put_MessageDrain((OAHWND)GetSafeHwnd());
-
-	pEvent->SetNotifyWindow((OAHWND)GetSafeHwnd(), WM_GRAPHNOTIFY, 0);
 
 	SetTimer(1, 200, NULL);
-
-	pGraph->RenderFile(filename, NULL);
-
-	// set timeformat to 100-nanoseconds units
-	if (pSeek->IsFormatSupported(&TIME_FORMAT_MEDIA_TIME) == S_OK)
-		pSeek->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME);
-	else
-		AfxMessageBox(L"Zeitformat wird nicht unterstützt");
-
-	if (pSeek) {
-		REFERENCE_TIME d;
-		pSeek->GetDuration(&d);
-		CSliderCtrl *sl;
-		sl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER);
-		sl->SetRange(0, (int)(d / 1000000)); sl->SetPos(0);
-	}
-
-	pVidWin->put_Owner((OAHWND)GetSafeHwnd());
-	pVidWin->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS);
-	pVidWin->put_Visible(OATRUE);
-	pVidWin->SetWindowPosition(10, 70, 300, 200);
-
-	pMediaControl->Run(); long evCode;
-	//pEvent->WaitForCompletion(INFINITE, &evCode);
-
-	
 
 }
 
 LONG CDirectX_ShowDlg::GetIt(UINT wparam, LONG lparam) {
-	long evCode, param1, param2; HRESULT hr;
-	while (SUCCEEDED(pEvent->GetEvent(&evCode, &param1, &param2, 0))) {
-		pEvent->FreeEventParams(evCode, param1, param2);
-		switch (evCode) {
-		case EC_COMPLETE:
-		case EC_USERABORT:
-			CleanUp(); return 0;
-		}
-	}
-	return 0;
-}
-
-void CDirectX_ShowDlg::OnStop() {
-	if (pMediaControl != 0) {
-		pMediaControl->Stop(); CleanUp();
-	}
-}
-
-void CDirectX_ShowDlg::OnResume() {
-	if (pMediaControl != 0)
-		pMediaControl->Run();
-}
-
-void CDirectX_ShowDlg::OnPause() {
-	if (pMediaControl != 0)
-		pMediaControl->Pause();
-}
-
-void CDirectX_ShowDlg::CleanUp() {
-	KillTimer(1);
-	Vollbild(false);
-	pVidWin->put_Visible(OAFALSE);
-	pVidWin->put_Owner(NULL);
-	pSeek->Release();
-	pMediaControl->Release();
-	pVidWin->Release();
-	pEvent->Release();
-	pGraph->Release();
-	pMediaControl = 0; pVidWin = 0;
-	pEvent = 0; pGraph = 0;
-	CoUninitialize();
-}
-
-void CDirectX_ShowDlg::Vollbild(bool v) {
-	if (pGraph) {
-		IVideoWindow *pVidWin1 = NULL;
-		pGraph->QueryInterface(IID_IVideoWindow, (void **)&pVidWin1);
-		pVidWin1->put_FullScreenMode(v ? OATRUE : OAFALSE);
-		pVidWin1->Release();
-	}
+	return directshow.GetIt(wparam, lparam);
 }
 
 void CDirectX_ShowDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	REFERENCE_TIME rtTotal, rtNow = 0; CString s;
-	pSeek->GetDuration(&rtTotal);
-	pSeek->GetCurrentPosition(&rtNow);
+	rtTotal = directshow.getLenght();
+	rtNow = directshow.getCurrentPosition();
 	s.Format(L"Abspielvorgang: %02d:%02d (%d%%)",
 		(int)((rtNow / 10000000L) / 60), // min
 		(int)((rtNow / 10000000L) % 60), // sek
 		(int)((rtNow * 100) / rtTotal)); // Prozent
 	GetDlgItem(IDC_STATUS)->SetWindowText(s);
 
-	((CSliderCtrl*)GetDlgItem(IDC_SLIDER))->SetPos((int)(rtNow / 1000000));
-	CDialog::OnTimer(nIDEvent);
 
+	REFERENCE_TIME d;
+	d = directshow.getLenght();
+	CSliderCtrl *sl;
+	sl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER);
+	sl->SetRange(0, (int)(d / 1000000)); sl->SetPos(0);
+
+
+	((CSliderCtrl*)GetDlgItem(IDC_SLIDER))->SetPos((int)(rtNow / 1000000));
 	CDialog::OnTimer(nIDEvent);
 }
 
@@ -222,10 +139,9 @@ void CDirectX_ShowDlg::OnTimer(UINT_PTR nIDEvent)
 void CDirectX_ShowDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	CSliderCtrl *sl1 = (CSliderCtrl*)GetDlgItem(IDC_SLIDER);
-	if ((pSeek) && ((void*)sl1 == (void*)pScrollBar)) {
+	if ((void*)sl1 == (void*)pScrollBar) {
 		REFERENCE_TIME pos = (REFERENCE_TIME)sl1->GetPos() * 1000000;
-		pSeek->SetPositions(&pos, AM_SEEKING_AbsolutePositioning,
-			NULL, AM_SEEKING_NoPositioning);
+		directshow.setCurrentPosition(pos);
 	}
 	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 }
@@ -241,8 +157,8 @@ void CDirectX_ShowDlg::OnBnClickedButton2()
 	// returns IDOK.
 	if (fileDlg.DoModal() == IDOK)
 	{
-		filename = fileDlg.GetPathName();
-		GetDlgItem(IDC_FILENAME)->SetWindowText(filename);
+		directshow.filename = fileDlg.GetPathName();
+		GetDlgItem(IDC_FILENAME)->SetWindowText(directshow.filename);
 	}
 }
 
@@ -250,33 +166,33 @@ void CDirectX_ShowDlg::OnBnClickedButton2()
 void CDirectX_ShowDlg::OnBnClickedPause()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
-	OnPause();
+	directshow.Pause();
 }
 
 
 void CDirectX_ShowDlg::OnBnClickedResume()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
-	OnResume();
+	directshow.Resume();
 }
 
 
 void CDirectX_ShowDlg::OnBnClickedStop()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
-	OnStop();
+	directshow.Stop();
 }
 
 
 void CDirectX_ShowDlg::OnBnClickedVollbild()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
-	Vollbild(true);
+	directshow.Vollbild(true);
 }
 
 
 void CDirectX_ShowDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	Vollbild(false);
+	directshow.Vollbild(false);
 	CDialog::OnLButtonDown(nFlags, point);
 }
