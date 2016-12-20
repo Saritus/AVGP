@@ -25,8 +25,9 @@ protected:
 
 	IGraphBuilder *pGraph; // ein Zeiger auf das COM-Interface
 	IMediaControl *pMediaControl;
-	IMediaEvent *pEvent;
+	IMediaEventEx *pEvent;
 	IVideoWindow *pVidWin = NULL;
+	IMediaSeeking *pSeek = NULL;
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
@@ -35,4 +36,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButton1();
+	afx_msg LONG GetIt(UINT wparam, LONG lparam);	void OnStop();	void OnResume();	void OnPause();	void CleanUp();
+	
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
