@@ -101,6 +101,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DirectShow.h" />
     <ClInclude Include="DirectX_Show.h" />
     <ClInclude Include="DirectX_ShowDlg.h" />
     <ClInclude Include="Resource.h" />
@@ -108,6 +109,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DirectShow.cpp" />
     <ClCompile Include="DirectX_Show.cpp" />
     <ClCompile Include="DirectX_ShowDlg.cpp" />
     <ClCompile Include="stdafx.cpp">

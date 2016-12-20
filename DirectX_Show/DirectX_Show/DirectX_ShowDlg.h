@@ -44,8 +44,14 @@ public:
 	void OnResume();
 	void OnPause();
 	void CleanUp();
+	void Vollbild(bool v);
 	
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedPause();
+	afx_msg void OnBnClickedResume();
+	afx_msg void OnBnClickedStop();
+	afx_msg void OnBnClickedVollbild();
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };

@@ -33,6 +33,9 @@
     <ClInclude Include="Resource.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="DirectShow.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX_Show.cpp">
@@ -42,6 +45,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectShow.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

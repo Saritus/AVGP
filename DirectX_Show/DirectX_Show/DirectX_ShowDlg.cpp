@@ -37,6 +37,11 @@ BEGIN_MESSAGE_MAP(CDirectX_ShowDlg, CDialogEx)
 	ON_WM_TIMER()
 	ON_WM_HSCROLL()
 	ON_BN_CLICKED(IDC_BUTTON2, &CDirectX_ShowDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_PAUSE, &CDirectX_ShowDlg::OnBnClickedPause)
+	ON_BN_CLICKED(IDC_RESUME, &CDirectX_ShowDlg::OnBnClickedResume)
+	ON_BN_CLICKED(IDC_STOP, &CDirectX_ShowDlg::OnBnClickedStop)
+	ON_BN_CLICKED(IDC_VOLLBILD, &CDirectX_ShowDlg::OnBnClickedVollbild)
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -108,6 +113,9 @@ void CDirectX_ShowDlg::OnBnClickedButton1()
 	pGraph->QueryInterface(IID_IVideoWindow, (void **)&pVidWin);
 	pGraph->QueryInterface(IID_IMediaSeeking, (void**)&pSeek);
 
+	// Nachrichtenbehandlung (Maus, Keyboard)
+	pVidWin->put_MessageDrain((OAHWND)GetSafeHwnd());
+
 	pEvent->SetNotifyWindow((OAHWND)GetSafeHwnd(), WM_GRAPHNOTIFY, 0);
 
 	SetTimer(1, 200, NULL);
@@ -171,6 +179,7 @@ void CDirectX_ShowDlg::OnPause() {
 
 void CDirectX_ShowDlg::CleanUp() {
 	KillTimer(1);
+	Vollbild(false);
 	pVidWin->put_Visible(OAFALSE);
 	pVidWin->put_Owner(NULL);
 	pSeek->Release();
@@ -181,6 +190,15 @@ void CDirectX_ShowDlg::CleanUp() {
 	pMediaControl = 0; pVidWin = 0;
 	pEvent = 0; pGraph = 0;
 	CoUninitialize();
+}
+
+void CDirectX_ShowDlg::Vollbild(bool v) {
+	if (pGraph) {
+		IVideoWindow *pVidWin1 = NULL;
+		pGraph->QueryInterface(IID_IVideoWindow, (void **)&pVidWin1);
+		pVidWin1->put_FullScreenMode(v ? OATRUE : OAFALSE);
+		pVidWin1->Release();
+	}
 }
 
 void CDirectX_ShowDlg::OnTimer(UINT_PTR nIDEvent)
@@ -226,4 +244,39 @@ void CDirectX_ShowDlg::OnBnClickedButton2()
 		filename = fileDlg.GetPathName();
 		GetDlgItem(IDC_FILENAME)->SetWindowText(filename);
 	}
+}
+
+
+void CDirectX_ShowDlg::OnBnClickedPause()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	OnPause();
+}
+
+
+void CDirectX_ShowDlg::OnBnClickedResume()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	OnResume();
+}
+
+
+void CDirectX_ShowDlg::OnBnClickedStop()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	OnStop();
+}
+
+
+void CDirectX_ShowDlg::OnBnClickedVollbild()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	Vollbild(true);
+}
+
+
+void CDirectX_ShowDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	Vollbild(false);
+	CDialog::OnLButtonDown(nFlags, point);
 }
