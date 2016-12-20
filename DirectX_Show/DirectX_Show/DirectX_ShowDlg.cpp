@@ -35,6 +35,8 @@ BEGIN_MESSAGE_MAP(CDirectX_ShowDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDirectX_ShowDlg::OnBnClickedButton1)
 	ON_REGISTERED_MESSAGE(WM_GRAPHNOTIFY, GetIt)
 	ON_WM_TIMER()
+	ON_WM_HSCROLL()
+	ON_BN_CLICKED(IDC_BUTTON2, &CDirectX_ShowDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -110,13 +112,21 @@ void CDirectX_ShowDlg::OnBnClickedButton1()
 
 	SetTimer(1, 200, NULL);
 
-	pGraph->RenderFile(L"Confused.avi", NULL);
+	pGraph->RenderFile(filename, NULL);
 
 	// set timeformat to 100-nanoseconds units
 	if (pSeek->IsFormatSupported(&TIME_FORMAT_MEDIA_TIME) == S_OK)
 		pSeek->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME);
 	else
 		AfxMessageBox(L"Zeitformat wird nicht unterstützt");
+
+	if (pSeek) {
+		REFERENCE_TIME d;
+		pSeek->GetDuration(&d);
+		CSliderCtrl *sl;
+		sl = (CSliderCtrl*)GetDlgItem(IDC_SLIDER);
+		sl->SetRange(0, (int)(d / 1000000)); sl->SetPos(0);
+	}
 
 	pVidWin->put_Owner((OAHWND)GetSafeHwnd());
 	pVidWin->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS);
@@ -160,6 +170,7 @@ void CDirectX_ShowDlg::OnPause() {
 }
 
 void CDirectX_ShowDlg::CleanUp() {
+	KillTimer(1);
 	pVidWin->put_Visible(OAFALSE);
 	pVidWin->put_Owner(NULL);
 	pSeek->Release();
@@ -182,5 +193,37 @@ void CDirectX_ShowDlg::OnTimer(UINT_PTR nIDEvent)
 		(int)((rtNow / 10000000L) % 60), // sek
 		(int)((rtNow * 100) / rtTotal)); // Prozent
 	GetDlgItem(IDC_STATUS)->SetWindowText(s);
+
+	((CSliderCtrl*)GetDlgItem(IDC_SLIDER))->SetPos((int)(rtNow / 1000000));
 	CDialog::OnTimer(nIDEvent);
+
+	CDialog::OnTimer(nIDEvent);
+}
+
+
+void CDirectX_ShowDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	CSliderCtrl *sl1 = (CSliderCtrl*)GetDlgItem(IDC_SLIDER);
+	if ((pSeek) && ((void*)sl1 == (void*)pScrollBar)) {
+		REFERENCE_TIME pos = (REFERENCE_TIME)sl1->GetPos() * 1000000;
+		pSeek->SetPositions(&pos, AM_SEEKING_AbsolutePositioning,
+			NULL, AM_SEEKING_NoPositioning);
+	}
+	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+
+void CDirectX_ShowDlg::OnBnClickedButton2()
+{
+	CString szFilters = L"AVI Files (*.avi)|*.avi|All Files (*.*)|*.*||";
+	// Create an Open dialog; the default file name extension is ".my".
+	CFileDialog fileDlg(TRUE, L"avi", L"*.avi", OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters, this);
+
+	// Display the file dialog. When user clicks OK, fileDlg.DoModal()
+	// returns IDOK.
+	if (fileDlg.DoModal() == IDOK)
+	{
+		filename = fileDlg.GetPathName();
+		GetDlgItem(IDC_FILENAME)->SetWindowText(filename);
+	}
 }

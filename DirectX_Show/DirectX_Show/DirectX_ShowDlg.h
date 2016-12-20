@@ -29,6 +29,8 @@ protected:
 	IVideoWindow *pVidWin = NULL;
 	IMediaSeeking *pSeek = NULL;
 
+	CString filename = L"Confused.avi";
+
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
@@ -36,7 +38,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButton1();
-	afx_msg LONG GetIt(UINT wparam, LONG lparam);	void OnStop();	void OnResume();	void OnPause();	void CleanUp();
+	afx_msg LONG GetIt(UINT wparam, LONG lparam);
+
+	void OnStop();
+	void OnResume();
+	void OnPause();
+	void CleanUp();
 	
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnBnClickedButton2();
 };
