@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CDirectX_ShowDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_STOP, &CDirectX_ShowDlg::OnBnClickedStop)
 	ON_BN_CLICKED(IDC_VOLLBILD, &CDirectX_ShowDlg::OnBnClickedVollbild)
 	ON_WM_LBUTTONDOWN()
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -57,7 +58,8 @@ BOOL CDirectX_ShowDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
 	// TODO: Hier zusätzliche Initialisierung einfügen	
-	directshow = new CDirectShow((OAHWND)GetSafeHwnd());
+	directshow.setWindow((OAHWND)GetSafeHwnd());
+	directshow.setNotifyWindow(WM_GRAPHNOTIFY);
 
 	return TRUE;  // TRUE zurückgeben, wenn der Fokus nicht auf ein Steuerelement gesetzt wird
 }
@@ -103,7 +105,8 @@ HCURSOR CDirectX_ShowDlg::OnQueryDragIcon()
 void CDirectX_ShowDlg::OnBnClickedButton1()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
-
+	directshow.setVideoWindow();
+	directshow.Run();
 	SetTimer(1, 200, NULL);
 
 }
@@ -117,7 +120,7 @@ void CDirectX_ShowDlg::OnTimer(UINT_PTR nIDEvent)
 	REFERENCE_TIME rtTotal, rtNow = 0; CString s;
 	rtTotal = directshow.getLenght();
 	rtNow = directshow.getCurrentPosition();
-	s.Format(L"Abspielvorgang: %02d:%02d (%d%%)",
+	s.Format(L"Zeit: %02d:%02d (%d%%)",
 		(int)((rtNow / 10000000L) / 60), // min
 		(int)((rtNow / 10000000L) % 60), // sek
 		(int)((rtNow * 100) / rtTotal)); // Prozent
@@ -157,7 +160,7 @@ void CDirectX_ShowDlg::OnBnClickedButton2()
 	// returns IDOK.
 	if (fileDlg.DoModal() == IDOK)
 	{
-		directshow.filename = fileDlg.GetPathName();
+		directshow.setFilename(fileDlg.GetPathName());
 		GetDlgItem(IDC_FILENAME)->SetWindowText(directshow.filename);
 	}
 }
@@ -180,6 +183,7 @@ void CDirectX_ShowDlg::OnBnClickedResume()
 void CDirectX_ShowDlg::OnBnClickedStop()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	KillTimer(1);
 	directshow.Stop();
 }
 
@@ -195,4 +199,15 @@ void CDirectX_ShowDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	directshow.Vollbild(false);
 	CDialog::OnLButtonDown(nFlags, point);
+}
+
+void CDirectX_ShowDlg::buttonsEnabled(bool) {
+
+}
+
+void CDirectX_ShowDlg::OnClose()
+{
+	// TODO: Fügen Sie hier Ihren Meldungsbehandlungscode ein, und/oder benutzen Sie den Standard.
+	directshow.CleanUp();
+	CDialogEx::OnClose();
 }

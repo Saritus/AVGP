@@ -46,4 +46,6 @@ public:
 	afx_msg void OnBnClickedStop();
 	afx_msg void OnBnClickedVollbild();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	void buttonsEnabled(bool);
+	afx_msg void OnClose();
 };

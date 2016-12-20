@@ -6,9 +6,10 @@ class CDirectShow
 {
 public:
 	CDirectShow();
-	CDirectShow(OAHWND window);
 	~CDirectShow();
 
+	void Init();
+	void setWindow(OAHWND parentwindow);
 	void Stop();
 	void Resume();
 	void Pause();
@@ -21,12 +22,14 @@ public:
 	REFERENCE_TIME getLenght();
 
 	LONG GetIt(UINT wparam, LONG lparam);
-	void setNotifyWindow(OAHWND window, UINT NEAR WM_GRAPHNOTIFY);
-	void setVideoWindow(OAHWND window);
+	void setNotifyWindow(UINT NEAR WM_GRAPHNOTIFY);
+	void setVideoWindow();
+	void setFilename(CString filename);
 
 	CString filename = L"Confused.avi";
 
 private:
+	OAHWND window;
 	IGraphBuilder *pGraph; // ein Zeiger auf das COM-Interface
 	IMediaControl *pMediaControl;
 	IMediaEventEx *pEvent;

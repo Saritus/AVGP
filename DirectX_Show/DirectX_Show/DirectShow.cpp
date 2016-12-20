@@ -1,12 +1,19 @@
 #include "stdafx.h"
 #include "DirectShow.h"
 
-CDirectShow::CDirectShow() {
-
+CDirectShow::CDirectShow()
+{
+	filename = L"Confused.avi";
+	Init();
 }
 
-CDirectShow::CDirectShow(OAHWND window)
+CDirectShow::~CDirectShow()
 {
+	//CleanUp();
+}
+
+void CDirectShow::Init() {
+
 	CoInitialize(NULL); // zur Initialisierung des COM-Interfaces
 	CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
 		IID_IGraphBuilder, (void **)&pGraph);
@@ -25,10 +32,8 @@ CDirectShow::CDirectShow(OAHWND window)
 		AfxMessageBox(L"Zeitformat wird nicht unterstützt");
 }
 
-
-CDirectShow::~CDirectShow()
-{
-	CleanUp();
+void CDirectShow::setWindow(OAHWND parentwindow) {
+	window = parentwindow;
 }
 
 void CDirectShow::Stop() {
@@ -106,13 +111,20 @@ LONG CDirectShow::GetIt(UINT wparam, LONG lparam) {
 	return 0;
 }
 
-void CDirectShow::setNotifyWindow(OAHWND window, UINT NEAR WM_GRAPHNOTIFY) {
+void CDirectShow::setNotifyWindow(UINT NEAR WM_GRAPHNOTIFY) {
 	pEvent->SetNotifyWindow(window, WM_GRAPHNOTIFY, 0);
 }
 
-void CDirectShow::setVideoWindow(OAHWND window) {
+void CDirectShow::setVideoWindow() {
 	pVidWin->put_Owner(window);
 	pVidWin->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS);
 	pVidWin->put_Visible(OATRUE);
 	pVidWin->SetWindowPosition(10, 70, 300, 200);
+}
+
+void CDirectShow::setFilename(CString newfilename) {
+
+	CleanUp();
+	filename = newfilename;
+	Init();
 }
