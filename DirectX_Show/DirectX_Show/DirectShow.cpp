@@ -120,10 +120,11 @@ void CDirectShow::setVideoWindow() {
 	pVidWin->put_WindowStyle(WS_CHILD | WS_CLIPSIBLINGS);
 	pVidWin->put_Visible(OATRUE);
 	pVidWin->SetWindowPosition(10, 70, 300, 200);
+	// Nachrichtenbehandlung (Maus, Keyboard)
+	pVidWin->put_MessageDrain(window);
 }
 
 void CDirectShow::setFilename(CString newfilename) {
-
 	CleanUp();
 	filename = newfilename;
 	Init();
