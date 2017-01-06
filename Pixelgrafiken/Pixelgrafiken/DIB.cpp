@@ -97,3 +97,8 @@ void* CDIB::GetPixelAddress(int x, int y) {
 		x*(m_pBMI->bmiHeader.biBitCount / 8);
 	return m_pBits + (DibHeight() - y - 1) * iWidth + x;
 }
+
+int CDIB::StorageWidth() {
+	return (m_pBMI ? ((m_pBMI->bmiHeader.biWidth*
+		(m_pBMI->bmiHeader.biBitCount / 8) + 3) & ~3) : 0);
+}

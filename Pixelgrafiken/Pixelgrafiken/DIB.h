@@ -9,6 +9,7 @@ public:
 	virtual int DibWidth();
 	virtual int DibHeight();
 	void* GetPixelAddress(int x, int y);
+	int StorageWidth();
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct
