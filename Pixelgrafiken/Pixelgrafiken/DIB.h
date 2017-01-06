@@ -13,6 +13,7 @@ public:
 	void brighten(int value);
 	void negative();
 	void grey();
+	void histogramm(float *h, float zoom);
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct

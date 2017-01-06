@@ -145,3 +145,23 @@ void CDIB::grey() {
 		}
 	}
 }
+
+void CDIB::histogramm(float *h, float zoom) {
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+	BYTE *t; BYTE g; int sw = StorageWidth();
+	float step = 1.f / (DibHeight()*DibWidth());
+	for (int i = 0; i < 255; i++) h[i] = 0.f; // init
+	for (int i = 0; i < DibHeight(); i++) {
+		t = (BYTE*)GetPixelAddress(0, i);
+		for (int j = 0; j < sw; j += 3) {
+			g = (BYTE)(0.1145*(*(t + j)) + 0.5866*(*(t + j + 1)) + 0.2989*(*(t + j + 2)));
+			h[g] += step; // count
+		}
+	}
+	if (zoom != 0.0f) // zoom
+		for (int i = 0; i < 255; i++) {
+			h[i] *= zoom;
+			if (h[i] > 1.f) h[i] = 1.f;
+		}
+}
