@@ -85,3 +85,15 @@ void CDIB::Draw(CDC* pDC, int x, int y) {
 			DIB_RGB_COLORS, // Options
 			SRCCOPY); // Raster operation code (ROP)
 }
+
+void* CDIB::GetPixelAddress(int x, int y) {
+	int iWidth;
+	if ((x >= DibWidth()) || (y >= DibHeight())) {
+		return NULL; // pixel is out of range
+	}
+	iWidth = StorageWidth(); // Bytes pro Bildzeile
+	if (m_pBMI->bmiHeader.biBitCount == 24)
+		return m_pBits + (DibHeight() - y - 1) * iWidth +
+		x*(m_pBMI->bmiHeader.biBitCount / 8);
+	return m_pBits + (DibHeight() - y - 1) * iWidth + x;
+}
