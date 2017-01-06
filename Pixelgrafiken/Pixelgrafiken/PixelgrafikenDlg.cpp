@@ -60,6 +60,7 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 void CPixelgrafikenDlg::OnPaint()
 {
 	CPaintDC dc(this); // Gerätekontext zum Zeichnen
+	m_dib.Draw(&dc, 0, 0);
 
 	if (IsIconic())
 	{
