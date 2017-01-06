@@ -11,6 +11,7 @@ public:
 	void* GetPixelAddress(int x, int y);
 	int StorageWidth();
 	void brighten(int value);
+	void negative();
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct
