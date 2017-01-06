@@ -103,15 +103,14 @@ int CDIB::StorageWidth() {
 		(m_pBMI->bmiHeader.biBitCount / 8) + 3) & ~3) : 0);
 }
 
-void CDIB::brighten(int value)
-{
+void CDIB::brighten(int value) {
 	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24)
-		|| (value<1) || (value>100))
+		|| (value < 1) || (value > 100))
 		return; // do nothing (not supported)
 	BYTE *t; int sw = StorageWidth();
-	for (int i = 0; i<DibHeight(); i++) {
+	for (int i = 0; i < DibHeight(); i++) {
 		t = (BYTE*)GetPixelAddress(0, i);
-		for (int j = 0; j<sw; j += 3) {
+		for (int j = 0; j < sw; j += 3) {
 			*(t + j) += (BYTE)((255 - *(t + j))*(value / 100.f));
 			*(t + j + 1) += (BYTE)((255 - *(t + j + 1))*(value / 100.f));
 			*(t + j + 2) += (BYTE)((255 - *(t + j + 2))*(value / 100.f));
