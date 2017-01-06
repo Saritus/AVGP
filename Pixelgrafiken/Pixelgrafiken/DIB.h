@@ -12,6 +12,7 @@ public:
 	int StorageWidth();
 	void brighten(int value);
 	void negative();
+	void grey();
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct

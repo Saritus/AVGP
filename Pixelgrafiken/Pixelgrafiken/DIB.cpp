@@ -131,3 +131,17 @@ void CDIB::negative() {
 		}
 	}
 }
+
+void CDIB::grey() {
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+	BYTE *t; int sw = StorageWidth();
+	for (int i = 0; i < DibHeight(); i++) {
+		t = (BYTE*)GetPixelAddress(0, i);
+		for (int j = 0; j < sw; j += 3) {
+			(*(t + j)) =
+				(*(t + j + 1)) =
+				(*(t + j + 2)) = (BYTE)(0.1145*(*(t + j)) + 0.5866*(*(t + j + 1)) + 0.2989*(*(t + j + 2)));
+		}
+	}
+}
