@@ -23,9 +23,20 @@ public:
 protected:
 	HICON m_hIcon;
 
+	IGraphBuilder *m_Graph1;
+	IMediaControl *m_Ctrl1;
+	IMediaEventEx *m_Event1;
+
+	IBaseFilter* g_pSource = NULL;
+	IBaseFilter* g_pWaveParser = NULL;
+	IBaseFilter* g_pMP3Coder = NULL;
+	IBaseFilter* g_pDest = NULL;
+
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedButton1();
 };
