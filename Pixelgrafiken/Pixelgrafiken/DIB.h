@@ -20,6 +20,7 @@ public:
 	void flip(char c);
 	//bool SaveJpeg(char* pszFileName, int quality);
 	//bool LoadJpeg(char* pszFileName);
+	void DrawRect(CDC* pDC, CRect rect);
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct

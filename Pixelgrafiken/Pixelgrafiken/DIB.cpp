@@ -403,3 +403,7 @@ bool CDIB::LoadJpeg(char* pszFileName) {
 	return true;
 }
 */
+
+void CDIB::DrawRect(CDC* pDC, CRect rect) {
+
+}
