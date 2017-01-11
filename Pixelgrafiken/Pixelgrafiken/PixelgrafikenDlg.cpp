@@ -63,6 +63,8 @@ void CPixelgrafikenDlg::OnPaint()
 	CPaintDC dc(this); // Gerätekontext zum Zeichnen
 	m_dib.Draw(&dc, 0, 0);
 
+	draw_histogramm();
+
 	if (IsIconic())
 	{
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
