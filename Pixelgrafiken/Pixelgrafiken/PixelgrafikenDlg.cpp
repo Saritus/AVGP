@@ -49,10 +49,6 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
 									// TODO: Hier zusätzliche Initialisierung einfügen
-	if (!m_dib.Load("bild.bmp")) {
-		AfxMessageBox(L"Keine bmp-Datei");
-		OnCancel(); return FALSE;
-	}
 
 	return TRUE;  // TRUE zurückgeben, wenn der Fokus nicht auf ein Steuerelement gesetzt wird
 }
@@ -112,16 +108,11 @@ void CPixelgrafikenDlg::draw_histogramm() {
 
 void CPixelgrafikenDlg::OnBnClickedButton1()
 {
-	CPaintDC dc(this); // Gerätekontext zum Zeichnen
-	m_dib.Draw(&dc, 0, 0);
-
-	OnPaint();
-
-	//CRect rect;
-	//GetClientRect(&rect);
-	//m_dib.Draw(&dc, 0, 0, rect.Width(), rect.Height());
-
-	//draw_histogramm();
+	if (!m_dib.Load("bild.bmp")) {
+		AfxMessageBox(L"Keine bmp-Datei");
+		OnCancel();
+	}
+	RedrawWindow();
 }
 
 
