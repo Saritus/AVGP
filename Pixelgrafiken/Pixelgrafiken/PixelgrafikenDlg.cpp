@@ -103,3 +103,16 @@ void CPixelgrafikenDlg::OnMouseMove(UINT nFlags, CPoint point)
 
 	CDialogEx::OnMouseMove(nFlags, point);
 }
+
+void CPixelgrafikenDlg::draw_histogramm() {
+	float h[256] = { 0.f }; int x = 10, y = 105;
+	CClientDC dc(this);
+	m_dib.histogramm(h, 20.f);
+	dc.MoveTo(x, y); dc.LineTo(x + 255 + 2, y); // Rahmen zeichnen
+	dc.LineTo(x + 255 + 2, y - 101); dc.LineTo(x, y - 101); dc.LineTo(x, y);
+	CPen p(PS_SOLID, 1, RGB(255, 255, 0)); dc.SelectObject(&p);
+	for (int i = 0; i < 255; i++) { // Histogramm zeichnen
+		dc.MoveTo(x + i + 1, y - 1);
+		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
+	}
+}
