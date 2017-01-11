@@ -30,7 +30,6 @@ void CPixelgrafikenDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CPixelgrafikenDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -45,7 +44,7 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Großes Symbol verwenden
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
-	// TODO: Hier zusätzliche Initialisierung einfügen
+									// TODO: Hier zusätzliche Initialisierung einfügen
 	if (!m_dib.Load("bild.bmp")) {
 		AfxMessageBox(L"Keine bmp-Datei");
 		OnCancel(); return FALSE;
@@ -91,19 +90,6 @@ void CPixelgrafikenDlg::OnPaint()
 HCURSOR CPixelgrafikenDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
-}
-
-
-
-void CPixelgrafikenDlg::OnMouseMove(UINT nFlags, CPoint point)
-{
-	// TODO: Fügen Sie hier Ihren Meldungsbehandlungscode ein, und/oder benutzen Sie den Standard.
-	CClientDC dc(this);
-	BYTE *b;
-	b = (BYTE*)m_dib.GetPixelAddress(point.x, point.y);
-
-
-	CDialogEx::OnMouseMove(nFlags, point);
 }
 
 void CPixelgrafikenDlg::draw_histogramm() {

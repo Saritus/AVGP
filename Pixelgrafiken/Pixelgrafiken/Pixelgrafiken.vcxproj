@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9B9EA50D-D2A4-4CAC-91CD-9807068D1B91}</ProjectGuid>
+    <ProjectGuid>{11F9B30B-C098-4F3C-A279-172CF04A7581}</ProjectGuid>
     <RootNamespace>Pixelgrafiken</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <Keyword>MFCProj</Keyword>
@@ -211,9 +211,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties RESOURCE_FILE="Pixelgrafiken.rc" />
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>

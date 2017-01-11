@@ -307,14 +307,14 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {
 
 	// ------------------------------------------------------------------
 	jpeg_set_quality(&cinfo, quality, TRUE); // Komprimierungsqualität
-											 // ------------------------------------------------------------------
+	// ------------------------------------------------------------------
 	jpeg_start_compress(&cinfo, TRUE); // Komrimierung starten
-									   // ------------------------------------------------------------------
+	// ------------------------------------------------------------------
 	BYTE *adr, h, *line = new BYTE[StorageWidth()];
 	while (cinfo.next_scanline < cinfo.image_height) {
 		adr = (unsigned char*)GetPixelAddress(0, cinfo.next_scanline);
 		memcpy(line, adr, StorageWidth());
-		for (int j = 0; j<(DibWidth() * 3); j += 3) { // BGR->RGB
+		for (int j = 0; j < (DibWidth() * 3); j += 3) { // BGR->RGB
 			h = line[j]; line[j] = line[j + 2]; line[j + 2] = h;
 		}
 		jpeg_write_scanlines(&cinfo, &line, 1); // Zeile schreiben
@@ -334,7 +334,7 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {
 bool CDIB::LoadJpeg(char* pszFileName) {
 	if (m_pBMFH != 0) delete[] m_pBMFH; // CDIB sollte leer sein
 
-										// ------------------------------------------------------------------
+	// ------------------------------------------------------------------
 	struct jpeg_decompress_struct cinfo; // Initialisierung
 	struct jpeg_error_mgr jerr;
 	cinfo.err = jpeg_std_error(&jerr);
