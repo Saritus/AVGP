@@ -47,7 +47,7 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 
 	// TODO: Hier zusätzliche Initialisierung einfügen
 	if (!m_dib.Load("bild.bmp")) {
-		AfxMessageBox(L"bild.bmp ist keine bmp-Datei");
+		AfxMessageBox(L"Keine bmp-Datei");
 		OnCancel(); return FALSE;
 	}
 

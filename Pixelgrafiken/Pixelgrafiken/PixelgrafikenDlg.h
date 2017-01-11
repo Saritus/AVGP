@@ -9,20 +9,20 @@
 // CPixelgrafikenDlg-Dialogfeld
 class CPixelgrafikenDlg : public CDialogEx
 {
-// Konstruktion
+	// Konstruktion
 public:
 	CPixelgrafikenDlg(CWnd* pParent = NULL);	// Standardkonstruktor
 
-// Dialogfelddaten
+	// Dialogfelddaten
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_PIXELGRAFIKEN_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV-Unterstützung
 
 
-// Implementierung
+	// Implementierung
 protected:
 	HICON m_hIcon;
 

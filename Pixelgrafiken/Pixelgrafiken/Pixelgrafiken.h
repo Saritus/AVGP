@@ -5,7 +5,7 @@
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error "'stdafx.h' vor dieser Datei für PCH einschließen"
+#error "'stdafx.h' vor dieser Datei für PCH einschließen"
 #endif
 
 #include "resource.h"		// Hauptsymbole
@@ -20,11 +20,11 @@ class CPixelgrafikenApp : public CWinApp
 public:
 	CPixelgrafikenApp();
 
-// Überschreibungen
+	// Überschreibungen
 public:
 	virtual BOOL InitInstance();
 
-// Implementierung
+	// Implementierung
 
 	DECLARE_MESSAGE_MAP()
 };
