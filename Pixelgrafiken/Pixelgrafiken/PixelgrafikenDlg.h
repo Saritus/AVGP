@@ -35,4 +35,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	void draw_histogramm();
+	afx_msg void OnBnClickedButton1();
 };

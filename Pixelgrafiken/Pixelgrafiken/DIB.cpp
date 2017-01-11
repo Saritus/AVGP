@@ -86,6 +86,27 @@ void CDIB::Draw(CDC* pDC, int x, int y) {
 			SRCCOPY); // Raster operation code (ROP)
 }
 
+void CDIB::Draw(CDC* pDC, int x, int y, int width, int height) {
+	if (m_pBMFH != 0)
+		StretchDIBits(pDC->GetSafeHdc(),
+			x, // Destination x
+			y, // Destination y
+			width, // Destination width
+			height, // Destination height
+			0, // Source x
+			0, // Source y
+			DibWidth(), // Source width
+			DibHeight(), // Source height
+			m_pBits, // Pointer to bits
+			m_pBMI, // BITMAPINFO
+			DIB_RGB_COLORS, // Options
+			SRCCOPY); // Raster operation code (ROP)
+}
+
+void CDIB::Draw(CDC* pDC, CRect rect) {
+	//Draw(pDC, rect.TopLeft.x, rect.TopLeft.y, rect.Width(), rect.Height());
+}
+
 void* CDIB::GetPixelAddress(int x, int y) {
 	int iWidth;
 	if ((x >= DibWidth()) || (y >= DibHeight())) {
@@ -403,7 +424,3 @@ bool CDIB::LoadJpeg(char* pszFileName) {
 	return true;
 }
 */
-
-void CDIB::DrawRect(CDC* pDC, CRect rect) {
-
-}

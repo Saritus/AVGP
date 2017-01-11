@@ -30,6 +30,7 @@ void CPixelgrafikenDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CPixelgrafikenDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CPixelgrafikenDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -59,10 +60,9 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 
 void CPixelgrafikenDlg::OnPaint()
 {
-	CPaintDC dc(this); // Gerätekontext zum Zeichnen
-	m_dib.Draw(&dc, 0, 0);
 
-	draw_histogramm();
+	CPaintDC dc(this); // Gerätekontext zum Zeichnen#
+	m_dib.Draw(&dc, 0, 0);
 
 	if (IsIconic())
 	{
@@ -103,4 +103,18 @@ void CPixelgrafikenDlg::draw_histogramm() {
 		dc.MoveTo(x + i + 1, y - 1);
 		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
 	}
+}
+
+void CPixelgrafikenDlg::OnBnClickedButton1()
+{
+	CPaintDC dc(this); // Gerätekontext zum Zeichnen
+	m_dib.Draw(&dc, 0, 0);
+
+	OnPaint();
+
+	//CRect rect;
+	//GetClientRect(&rect);
+	//m_dib.Draw(&dc, 0, 0, rect.Width(), rect.Height());
+
+	//draw_histogramm();
 }

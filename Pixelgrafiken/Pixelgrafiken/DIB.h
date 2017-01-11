@@ -6,6 +6,8 @@ public:
 	virtual bool Load(char* fname); // Load from file
 	virtual bool Save(char* fname); // Save to file
 	virtual void Draw(CDC* pDC, int x, int y);
+	virtual void Draw(CDC* pDC, int x, int y, int width, int height);
+	virtual void Draw(CDC* pDC, CRect rect);
 	virtual int DibWidth();
 	virtual int DibHeight();
 	void* GetPixelAddress(int x, int y);
@@ -20,7 +22,6 @@ public:
 	void flip(char c);
 	//bool SaveJpeg(char* pszFileName, int quality);
 	//bool LoadJpeg(char* pszFileName);
-	void DrawRect(CDC* pDC, CRect rect);
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct
