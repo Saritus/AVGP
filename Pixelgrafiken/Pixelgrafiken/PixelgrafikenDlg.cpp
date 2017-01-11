@@ -134,9 +134,6 @@ void CPixelgrafikenDlg::OnSize(UINT nType, int cx, int cy)
 
 void CPixelgrafikenDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-	CRect rc;
-	GetWindowRect(&rc);
-
 	CMenu menu;
 	VERIFY(menu.CreatePopupMenu());
 	menu.AppendMenu(MF_STRING, 0, L"Load");
