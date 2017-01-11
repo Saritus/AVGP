@@ -165,3 +165,35 @@ void CDIB::histogramm(float *h, float zoom) {
 			if (h[i] > 1.f) h[i] = 1.f;
 		}
 }
+
+void CDIB::contrast(float alpha) {
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+	if (alpha < 0 || alpha>2) {
+		AfxMessageBox(L"Ungültiger Kontrast Alpha-Wert."); return;
+	}
+	BYTE *t; int i, j, z; double median = 0.0;
+	unsigned char lut[256]; int sw = StorageWidth();
+	//Mittlere Intensität berechnen
+	for (i = 0; i < DibHeight(); i++) {
+		t = (BYTE*)GetPixelAddress(0, i);
+		for (j = 0; j < sw; j += 3)
+			median += (int)((0.1145*(*(t + j)) +
+				0.5866*(*(t + j + 1)) + 0.2989*(*(t + j + 2))));
+	}
+	median /= (DibHeight()*DibWidth());
+	for (i = 0; i < 256; i++) {
+		z = (int)((1 - alpha)*median + alpha*i);
+		if (z > 255) z = 255;
+		else if (z < 0) z = 0;
+		lut[i] = z;
+	}
+	for (i = 0; i < DibHeight(); i++) {
+		t = (BYTE*)GetPixelAddress(0, i);
+		for (j = 0; j < sw; j += 3) {
+			*(t + j) = lut[*(t + j)];
+			*(t + j + 1) = lut[*(t + j + 1)];
+			*(t + j + 2) = lut[*(t + j + 2)];
+		}
+	}
+}
