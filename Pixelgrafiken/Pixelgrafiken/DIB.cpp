@@ -285,10 +285,6 @@ void CDIB::flip(char c) {
 	}
 }
 
-void CDIB::enable(bool enable) {
-	enabled = enable;
-}
-
 /*
 bool CDIB::SaveJpeg(char* pszFileName, int quality) {
 	if (m_pBMFH == 0) return false;

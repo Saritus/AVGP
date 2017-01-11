@@ -18,7 +18,7 @@ public:
 	void histogramm(float *h, float zoom);
 	void contrast(float alpha);
 	void rgb(char ch);
-	void matrix(int* matrix, int matrixsize, int koeff, char offset);
+	void matrix(int* matrix, int matrixsize, int koeff, char offset = 0);
 	void flip(char c);
 	//bool SaveJpeg(char* pszFileName, int quality);
 	//bool LoadJpeg(char* pszFileName);
