@@ -213,3 +213,36 @@ void CDIB::rgb(char ch) {
 		}
 	}
 }
+
+void CDIB::matrix(int* matrix, int matrixsize, int koeff, char offset) {
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+	if (koeff == 0) return;
+	BYTE *t, *temp;
+	int sw = StorageWidth(); int red, green, blue, index;
+	temp = new BYTE[sw*DibHeight()]; // eine temporäre Kopie des Bildes anlegen
+	memcpy(temp, m_pBits, sw*DibHeight());
+	for (int i = 0; i < DibHeight(); i++) { // für alle Zeilen
+		for (int j = 0; j < sw; j += 3) { // und jedes Pixel der Zeile
+			index = 0; red = green = blue = offset;
+			for (int k = -matrixsize; k <= matrixsize; k++) {
+				t = temp + ((BYTE*)GetPixelAddress(0, (DibHeight() + i + k) % DibHeight()) - m_pBits);
+				for (int l = -3 * matrixsize; l <= 3 * matrixsize; l += 3) { // Matrix abarbeiten
+					blue += (int)(matrix[index] * (*(t + (sw + j + l) % sw)));
+					green += (int)(matrix[index] * (*(t + (sw + j + 1 + l) % sw)));
+					red += (int)(matrix[index] * (*(t + (sw + j + 2 + l) % sw)));
+					index++;
+				}
+			}
+			t = (BYTE*)GetPixelAddress(0, i);
+			red /= koeff; green /= koeff; blue /= koeff;
+			(blue <= 255) ? (*(t + j) = (BYTE)blue) : (*(t + j) = 255);
+			(green <= 255) ? (*(t + j + 1) = (BYTE)green) : (*(t + j + 1) = 255);
+			(red <= 255) ? (*(t + j + 2) = (BYTE)red) : (*(t + j + 2) = 255);
+			if (blue < 0) (*(t + j)) = 0;
+			if (green < 0) (*(t + j + 1)) = 0;
+			if (red < 0) (*(t + j + 2)) = 0;
+		}
+	}
+	delete[] temp;
+}
