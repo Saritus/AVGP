@@ -305,6 +305,27 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {
 		cinfo.in_color_space = JCS_GRAYSCALE;
 	jpeg_set_defaults(&cinfo);
 
+	// ------------------------------------------------------------------
+	jpeg_set_quality(&cinfo, quality, TRUE); // Komprimierungsqualität
+											 // ------------------------------------------------------------------
+	jpeg_start_compress(&cinfo, TRUE); // Komrimierung starten
+									   // ------------------------------------------------------------------
+	BYTE *adr, h, *line = new BYTE[StorageWidth()];
+	while (cinfo.next_scanline < cinfo.image_height) {
+		adr = (unsigned char*)GetPixelAddress(0, cinfo.next_scanline);
+		memcpy(line, adr, StorageWidth());
+		for (int j = 0; j<(DibWidth() * 3); j += 3) { // BGR->RGB
+			h = line[j]; line[j] = line[j + 2]; line[j + 2] = h;
+		}
+		jpeg_write_scanlines(&cinfo, &line, 1); // Zeile schreiben
+	}
+	// ------------------------------------------------------------------
+	jpeg_finish_compress(&cinfo); // Komrimierung beenden
+	fclose(outfile);
+	// ------------------------------------------------------------------
+	delete[] line;
+	jpeg_destroy_compress(&cinfo); // Ressourcen freigeben
+
 	return true;
 }
 */
