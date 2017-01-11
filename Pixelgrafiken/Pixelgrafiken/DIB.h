@@ -15,6 +15,7 @@ public:
 	void grey();
 	void histogramm(float *h, float zoom);
 	void contrast(float alpha);
+	void rgb(char ch);
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct

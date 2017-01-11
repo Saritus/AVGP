@@ -197,3 +197,19 @@ void CDIB::contrast(float alpha) {
 		}
 	}
 }
+
+void CDIB::rgb(char ch) {
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+	BYTE *t; int sw = StorageWidth();
+	for (int i = 0; i < DibHeight(); i++) {
+		t = (BYTE*)GetPixelAddress(0, i);
+		for (int j = 0; j < sw; j += 3) {
+			switch (ch) {
+			case 'r': (*(t + j)) = (*(t + j + 1)) = 0; break;
+			case 'g': (*(t + j)) = (*(t + j + 2)) = 0; break;
+			case 'b': (*(t + j + 1)) = (*(t + j + 2)) = 0; break;
+			}
+		}
+	}
+}
