@@ -31,6 +31,7 @@ BEGIN_MESSAGE_MAP(CPixelgrafikenDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CPixelgrafikenDlg::OnBnClickedButton1)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -60,9 +61,11 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 
 void CPixelgrafikenDlg::OnPaint()
 {
+	CPaintDC dc(this); // Gerätekontext zum Zeichnen
 
-	CPaintDC dc(this); // Gerätekontext zum Zeichnen#
-	m_dib.Draw(&dc, 0, 0);
+	CRect rect;
+	GetClientRect(&rect);
+	m_dib.Draw(&dc, 0, 0, rect.Width(), rect.Height());
 
 	if (IsIconic())
 	{
@@ -117,4 +120,11 @@ void CPixelgrafikenDlg::OnBnClickedButton1()
 	//m_dib.Draw(&dc, 0, 0, rect.Width(), rect.Height());
 
 	//draw_histogramm();
+}
+
+
+void CPixelgrafikenDlg::OnSize(UINT nType, int cx, int cy)
+{
+	RedrawWindow();
+	CDialogEx::OnSize(nType, cx, cy);
 }
