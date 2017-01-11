@@ -18,6 +18,7 @@ public:
 	void rgb(char ch);
 	void matrix(int* matrix, int matrixsize, int koeff, char offset);
 	void flip(char c);
+	//bool SaveJpeg(char* pszFileName, int quality);
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct

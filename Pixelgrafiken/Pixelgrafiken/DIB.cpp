@@ -276,3 +276,35 @@ void CDIB::flip(char c) {
 		break; }
 	}
 }
+
+/*
+bool CDIB::SaveJpeg(char* pszFileName, int quality) {
+	if (m_pBMFH == 0) return false;
+
+	// ------------------------------------------------------------------
+	struct jpeg_compress_struct cinfo; // Initialisierung
+	struct jpeg_error_mgr jerr;
+	cinfo.err = jpeg_std_error(&jerr);
+	jpeg_create_compress(&cinfo);
+	// ------------------------------------------------------------------
+	FILE * outfile; // Ausgabedatei festlegen
+	if ((outfile = fopen(pszFileName, "wb")) == 0) {
+		CString s;
+		s.Format("can't open %s\n", pszFileName);
+		AfxMessageBox(s);
+		return false;
+	}
+	jpeg_stdio_dest(&cinfo, outfile);
+	// ------------------------------------------------------------------
+	cinfo.image_width = m_pBMI->bmiHeader.biWidth;
+	cinfo.image_height = m_pBMI->bmiHeader.biHeight;
+	cinfo.input_components = m_pBMI->bmiHeader.biBitCount / 8;
+	if (cinfo.input_components == 3)
+		cinfo.in_color_space = JCS_RGB; // Farbraum
+	else
+		cinfo.in_color_space = JCS_GRAYSCALE;
+	jpeg_set_defaults(&cinfo);
+
+	return true;
+}
+*/
