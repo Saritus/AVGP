@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(CPixelgrafikenDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CPixelgrafikenDlg::OnBnClickedButton1)
 	ON_WM_SIZE()
 	ON_WM_CONTEXTMENU()
+	ON_WM_MENUSELECT()
 END_MESSAGE_MAP()
 
 
@@ -138,7 +139,13 @@ void CPixelgrafikenDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 
 	CMenu menu;
 	VERIFY(menu.CreatePopupMenu());
+	menu.AppendMenu(MF_STRING, 0, L"Load");
 	menu.AppendMenu(MF_STRING, 0, L"Exit");
-
 	menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON, point.x, point.y, this);
+}
+
+
+void CPixelgrafikenDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
+{
+	CDialogEx::OnMenuSelect(nItemID, nFlags, hSysMenu);
 }

@@ -28,6 +28,8 @@ protected:
 
 	CDIB m_dib;
 
+	UINT menueSelection;
+
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
@@ -37,5 +39,6 @@ public:
 	void draw_histogramm();
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 };
