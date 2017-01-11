@@ -246,3 +246,33 @@ void CDIB::matrix(int* matrix, int matrixsize, int koeff, char offset) {
 	}
 	delete[] temp;
 }
+
+// "flipping" des Bildes: 'h' - horizontal 'v' - vertikal
+void CDIB::flip(char c) {
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+	int i;
+	switch (c) {
+	case 'h': {// horizontal
+		BYTE *h = new BYTE[StorageWidth()];
+		for (i = 0; i < DibHeight() / 2; i++) {
+			memcpy(h, GetPixelAddress(0, i), StorageWidth());
+			memcpy(GetPixelAddress(0, i),
+				GetPixelAddress(0, DibHeight() - i - 1), StorageWidth());
+			memcpy(GetPixelAddress(0, DibHeight() - i - 1), h, StorageWidth());
+		}
+		delete[] h;
+		break; }
+	case 'v': {// vertikal
+		BYTE h[3]; // Hilfspixel
+		for (i = 0; i < DibHeight(); i++) {
+			for (int j = 0; j < DibWidth() / 2; j++) {
+				memcpy(h, GetPixelAddress(j, i), 3);
+				memcpy(GetPixelAddress(j, i),
+					GetPixelAddress(DibWidth() - j - 1, i), 3);
+				memcpy(GetPixelAddress(DibWidth() - j - 1, i), h, 3);
+			}
+		}
+		break; }
+	}
+}
