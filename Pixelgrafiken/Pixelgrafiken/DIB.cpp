@@ -329,3 +329,77 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {
 	return true;
 }
 */
+
+/*
+bool CDIB::LoadJpeg(char* pszFileName) {
+	if (m_pBMFH != 0) delete[] m_pBMFH; // CDIB sollte leer sein
+
+										// ------------------------------------------------------------------
+	struct jpeg_decompress_struct cinfo; // Initialisierung
+	struct jpeg_error_mgr jerr;
+	cinfo.err = jpeg_std_error(&jerr);
+	jpeg_create_decompress(&cinfo);
+	// ------------------------------------------------------------------
+	FILE * infile; // Datei öffnen
+	if ((infile = fopen(pszFileName, "rb")) == 0) {
+		CString s;
+		s.Format("can't open %s", pszFileName);
+		AfxMessageBox(s);
+		return false;
+	}
+	jpeg_stdio_src(&cinfo, infile);
+	// ------------------------------------------------------------------
+	jpeg_read_header(&cinfo, TRUE); // Bildheader (Metadaten) lesen
+	if (cinfo.num_components != 3) { // 24 bit test
+		AfxMessageBox(L"We support only 24 Bit RGB pictures!!!");
+		fclose(infile); return false;
+	}
+	jpeg_start_decompress(&cinfo);
+	// ------------------------------------------------------------------
+	int bytes_per_line = // Speicher allocieren
+		(cinfo.output_width * cinfo.num_components + 3) & ~3;
+	int bytes_per_picture = cinfo.output_height * bytes_per_line;
+	m_dwLength = sizeof(BITMAPFILEHEADER) +
+		sizeof(BITMAPINFO) + bytes_per_picture;
+	if ((m_pBMFH = (BITMAPFILEHEADER*) new char[m_dwLength]) == 0) {
+		AfxMessageBox(L"Unable to allocate BITMAP-Memory");
+		return false;
+	}
+
+	// ------------------------------------------------------------------
+	m_pBMFH->bfType = 0x4d42; // BITMAPFILEHEADER
+	m_pBMFH->bfReserved1 = m_pBMFH->bfReserved2 = 0;
+	m_pBMFH->bfOffBits = sizeof(BITMAPFILEHEADER) +
+		sizeof(BITMAPINFO);
+	// BITMAPINFOHEADER
+	m_pBMI = (BITMAPINFO*)((unsigned char*)m_pBMFH +
+		sizeof(BITMAPFILEHEADER));
+	m_pBMI->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	m_pBMI->bmiHeader.biWidth = cinfo.output_width;
+	m_pBMI->bmiHeader.biHeight = cinfo.output_height;
+	m_pBMI->bmiHeader.biPlanes = 1;
+	m_pBMI->bmiHeader.biBitCount = cinfo.num_components * 8;
+	m_pBMI->bmiHeader.biCompression = BI_RGB;
+	m_pBMI->bmiHeader.biSizeImage =
+		m_pBMI->bmiHeader.biXPelsPerMeter = m_pBMI->bmiHeader.biYPelsPerMeter =
+		m_pBMI->bmiHeader.biClrUsed = m_pBMI->bmiHeader.biClrImportant = 0;
+	m_pBits = (unsigned char*)m_pBMFH + // Pixeldaten
+		sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFO);
+	// ------------------------------------------------------------------
+	// Dekomprimierungsschleife
+	unsigned char *adr, h;
+	while (cinfo.output_scanline < cinfo.output_height) {
+		adr = (unsigned char*)GetPixelAddress(0, cinfo.output_scanline);
+		jpeg_read_scanlines(&cinfo, &adr, 1);
+		for (int j = 0; j < (DibWidth() * 3); j += 3) { // RGB -> BGR convert
+			h = adr[j]; adr[j] = adr[j + 2]; adr[j + 2] = h;
+		}
+	}
+	// ------------------------------------------------------------------
+	jpeg_finish_decompress(&cinfo); // Ressourcen freigeben
+	jpeg_destroy_decompress(&cinfo);
+	fclose(infile);
+
+	return true;
+}
+*/
