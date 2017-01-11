@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(CPixelgrafikenDlg, CDialogEx)
 	ON_WM_CONTEXTMENU()
 	ON_WM_MENUSELECT()
 	ON_BN_CLICKED(IDC_BUTTON2, &CPixelgrafikenDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CPixelgrafikenDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -94,19 +95,6 @@ HCURSOR CPixelgrafikenDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CPixelgrafikenDlg::draw_histogramm() {
-	float h[256] = { 0.f }; int x = 10, y = 105;
-	CClientDC dc(this);
-	m_dib.histogramm(h, 20.f);
-	dc.MoveTo(x, y); dc.LineTo(x + 255 + 2, y); // Rahmen zeichnen
-	dc.LineTo(x + 255 + 2, y - 101); dc.LineTo(x, y - 101); dc.LineTo(x, y);
-	CPen p(PS_SOLID, 1, RGB(255, 255, 0)); dc.SelectObject(&p);
-	for (int i = 0; i < 255; i++) { // Histogramm zeichnen
-		dc.MoveTo(x + i + 1, y - 1);
-		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
-	}
-}
-
 void CPixelgrafikenDlg::OnBnClickedButton1()
 {
 	if (!m_dib.Load("bild.bmp")) {
@@ -145,4 +133,19 @@ void CPixelgrafikenDlg::OnBnClickedButton2()
 	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 };
 	m_dib.matrix(edge_matrix, 1, 1);
 	RedrawWindow();
+}
+
+
+void CPixelgrafikenDlg::OnBnClickedButton3()
+{
+	float h[256] = { 0.f }; int x = 10, y = 105;
+	CClientDC dc(this);
+	m_dib.histogramm(h, 20.f);
+	dc.MoveTo(x, y); dc.LineTo(x + 255 + 2, y); // Rahmen zeichnen
+	dc.LineTo(x + 255 + 2, y - 101); dc.LineTo(x, y - 101); dc.LineTo(x, y);
+	CPen p(PS_SOLID, 1, RGB(255, 255, 0)); dc.SelectObject(&p);
+	for (int i = 0; i < 255; i++) { // Histogramm zeichnen
+		dc.MoveTo(x + i + 1, y - 1);
+		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
+	}
 }
