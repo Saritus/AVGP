@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(CWAVMP3EncoderDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CWAVMP3EncoderDlg::OnBnClickedButton1)
 	ON_REGISTERED_MESSAGE(WM_GRAPHNOTIFY, NewMessage)
+	ON_BN_CLICKED(IDC_TOWAV, &CWAVMP3EncoderDlg::OnBnClickedTowav)
 END_MESSAGE_MAP()
 
 
@@ -200,7 +201,7 @@ void CWAVMP3EncoderDlg::OnBnClickedButton1()
 	// Schritt 8:
 	m_Graph1->QueryInterface(IID_IMediaControl, (void **)&m_Ctrl1);
 	m_Graph1->QueryInterface(IID_IMediaEventEx, (void **)&m_Event1);
-	//m_Event1->SetNotifyWindow((long)GetSafeHwnd(), WM_GRAPHNOTIFY, NULL);
+	m_Event1->SetNotifyWindow((long)GetSafeHwnd(), WM_GRAPHNOTIFY, NULL);
 	m_Ctrl1->Run();
 }
 
@@ -235,15 +236,219 @@ void CWAVMP3EncoderDlg::OnRelease() {
 		m_Graph1 = NULL;
 	}
 	CoUninitialize();
-}
-
-void CWAVMP3EncoderDlg::OnBnClickedButton2()
-{
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 }
 
 
-void CWAVMP3EncoderDlg::OnBnClickedButton3()
+void CWAVMP3EncoderDlg::OnBnClickedTowav()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// Schritt 1:
+	CoInitialize(NULL); // zur Initialisierung des COM-Interfaces
+	CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void **)&m_Graph1);
+
+	// Schritt 2:
+	CoCreateInstance(CLSID_AsyncReader, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&g_pSource);
+
+	const GUID CLSID_MpegSplitter = { 0x336475D0, 0x942A, 0x11CE, 0xA8, 0x70, 0x00, 0xAA, 0x00, 0x2F, 0xEA, 0xB5 };
+	CoCreateInstance(CLSID_MpegSplitter, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)(&mpegSplitter));
+
+	HRESULT hr = getFilter(L"DirectShow Filters", L"MP3 Decoder DMO", &mp3DecoderFilter);
+	if (!SUCCEEDED(hr)) {
+		// do something with the Filter
+		AfxMessageBox(L"Fehler beim Suchen nach MP3 Decoder DMO");
+		//mp3DecoderFilter->Release();
+	}
+	//CoUninitialize();
+
+	const GUID CLSID_WavDest = { 0x3C78B8E2, 0x6C4D, 0x11D1, 0xAD, 0xE2, 0x00, 0x00, 0xF8, 0x75, 0x4B, 0x99 };
+	CoCreateInstance(CLSID_WavDest, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)(&wavDest));
+
+	const GUID CLSID_FileWriter = { 0x8596E5F0, 0x0DA5, 0x11D0, 0xBD, 0x21, 0x00, 0xA0, 0xC9, 0x11, 0xCE, 0x86 };
+	CoCreateInstance(CLSID_FileWriter, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)(&g_pDest));
+
+	// Schritt 3:
+	// Quellfile setzen
+	IFileSourceFilter* FileSource = NULL;
+	CString srcname;
+	((CEdit*)GetDlgItem(IDC_EDIT1))->GetWindowTextW(srcname);
+	g_pSource->QueryInterface(IID_IFileSourceFilter, (void**)&FileSource);
+	FileSource->Load(srcname.AllocSysString(), NULL);
+	FileSource->Release();
+	// Zielfile setzen
+	IFileSinkFilter* FileDest = NULL;
+	CString destname;
+	((CEdit*)GetDlgItem(IDC_OUTPUT))->GetWindowTextW(destname);
+	g_pDest->QueryInterface(IID_IFileSinkFilter, (void**)&FileDest);
+	FileDest->SetFileName(destname.AllocSysString(), NULL);
+	FileDest->Release();
+
+	// Schritt 4:
+	if (m_Graph1->AddFilter(g_pSource, NULL) != S_OK) {
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	}
+	if (m_Graph1->AddFilter(mpegSplitter, NULL) != S_OK) {
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	}
+	if (m_Graph1->AddFilter(mp3DecoderFilter, NULL) != S_OK) {
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	}
+	if (m_Graph1->AddFilter(wavDest, NULL) != S_OK) {
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	}
+	if (m_Graph1->AddFilter(g_pDest, NULL) != S_OK) {
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	}
+
+	// Schritt 5:
+	IPin *pPinIn = NULL, *pPinOut = NULL;
+
+	if (g_pSource->FindPin(L"Output", &pPinOut) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+
+	if (mpegSplitter->FindPin(L"Input", &pPinIn) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	if (m_Graph1->Connect(pPinOut, pPinIn) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	pPinIn->Release();
+	pPinOut->Release();
+
+	if (mpegSplitter->FindPin(L"Audio", &pPinOut) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	if (mp3DecoderFilter->FindPin(L"in0", &pPinIn) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	if (m_Graph1->Connect(pPinOut, pPinIn) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	pPinIn->Release();
+	pPinOut->Release();
+
+	if (mp3DecoderFilter->FindPin(L"out0", &pPinOut) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	if (wavDest->FindPin(L"In", &pPinIn) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	if (m_Graph1->Connect(pPinOut, pPinIn) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	pPinIn->Release();
+	pPinOut->Release();
+
+	if (wavDest->FindPin(L"Out", &pPinOut) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	if (g_pDest->FindPin(L"in", &pPinIn) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	if (m_Graph1->Connect(pPinOut, pPinIn) != S_OK)
+		AfxMessageBox(L"Fehler im Filtergraphen");
+	pPinIn->Release();
+	pPinOut->Release();
+
+	// Schritt 7:
+	g_pSource->Release();
+	mpegSplitter->Release();
+	mp3DecoderFilter->Release();
+	wavDest->Release();
+	g_pDest->Release();
+
+	// Schritt 8:
+	m_Graph1->QueryInterface(IID_IMediaControl, (void **)&m_Ctrl1);
+	m_Graph1->QueryInterface(IID_IMediaEventEx, (void **)&m_Event1);
+	m_Event1->SetNotifyWindow((long)GetSafeHwnd(), WM_GRAPHNOTIFY, NULL);
+	m_Ctrl1->Run();
+}
+
+HRESULT CWAVMP3EncoderDlg::getFilter(CString category, CString name, IBaseFilter **ppFilter)
+{
+	// Erster Teil: Kategorie suchen
+	*ppFilter = NULL;
+	HRESULT hr;
+	ICreateDevEnum *pSysDevEnum = NULL;
+	hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC, IID_ICreateDevEnum, (void **)&pSysDevEnum);
+	if (FAILED(hr)) return hr;
+	IEnumMoniker *pEnumCat = NULL;
+	hr = pSysDevEnum->CreateClassEnumerator(CLSID_ActiveMovieCategories, &pEnumCat, 0);
+	if (FAILED(hr)) {
+		pSysDevEnum->Release();
+		return hr;
+	}
+	IMoniker *pMoniker = NULL;
+	ULONG cFetched;
+	IPropertyBag *pPropBag = NULL;
+	CLSID* pclsid = new CLSID();
+	bool found = false;
+	VARIANT var;
+	VariantInit(&var);
+	while (true) {
+		hr = pEnumCat->Next(1, &pMoniker, &cFetched);
+		if (FAILED(hr)) break;	// Fehler
+		if (hr == S_FALSE) break;  // die Enum hat keine Elemente mehr  
+		/////////////// die gewünschte Kategorie finden und clsid bilden ///////////////////
+		hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pPropBag);
+		if (FAILED(hr))
+			continue;
+		hr = pPropBag->Read(L"FriendlyName", &var, 0);
+		if (FAILED(hr))
+			continue;
+		CString strFriendlyName(var.bstrVal);
+		if (strFriendlyName.Find(category) == -1) // weiter suchen
+			continue;
+		// die gewünschte kategorie ist nun gefunden
+		hr = pPropBag->Read(L"CLSID", &var, 0);
+		if (FAILED(hr)) break;
+		CString strCLSID(var.bstrVal);
+		hr = CLSIDFromString(var.bstrVal, pclsid);
+		if (FAILED(hr)) break;
+		found = true;
+		break;
+	}
+	if (pPropBag) { pPropBag->Release(); pPropBag = NULL; }
+	if (pMoniker) { pMoniker->Release(); pMoniker = NULL; }
+	if (pEnumCat) { pEnumCat->Release();	pEnumCat = NULL; }
+	if (pSysDevEnum) { pSysDevEnum->Release(); pSysDevEnum = NULL; }
+	VariantClear(&var);
+	if (FAILED(hr)) {
+		delete pclsid;
+		return hr;
+	}
+	if (!found) {
+		delete pclsid;
+		return S_FALSE;
+	}
+	// Zweiter Teil: Filter suchen
+	hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC, IID_ICreateDevEnum, (void **)&pSysDevEnum);
+	if (FAILED(hr)) {
+		delete pclsid;
+		return hr;
+	}
+	hr = pSysDevEnum->CreateClassEnumerator(*pclsid, &pEnumCat, 0);
+	if (FAILED(hr)) {
+		pSysDevEnum->Release();
+		delete pclsid;
+		return hr;
+	}
+	found = false;
+	VariantInit(&var);
+	while (true) {
+		hr = pEnumCat->Next(1, &pMoniker, &cFetched);
+		if (FAILED(hr)) break;	// Fehler
+		if (hr == S_FALSE) break;  // die Enum hat keine Elemente mehr
+		hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pPropBag);
+		if (FAILED(hr))
+			continue;
+		hr = pPropBag->Read(L"FriendlyName", &var, 0);
+		if (FAILED(hr))
+			continue;
+		CString strFriendlyName(var.bstrVal);
+		if (strFriendlyName.Find(name) == -1) // weiter suchen
+			continue;
+		// der gewünschte filter ist nun gefunden
+		hr = pMoniker->BindToObject(0, 0, IID_IBaseFilter, (void **)ppFilter);
+		if (FAILED(hr)) break;
+		found = true;
+		break;
+	}
+	if (pPropBag) { pPropBag->Release(); pPropBag = NULL; }
+	if (pMoniker) { pMoniker->Release(); pMoniker = NULL; }
+	if (pEnumCat) { pEnumCat->Release();	pEnumCat = NULL; }
+	if (pSysDevEnum) { pSysDevEnum->Release(); pSysDevEnum = NULL; }
+	delete pclsid;
+	VariantClear(&var);
+	if (FAILED(hr))return hr;
+	if (!found) return S_FALSE; // keinen passenden Filter gefunden
+	return S_OK;
 }

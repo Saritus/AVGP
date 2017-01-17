@@ -32,6 +32,10 @@ protected:
 	IBaseFilter* g_pMP3Coder = NULL;
 	IBaseFilter* g_pDest = NULL;
 
+	IBaseFilter* mpegSplitter = NULL;
+	IBaseFilter* mp3DecoderFilter = NULL;
+	IBaseFilter* wavDest = NULL;
+
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
@@ -41,6 +45,6 @@ public:
 	afx_msg void OnBnClickedButton1();
 	LONG NewMessage(UINT wparam, LONG lparam);
 	void OnRelease();
-	afx_msg void OnBnClickedButton2();
-	afx_msg void OnBnClickedButton3();
+	afx_msg void OnBnClickedTowav();
+	HRESULT getFilter(CString category, CString name, IBaseFilter **ppFilter);
 };
