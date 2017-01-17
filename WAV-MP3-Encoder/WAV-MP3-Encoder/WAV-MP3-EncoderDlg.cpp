@@ -27,10 +27,13 @@ void CWAVMP3EncoderDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
+static UINT NEAR WM_GRAPHNOTIFY = RegisterWindowMessage(L"GRAPHNOTIFY");
+
 BEGIN_MESSAGE_MAP(CWAVMP3EncoderDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CWAVMP3EncoderDlg::OnBnClickedButton1)
+	ON_REGISTERED_MESSAGE(WM_GRAPHNOTIFY, NewMessage)
 END_MESSAGE_MAP()
 
 
@@ -116,16 +119,19 @@ void CWAVMP3EncoderDlg::OnBnClickedButton1()
 	// Schritt 3:
 	// Quellfile setzen
 	IFileSourceFilter* FileSource = NULL;
-	CString srcname = L"XYLOPHON.wav";
+	CString srcname;
+	((CEdit*)GetDlgItem(IDC_EDIT1))->GetWindowTextW(srcname);
 	g_pSource->QueryInterface(IID_IFileSourceFilter, (void**)&FileSource);
 	FileSource->Load(srcname.AllocSysString(), NULL);
 	FileSource->Release();
 	// Zielfile setzen
 	IFileSinkFilter* FileDest = NULL;
-	CString destname = L"XYLOPHON.mp3";
+	CString destname;
+	((CEdit*)GetDlgItem(IDC_OUTPUT))->GetWindowTextW(destname);
 	g_pDest->QueryInterface(IID_IFileSinkFilter, (void**)&FileDest);
 	FileDest->SetFileName(destname.AllocSysString(), NULL);
-	FileDest->Release();
+	FileDest->Release();
+
 	// Schritt 4:
 	if (m_Graph1->AddFilter(g_pSource, NULL) != S_OK) {
 		AfxMessageBox(L"Fehler im Filtergraphen");
@@ -138,7 +144,8 @@ void CWAVMP3EncoderDlg::OnBnClickedButton1()
 	}
 	if (m_Graph1->AddFilter(g_pDest, NULL) != S_OK) {
 		AfxMessageBox(L"Fehler im Filtergraphen");
-	}
+	}
+
 	// Schritt 5:
 	IPin *pPinIn = NULL, *pPinOut = NULL;
 	if (g_pSource->FindPin(L"Output", &pPinOut) != S_OK)
@@ -161,7 +168,8 @@ void CWAVMP3EncoderDlg::OnBnClickedButton1()
 		AfxMessageBox(L"Fehler im Filtergraphen");
 	if (m_Graph1->Connect(pPinOut, pPinIn) != S_OK)
 		AfxMessageBox(L"Fehler im Filtergraphen");
-	pPinIn->Release(); pPinOut->Release();
+	pPinIn->Release(); pPinOut->Release();
+
 	// Schritt 6:
 	ISpecifyPropertyPages *pSpecify = NULL;
 	if (g_pMP3Coder->QueryInterface(IID_ISpecifyPropertyPages,
@@ -187,10 +195,55 @@ void CWAVMP3EncoderDlg::OnBnClickedButton1()
 	g_pSource->Release();
 	g_pWaveParser->Release();
 	g_pMP3Coder->Release();
-	g_pDest->Release();
+	g_pDest->Release();
+
 	// Schritt 8:
 	m_Graph1->QueryInterface(IID_IMediaControl, (void **)&m_Ctrl1);
 	m_Graph1->QueryInterface(IID_IMediaEventEx, (void **)&m_Event1);
 	//m_Event1->SetNotifyWindow((long)GetSafeHwnd(), WM_GRAPHNOTIFY, NULL);
 	m_Ctrl1->Run();
+}
+
+LONG CWAVMP3EncoderDlg::NewMessage(UINT wparam, LONG lparam) {
+	LONG evCode, evParam1, evParam2;
+	if (m_Event1)
+		while (SUCCEEDED(m_Event1->GetEvent(&evCode, &evParam1, &evParam2, 0))) {
+			m_Event1->FreeEventParams(evCode, evParam1, evParam2);
+			switch (evCode) {
+			case EC_COMPLETE:
+				OnRelease();
+				AfxMessageBox(L"Fertig"); return 0;
+			case EC_USERABORT:
+				OnRelease(); return 0;
+			}
+		}
+	return 0;
+}
+
+void CWAVMP3EncoderDlg::OnRelease() {
+	if (m_Ctrl1) {
+		m_Ctrl1->Stop();
+		m_Ctrl1->Release();
+		m_Ctrl1 = NULL;
+	}
+	if (m_Event1) {
+		m_Event1->Release();
+		m_Event1 = NULL;
+	}
+	if (m_Graph1) {
+		m_Graph1->Release();
+		m_Graph1 = NULL;
+	}
+	CoUninitialize();
+}
+
+void CWAVMP3EncoderDlg::OnBnClickedButton2()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+}
+
+
+void CWAVMP3EncoderDlg::OnBnClickedButton3()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 }

@@ -31,7 +31,9 @@ void CAudioConverter::Init() {
 	const GUID CLSID_DumpFile = { 0x36A5F770, 0xFE4C, 0x11CE, 0xA8, 0xED, 0x00,
 		0xAA, 0x00, 0x2F, 0xEA, 0xB5 };
 	CoCreateInstance(CLSID_DumpFile, NULL, CLSCTX_INPROC_SERVER,
-		IID_IBaseFilter, (void**)(&g_pDest));	// Quellfile setzen
+		IID_IBaseFilter, (void**)(&g_pDest));
+
+	// Quellfile setzen
 	IFileSourceFilter* FileSource = NULL;
 	CString srcname = L"test2.wav";
 	g_pSource->QueryInterface(IID_IFileSourceFilter, (void**)&FileSource);
@@ -42,7 +44,9 @@ void CAudioConverter::Init() {
 	CString destname = L"test2.mp3";
 	g_pDest->QueryInterface(IID_IFileSinkFilter, (void**)&FileDest);
 	FileDest->SetFileName(destname.AllocSysString(), NULL);
-	FileDest->Release();	// speichert wav in file
+	FileDest->Release();
+
+	// speichert wav in file
 	const GUID CLSID_WAVDEST = { 0x3C78B8E2, 0x6C4D, 0x11D1,
 		0xAD, 0xE2, 0x00, 0x00, 0xF8, 0x75, 0x4B, 0x99 };
 	// mp3-Decoder
@@ -50,7 +54,8 @@ void CAudioConverter::Init() {
 		0x86, 0x0E, 0x00, 0xA0, 0x24, 0xCF, 0xEF, 0x6D };
 	// DivX-Decoder
 	const GUID CLSID_DivX_Decoder = { 0x78766964, 0x0000, 0x0010,
-		0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
+		0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
+
 	if (m_Graph1->AddFilter(g_pSource, NULL) != S_OK) {
 		AfxMessageBox(L"Fehler im Filtergraphen");
 	}
