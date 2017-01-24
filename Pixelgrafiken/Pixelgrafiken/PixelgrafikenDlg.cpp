@@ -136,7 +136,10 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		m_dib.brighten(10);
 		break;
 	case 4: // Abdunkeln
-		// TODO: abdunkeln
+		// TODO: check for better method
+		m_dib.negative();
+		m_dib.brighten(10);
+		m_dib.negative();
 		break;
 	case 5: // Graustufen
 		m_dib.grey();
