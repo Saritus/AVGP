@@ -231,16 +231,35 @@ void CDirectX_SoundDlg::OnBnClickedButton2()
 
 void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	switch (mode) {
-	case 0:
-		Tonleiter();
-		break;
-	case 1:
-		PCM();
-		m_ds.Play(lpDSBSecondary);
-		break;
-	default:
-		break;
+	if (nIDEvent == 1) {
+		switch (mode) {
+		case 0:
+			Tonleiter();
+			break;
+		case 1:
+			PCM();
+			m_ds.Play(lpDSBSecondary);
+			break;
+		default:
+			break;
+		}
+	}
+	else if (nIDEvent == 2) {
+		CClientDC dc(this);
+
+		const int transformLength = 128;
+		float fftVektor[transformLength * 2];
+
+		// Samples in fftVektor normalisieren
+		m_ds.calcParts(transformLength);
+
+		m_ds.smsFft(fftVektor, transformLength, -1);
+
+		// magnitude-Vektor berechnen
+		m_ds.calcMagnitude(transformLength, 22050);
+
+		m_ds.DrawFFT(&dc, CRect(10, 70, 310, 120));
+
 	}
 	CDialog::OnTimer(nIDEvent);
 }
@@ -258,7 +277,7 @@ void CDirectX_SoundDlg::Tonleiter() {
 				return;
 			return;
 		}
-		
+
 		if (((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck()) {
 			// TODO: Use guitar sound for major scale
 			m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, ton[j]);
@@ -361,7 +380,7 @@ void CDirectX_SoundDlg::OnBnClickedButton5()
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	m_ds.Stop(lpDSBSecondary);
 	m_ds.GenerateSound(lpDSBSecondary, 0, 4, 0);
-	
+
 	for (int i = 0; i < 3; i++) {
 		m_ds.Stop(lpDSBTri[i]);
 	}
@@ -389,7 +408,7 @@ void CDirectX_SoundDlg::OnBnClickedButton4()
 			m_ds.GenerateSound(lpDSBTri[i], 0, 2, ton[2 * i]);
 		}
 	}
-	
+
 	for (int i = 0; i < 3; i++) {
 		if (!m_ds.Play(lpDSBTri[i], true))
 			OnCancel();
@@ -405,6 +424,7 @@ void CDirectX_SoundDlg::OnBnClickedButton3()
 	rewind(fileptr);                      // Jump back to the beginning of the file
 
 	SetTimer(1, 200, NULL);
+	SetTimer(2, 1000 / 20, NULL);
 	mode = 1; // 0 - Tonleiter, 1 - PCM-Datei
 }
 
