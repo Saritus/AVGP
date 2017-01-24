@@ -234,6 +234,28 @@ void CDIB::rgb(char ch) {
 	}
 }
 
+void CDIB::slur(int percentage) {
+	// https://docs.gimp.org/de/plug-in-randomize-slur.html
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+	BYTE *t, *o, *temp;
+	int sw = StorageWidth();
+	temp = new BYTE[sw*DibHeight()]; // eine temporäre Kopie des Bildes anlegen
+	memcpy(temp, m_pBits, sw*DibHeight());
+	for (int i = 1; i < DibHeight(); i++) { // für alle Zeilen
+		for (int j = 0; j < sw; j += 3) { // und jedes Pixel der Zeile
+			t = (BYTE*)GetPixelAddress(0, i);
+			o = (BYTE*)GetPixelAddress(0, i - 1);
+			if ((rand() % 100) < percentage) {
+				*(t + j) = *(o + j);
+				*(t + j + 1) = *(o + j + 1);
+				*(t + j + 2) = *(o + j + 2);
+			}
+		}
+	}
+	delete[] temp;
+}
+
 void CDIB::matrix(int* matrix, int matrixsize, int koeff, char offset) {
 	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
 		return;

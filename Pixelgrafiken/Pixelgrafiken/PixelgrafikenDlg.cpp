@@ -182,6 +182,7 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		m_dib.flip('v');
 		break;
 	case 18: // Schmelzen
+		m_dib.slur(10);
 		break;
 	case 19: // Ölgemälde
 		break;
