@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "DirectSound.h"
 
+#define M_PI 3.14159265358979323846
+
 CDirectSound::CDirectSound() {
 	CoInitialize(NULL); // init COM-Interface
 	lpds = 0; lpDSBPrimary = 0;
