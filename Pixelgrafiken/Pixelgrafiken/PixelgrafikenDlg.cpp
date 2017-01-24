@@ -34,7 +34,6 @@ BEGIN_MESSAGE_MAP(CPixelgrafikenDlg, CDialogEx)
 	ON_WM_CONTEXTMENU()
 	ON_WM_MENUSELECT()
 
-	ON_BN_CLICKED(IDC_BUTTON1, &CPixelgrafikenDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CPixelgrafikenDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CPixelgrafikenDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
@@ -98,15 +97,6 @@ HCURSOR CPixelgrafikenDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CPixelgrafikenDlg::OnBnClickedButton1()
-{
-	if (!m_dib.Load("bild.bmp")) {
-		AfxMessageBox(L"Keine bmp-Datei");
-		OnCancel();
-	}
-	RedrawWindow();
-}
-
 
 void CPixelgrafikenDlg::OnSize(UINT nType, int cx, int cy)
 {
@@ -156,10 +146,13 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	int emboss_matrix[9] = { -1,0,0,0,0,0,0,0,1 }; // 14
 	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 }; // 15
 
-
 	switch (wParam)
 	{
 	case 1: // Laden
+		if (!m_dib.Load("bild.bmp")) {
+			AfxMessageBox(L"Keine bmp-Datei");
+			OnCancel();
+		}
 		break;
 	case 2: // Speichern
 		break;
