@@ -43,4 +43,5 @@ public:
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton3();
 	BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+	void create_popup_menu();
 };

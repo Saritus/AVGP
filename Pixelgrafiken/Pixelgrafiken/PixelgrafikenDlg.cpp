@@ -46,6 +46,8 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	create_popup_menu();
+
 	// Symbol für dieses Dialogfeld festlegen.  Wird automatisch erledigt
 	//  wenn das Hauptfenster der Anwendung kein Dialogfeld ist
 	SetIcon(m_hIcon, TRUE);			// Großes Symbol verwenden
@@ -115,6 +117,112 @@ void CPixelgrafikenDlg::OnSize(UINT nType, int cx, int cy)
 
 void CPixelgrafikenDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 {
+	menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON, point.x, point.y, this);
+}
+
+
+void CPixelgrafikenDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
+{
+	CDialogEx::OnMenuSelect(nItemID, nFlags, hSysMenu);
+}
+
+
+void CPixelgrafikenDlg::OnBnClickedButton2()
+{
+	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 };
+	m_dib.matrix(edge_matrix, 1, 1);
+	RedrawWindow();
+}
+
+
+void CPixelgrafikenDlg::OnBnClickedButton3()
+{
+	float h[256] = { 0.f }; int x = 10, y = 105;
+	CClientDC dc(this);
+	m_dib.histogramm(h, 20.f);
+	dc.MoveTo(x, y); dc.LineTo(x + 255 + 2, y); // Rahmen zeichnen
+	dc.LineTo(x + 255 + 2, y - 101); dc.LineTo(x, y - 101); dc.LineTo(x, y);
+	CPen p(PS_SOLID, 1, RGB(255, 255, 0)); dc.SelectObject(&p);
+	for (int i = 0; i < 255; i++) { // Histogramm zeichnen
+		dc.MoveTo(x + i + 1, y - 1);
+		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
+	}
+}
+
+BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
+{
+	int sharpen_matrix[9] = { -1,-1,-1,-1,9,-1,-1,-1,-1 }; // 12
+	int soften_matrix[9] = { 6,12,6,12,25,12,6,12,6 }; // 13
+	int emboss_matrix[9] = { -1,0,0,0,0,0,0,0,1 }; // 14
+	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 }; // 15
+
+
+	switch (wParam)
+	{
+	case 1: // Laden
+		break;
+	case 2: // Speichern
+		break;
+	case 3: // Aufhellen
+		m_dib.brighten(10);
+		break;
+	case 4: // Abdunkeln
+		// TODO: abdunkeln
+		break;
+	case 5: // Graustufen
+		m_dib.grey();
+		break;
+	case 6: // Negativ
+		m_dib.negative();
+		break;
+	case 7: // mehr Kontrast
+		m_dib.contrast(1.1f);
+		break;
+	case 8: // Rotebene
+		m_dib.rgb('r');
+		break;
+	case 9: // Grünebene
+		m_dib.rgb('g');
+		break;
+	case 10: // Blauebene
+		m_dib.rgb('b');
+		break;
+	case 11: // Histogramm
+		break;
+	case 12: // Schärfen
+		m_dib.matrix(sharpen_matrix, 1, 1);
+		break;
+	case 13: // Unschärfe
+		m_dib.matrix(soften_matrix, 1, 97);
+		break;
+	case 14: // Emboss
+		m_dib.matrix(emboss_matrix, 1, 1, 127);
+		break;
+	case 15: // Kantenerkennung
+		m_dib.matrix(edge_matrix, 1, 1);
+		break;
+	case 16: // Flip horizontal
+		m_dib.flip('h');
+		break;
+	case 17: // Flip vertikal
+		m_dib.flip('v');
+		break;
+	case 18: // Schmelzen
+		break;
+	case 19: // Ölgemälde
+		break;
+	case 20: // Mosaik
+		break;
+	case 21: // inverse FFT
+		break;
+	default: // Do nothing
+		break;
+	}
+	RedrawWindow();
+	return CDialog::OnCommand(wParam, lParam);
+}
+
+void CPixelgrafikenDlg::create_popup_menu() {
 	VERIFY(menu.CreatePopupMenu());
 	menu.AppendMenu(MF_STRING, 1, L"Laden ...");
 	menu.AppendMenu(MF_STRING, 2, L"Speichern ...");
@@ -161,95 +269,4 @@ void CPixelgrafikenDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
 	menu.AppendMenu(MF_STRING, 21, L"(inverse) FFT");
-	menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON, point.x, point.y, this);
-}
-
-
-void CPixelgrafikenDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
-{
-	CDialogEx::OnMenuSelect(nItemID, nFlags, hSysMenu);
-}
-
-
-void CPixelgrafikenDlg::OnBnClickedButton2()
-{
-	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 };
-	m_dib.matrix(edge_matrix, 1, 1);
-	RedrawWindow();
-}
-
-
-void CPixelgrafikenDlg::OnBnClickedButton3()
-{
-	float h[256] = { 0.f }; int x = 10, y = 105;
-	CClientDC dc(this);
-	m_dib.histogramm(h, 20.f);
-	dc.MoveTo(x, y); dc.LineTo(x + 255 + 2, y); // Rahmen zeichnen
-	dc.LineTo(x + 255 + 2, y - 101); dc.LineTo(x, y - 101); dc.LineTo(x, y);
-	CPen p(PS_SOLID, 1, RGB(255, 255, 0)); dc.SelectObject(&p);
-	for (int i = 0; i < 255; i++) { // Histogramm zeichnen
-		dc.MoveTo(x + i + 1, y - 1);
-		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
-	}
-}
-
-BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
-{
-	switch (wParam)
-	{
-	case 1: // Laden
-		break;
-	case 2: // Speichern
-		break;
-	case 3: // Aufhellen
-		m_dib.brighten(10);
-		break;
-	case 4: // Abdunkeln
-		// TODO: abdunkeln
-		break;
-	case 5: // Graustufen
-		m_dib.grey();
-		break;
-	case 6: // Negativ
-		m_dib.negative();
-		break;
-	case 7: // mehr Kontrast
-		m_dib.contrast(1.1f);
-		break;
-	case 8: // Rotebene
-		m_dib.rgb('r');
-		break;
-	case 9: // Grünebene
-		m_dib.rgb('g');
-		break;
-	case 10: // Blauebene
-		m_dib.rgb('b');
-		break;
-	case 11: // Histogramm
-		break;
-	case 12: // Schärfen
-		break;
-	case 13: // Unschärfe
-		break;
-	case 14: // Emboss
-		break;
-	case 15: // Kantenerkennung
-		break;
-	case 16: // Flip horizontal
-		break;
-	case 17: // Flip vertikal
-		break;
-	case 18: // Schmelzen
-		break;
-	case 19: // Ölgemälde
-		break;
-	case 20: // Mosaik
-		break;
-	case 21: // inverse FFT
-		break;
-	default: // Do nothing
-		break;
-	}
-	RedrawWindow();
-	return CDialog::OnCommand(wParam, lParam);
 }
