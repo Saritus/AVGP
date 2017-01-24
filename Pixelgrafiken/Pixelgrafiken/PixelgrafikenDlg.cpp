@@ -213,7 +213,7 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		m_dib.slur(10);
 		break;
 	case 1019: // Ölgemälde
-		m_dib.oil();
+		m_dib.oil(5, 20);
 		break;
 	case 1020: // Mosaik
 		m_dib.mosaic();

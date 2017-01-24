@@ -269,8 +269,98 @@ void CDIB::slur(int percentage) {
 	delete[] temp;
 }
 
-	// TODO:
-void CDIB::oil() {
+void CDIB::oil(int radius, int intensityLevels) {
+
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+
+	BYTE *temp;
+	int sw = StorageWidth();
+	temp = new BYTE[sw*DibHeight()]; // eine temporäre Kopie des Bildes anlegen
+	memcpy(temp, m_pBits, sw*DibHeight());
+
+	// Step 1
+
+	BYTE *pixel, *resultpixel;
+	int* averageR = new int[intensityLevels];
+	for (int i = 0; i < intensityLevels; i++) {
+		averageR[i] = 0;
+	}
+	int* averageG = new int[intensityLevels];
+	for (int i = 0; i < intensityLevels; i++) {
+		averageG[i] = 0;
+	}
+	int* averageB = new int[intensityLevels];
+	for (int i = 0; i < intensityLevels; i++) {
+		averageB[i] = 0;
+	}
+	int* intensityCount = new int[intensityLevels];
+	for (int i = 0; i < intensityLevels; i++) {
+		intensityCount[i] = 0;
+	}
+
+	//for (each pixel)
+	for (int x = 0; x < DibWidth(); x++)
+	{
+		for (int y = 0; y < DibHeight(); y++)
+		{
+			//	for (each pixel, within radius r of pixel)
+			for (int i = max(0, x - radius); i < min(DibWidth(), x + radius); i++) {
+				for (int j = max(0, y - radius); j < min(DibHeight(), y + radius); j++) {
+					if (dist(x, y, i, j) < radius) {
+						pixel = temp + ((BYTE*)GetPixelAddress(i, j) - m_pBits);
+						int r = *(pixel + 2);
+						int g = *(pixel + 1);
+						int b = *(pixel);
+						// int curIntensity = (int)((double)((r + g + b) / 3)*intensityLevels) / 255.0f;
+						int curIntensity = (int)((double)((r + g + b) / 3)*intensityLevels) / 255.0f;
+						// intensityCount[curIntensity]++;
+						intensityCount[curIntensity]++;
+						// averageR[curIntensity] += r;
+						averageR[curIntensity] += r;
+						// averageG[curIntensity] += g;
+						averageG[curIntensity] += g;
+						// averageB[curIntensity] += b;
+						averageB[curIntensity] += b;
+					}
+				}
+			}
+
+			// Step 2
+
+			// find the maximum level of intensity
+
+			int curMax = 0;
+			int maxIndex = 0;
+
+			//for (each level of intensity)
+			for (int i = 0; i < intensityLevels; i++)
+			{
+				//if (intensityCount[i] > curMax)
+				if (intensityCount[i] > curMax) {
+					//curMax = intensityCount[i];
+					curMax = intensityCount[i];
+					//maxIndex = i;
+					maxIndex = i;
+				}
+			}
+
+			// Step 3
+
+			resultpixel = (BYTE*)GetPixelAddress(x, y);
+			// calculate the final value
+			//finalR = averageR[maxIndex] / curMax;
+			*(resultpixel + 2) = averageR[maxIndex] / curMax;
+			//finalG = averageG[maxIndex] / curMax;
+			*(resultpixel + 1) = averageG[maxIndex] / curMax;
+			//finalB = averageB[maxIndex] / curMax;
+			*(resultpixel) = averageB[maxIndex] / curMax;
+		}
+	}
+}
+
+double CDIB::dist(int x1, int y1, int x2, int y2) {
+	return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
 }
 
 void CDIB::mosaic() {

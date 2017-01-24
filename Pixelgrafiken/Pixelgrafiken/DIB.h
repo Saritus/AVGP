@@ -21,7 +21,7 @@ public:
 	void contrast(float alpha);
 	void rgb(char ch);
 	void slur(int percentage);
-	void oil();
+	void oil(int radius, int intensityLevels);
 	void mosaic();
 	void fft();
 	void matrix(int* matrix, int matrixsize, int koeff, char offset = 0);
@@ -33,4 +33,6 @@ protected:
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct
 	BYTE* m_pBits; // Pointer to Pixelbits
 	DWORD m_dwLength; // length of DIB (including headers)
+private:
+	double dist(int x1, int y1, int x2, int y2);
 };
