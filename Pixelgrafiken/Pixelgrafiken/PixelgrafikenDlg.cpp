@@ -138,17 +138,12 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	case 1001: // Laden
 		break;
 	case 1002: // Speichern
-
 		if (FileDlg.DoModal() == IDOK) // this is the line which gives the errors
 		{
 			CString agendaName = FileDlg.GetFileName(); //filename
 			CString agendaPath = FileDlg.GetFolderPath(); //filepath (folders)
-			CString agenda = agendaPath + "\\" + agendaName;
-			char* filename = (char*)(LPCTSTR)(agenda);
-
-			m_dib.Save(filename);
+			m_dib.Save(agendaPath + "\\" + agendaName);
 		}
-
 		break;
 	case 1003: // Aufhellen
 		m_dib.brighten(10);
