@@ -135,9 +135,9 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	case 1001: // Laden
 		if (OpenFileDlg.DoModal() == IDOK)
 		{
+			CString agendaName = OpenFileDlg.GetFileName(); //filename
+			CString agendaPath = OpenFileDlg.GetFolderPath(); //filepath (folders)
 			if (OpenFileDlg.GetFileExt() == L"bmp") {
-				CString agendaName = OpenFileDlg.GetFileName(); //filename
-				CString agendaPath = OpenFileDlg.GetFolderPath(); //filepath (folders)
 				m_dib.Load(agendaPath + "\\" + agendaName);
 			}
 			else if (OpenFileDlg.GetFileExt() == L"jpg") {
@@ -151,9 +151,9 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	case 1002: // Speichern
 		if (SaveFileDlg.DoModal() == IDOK)
 		{
+			CString agendaName = SaveFileDlg.GetFileName(); //filename
+			CString agendaPath = SaveFileDlg.GetFolderPath(); //filepath (folders)
 			if (SaveFileDlg.GetFileExt() == L"bmp") {
-				CString agendaName = SaveFileDlg.GetFileName(); //filename
-				CString agendaPath = SaveFileDlg.GetFolderPath(); //filepath (folders)
 				m_dib.Save(agendaPath + "\\" + agendaName);
 			}
 			else if (SaveFileDlg.GetFileExt() == L"jpg") {
