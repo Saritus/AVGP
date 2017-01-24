@@ -112,16 +112,28 @@ int CDIB::StorageWidth() {
 }
 
 void CDIB::brighten(int value) {
-	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24)
-		|| (value < 1) || (value > 100))
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
 		return; // do nothing (not supported)
-	BYTE *t; int sw = StorageWidth();
-	for (int i = 0; i < DibHeight(); i++) {
-		t = (BYTE*)GetPixelAddress(0, i);
-		for (int j = 0; j < sw; j += 3) {
-			*(t + j) += (BYTE)((255 - *(t + j))*(value / 100.f));
-			*(t + j + 1) += (BYTE)((255 - *(t + j + 1))*(value / 100.f));
-			*(t + j + 2) += (BYTE)((255 - *(t + j + 2))*(value / 100.f));
+	if ((value > 0) && (value < 100)) { // brighten
+		BYTE *t; int sw = StorageWidth();
+		for (int i = 0; i < DibHeight(); i++) {
+			t = (BYTE*)GetPixelAddress(0, i);
+			for (int j = 0; j < sw; j += 3) {
+				*(t + j) += (BYTE)((255 - *(t + j))*(value / 100.f));
+				*(t + j + 1) += (BYTE)((255 - *(t + j + 1))*(value / 100.f));
+				*(t + j + 2) += (BYTE)((255 - *(t + j + 2))*(value / 100.f));
+			}
+		}
+	}
+	else if ((value < 0) && (value > -100)) { // darken
+		BYTE *t; int sw = StorageWidth();
+		for (int i = 0; i < DibHeight(); i++) {
+			t = (BYTE*)GetPixelAddress(0, i);
+			for (int j = 0; j < sw; j += 3) {
+				*(t + j) += (BYTE)((*(t + j))*(value / 100.f));
+				*(t + j + 1) += (BYTE)((*(t + j + 1))*(value / 100.f));
+				*(t + j + 2) += (BYTE)((*(t + j + 2))*(value / 100.f));
+			}
 		}
 	}
 }
