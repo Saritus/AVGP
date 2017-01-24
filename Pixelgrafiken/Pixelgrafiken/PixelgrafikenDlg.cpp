@@ -33,8 +33,6 @@ BEGIN_MESSAGE_MAP(CPixelgrafikenDlg, CDialogEx)
 	ON_WM_SIZE()
 	ON_WM_CONTEXTMENU()
 	ON_WM_MENUSELECT()
-
-	ON_BN_CLICKED(IDC_BUTTON3, &CPixelgrafikenDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -115,20 +113,6 @@ void CPixelgrafikenDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
 	CDialogEx::OnMenuSelect(nItemID, nFlags, hSysMenu);
 }
 
-
-void CPixelgrafikenDlg::OnBnClickedButton3()
-{
-	float h[256] = { 0.f }; int x = 10, y = 105;
-	CClientDC dc(this);
-	m_dib.histogramm(h, 20.f);
-	dc.MoveTo(x, y); dc.LineTo(x + 255 + 2, y); // Rahmen zeichnen
-	dc.LineTo(x + 255 + 2, y - 101); dc.LineTo(x, y - 101); dc.LineTo(x, y);
-	CPen p(PS_SOLID, 1, RGB(255, 255, 0)); dc.SelectObject(&p);
-	for (int i = 0; i < 255; i++) { // Histogramm zeichnen
-		dc.MoveTo(x + i + 1, y - 1);
-		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
-	}
-}
 
 BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 {
