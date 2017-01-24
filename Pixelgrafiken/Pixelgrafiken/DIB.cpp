@@ -269,6 +269,18 @@ void CDIB::slur(int percentage) {
 	delete[] temp;
 }
 
+void oil() {
+	// TODO:
+}
+
+void mosaic() {
+	// TODO:
+}
+
+void fft() {
+	// TODO:
+}
+
 void CDIB::matrix(int* matrix, int matrixsize, int koeff, char offset) {
 	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
 		return;
