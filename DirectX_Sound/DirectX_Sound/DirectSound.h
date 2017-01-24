@@ -26,4 +26,13 @@ private:
 	DSBUFFERDESC dsbd; // buffer description
 	LPDIRECTSOUND lpds; // points to DirectSound-Interface
 	LPDIRECTSOUNDBUFFER lpDSBPrimary; // points to primary sound buffer
+
+	long fftFrameSize;
+
+	float* inputData;
+	float* cosPart;
+	float* sinPart;
+
+	float* frequency;
+	float* magnitude;
 };
