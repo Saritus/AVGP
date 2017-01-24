@@ -115,53 +115,52 @@ void CPixelgrafikenDlg::OnSize(UINT nType, int cx, int cy)
 
 void CPixelgrafikenDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-	CMenu menu;
 	VERIFY(menu.CreatePopupMenu());
-	menu.AppendMenu(MF_STRING, 0, L"Laden ...");
-	menu.AppendMenu(MF_STRING, 0, L"Speichern ...");
+	menu.AppendMenu(MF_STRING, 1, L"Laden ...");
+	menu.AppendMenu(MF_STRING, 2, L"Speichern ...");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 0, L"Aufhellen");
-	menu.AppendMenu(MF_STRING, 0, L"Abdunkeln");
-	menu.AppendMenu(MF_STRING, 0, L"Graustufen");
-	menu.AppendMenu(MF_STRING, 0, L"Negativ");
-	menu.AppendMenu(MF_STRING, 0, L"mehr Kontrast");
+	menu.AppendMenu(MF_STRING, 3, L"Aufhellen");
+	menu.AppendMenu(MF_STRING, 4, L"Abdunkeln");
+	menu.AppendMenu(MF_STRING, 5, L"Graustufen");
+	menu.AppendMenu(MF_STRING, 6, L"Negativ");
+	menu.AppendMenu(MF_STRING, 7, L"mehr Kontrast");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 0, L"Rotebene");
-	menu.AppendMenu(MF_STRING, 0, L"Grünebene");
-	menu.AppendMenu(MF_STRING, 0, L"Blauebene");
+	menu.AppendMenu(MF_STRING, 8, L"Rotebene");
+	menu.AppendMenu(MF_STRING, 9, L"Grünebene");
+	menu.AppendMenu(MF_STRING, 10, L"Blauebene");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 0, L"Histogramm");
+	menu.AppendMenu(MF_STRING, 11, L"Histogramm");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 0, L"Schärfen");
-	menu.AppendMenu(MF_STRING, 0, L"Unschärfe");
-	menu.AppendMenu(MF_STRING, 0, L"Emboss");
-	menu.AppendMenu(MF_STRING, 0, L"Kantenerkennung");
+	menu.AppendMenu(MF_STRING, 12, L"Schärfen");
+	menu.AppendMenu(MF_STRING, 13, L"Unschärfe");
+	menu.AppendMenu(MF_STRING, 14, L"Emboss");
+	menu.AppendMenu(MF_STRING, 15, L"Kantenerkennung");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 0, L"Flip horizontal");
-	menu.AppendMenu(MF_STRING, 0, L"Flip vertikal");
-	menu.AppendMenu(MF_STRING, 0, L"Schmelzen");
-	menu.AppendMenu(MF_STRING, 0, L"Ölgemälde");
-	menu.AppendMenu(MF_STRING, 0, L"Mosaik");
+	menu.AppendMenu(MF_STRING, 16, L"Flip horizontal");
+	menu.AppendMenu(MF_STRING, 17, L"Flip vertikal");
+	menu.AppendMenu(MF_STRING, 18, L"Schmelzen");
+	menu.AppendMenu(MF_STRING, 19, L"Ölgemälde");
+	menu.AppendMenu(MF_STRING, 20, L"Mosaik");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 0, L"(inverse) FFT");
+	menu.AppendMenu(MF_STRING, 21, L"(inverse) FFT");
 	menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON, point.x, point.y, this);
 }
 
@@ -192,4 +191,58 @@ void CPixelgrafikenDlg::OnBnClickedButton3()
 		dc.MoveTo(x + i + 1, y - 1);
 		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
 	}
+}
+
+BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
+{
+
+
+	switch (wParam)
+	{
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	case 7:
+		break;
+	case 8:
+		break;
+	case 9:
+		break;
+	case 10:
+		break;
+	case 11:
+		break;
+	case 12:
+		break;
+	case 13:
+		break;
+	case 14:
+		break;
+	case 15:
+		break;
+	case 16:
+		break;
+	case 17:
+		break;
+	case 18:
+		break;
+	case 19:
+		break;
+	case 20:
+		break;
+	case 21:
+		break;
+	default: // Do nothing
+		break;
+	}
+	return CDialog::OnCommand(wParam, lParam);
 }

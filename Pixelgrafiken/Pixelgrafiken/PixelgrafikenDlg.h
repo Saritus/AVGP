@@ -27,6 +27,7 @@ protected:
 	HICON m_hIcon;
 
 	CDIB m_dib;
+	CMenu menu;
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
@@ -41,4 +42,5 @@ public:
 	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton3();
+	BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 };
