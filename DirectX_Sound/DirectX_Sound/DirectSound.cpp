@@ -238,4 +238,22 @@ void CDirectSound::smsFft(float *fftBuffer, long fftFrameSize, long sign) {
 		}
 	}
 }
+
+void CDirectSound::DrawFFT(CDC *pdc, CRect r) {
+	COLORREF c = RGB(0, 255, 0); CRgn rgn;
+	pdc->FillSolidRect(&r, RGB(255, 255, 255));
+	pdc->MoveTo(r.TopLeft()); // Rahmen zeichnen
+	pdc->LineTo(r.right, r.top);
+	pdc->LineTo(r.BottomRight());
+	pdc->LineTo(r.left, r.bottom);
+	pdc->LineTo(r.TopLeft());
+	rgn.CreateRectRgn(r.left + 2, r.top + 2, r.right - 1, r.bottom - 1);
+	pdc->SelectObject(&rgn);
+	float bandwidth = (r.Width() / (fftFrameSize / 2.f)) - 1;
+	float dbstep = (r.Height() - 2) / 40.f; // Schwellwert anwenden
+	if (bandwidth < 1.0f) bandwidth = 1.0f; // 1 Pixel Balkenbreite
+											// Frequenzanteile zeichnen
+	for (int i = 0, x = r.left + 1; i < (fftFrameSize / 2); i++, x += (int)bandwidth + 1)
+		pdc->FillSolidRect(x, (int)(r.top + 1 + dbstep*(-magnitude[i])),
+		(int)bandwidth, r.Height() - 1, c);
 }

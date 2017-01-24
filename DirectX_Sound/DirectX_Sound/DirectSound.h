@@ -19,6 +19,7 @@ public:
 	bool GenerateSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD length, int f);
 	bool LoadPCMSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD length, FILE *fileptr);
 	void smsFft(float *fftBuffer, long fftFrameSize, long sign);
+	void DrawFFT(CDC *pdc, CRect r);
 private:
 	DSBUFFERDESC dsbd; // buffer description
 	LPDIRECTSOUND lpds; // points to DirectSound-Interface
