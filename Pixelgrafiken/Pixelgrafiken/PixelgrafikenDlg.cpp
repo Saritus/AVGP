@@ -42,6 +42,11 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	if (!m_dib.Load("bild.bmp")) {
+		AfxMessageBox(L"Keine bmp-Datei");
+		OnCancel();
+	}
+
 	create_popup_menu();
 
 	// Symbol für dieses Dialogfeld festlegen.  Wird automatisch erledigt
@@ -124,10 +129,6 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	switch (wParam)
 	{
 	case 1: // Laden
-		if (!m_dib.Load("bild.bmp")) {
-			AfxMessageBox(L"Keine bmp-Datei");
-			OnCancel();
-		}
 		break;
 	case 2: // Speichern
 		break;
