@@ -269,15 +269,15 @@ void CDIB::slur(int percentage) {
 	delete[] temp;
 }
 
-void oil() {
+	// TODO:
+void CDIB::oil() {
+}
+
+void CDIB::mosaic() {
 	// TODO:
 }
 
-void mosaic() {
-	// TODO:
-}
-
-void fft() {
+void CDIB::fft() {
 	// TODO:
 }
 
