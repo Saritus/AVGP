@@ -195,51 +195,49 @@ void CPixelgrafikenDlg::OnBnClickedButton3()
 
 BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 {
-
-
 	switch (wParam)
 	{
-	case 1:
+	case 1: // Laden
 		break;
-	case 2:
+	case 2: // Speichern
 		break;
-	case 3:
+	case 3: // Aufhellen
 		break;
-	case 4:
+	case 4: // Abdunkeln
 		break;
-	case 5:
+	case 5: // Graustufen
 		break;
-	case 6:
+	case 6: // Negativ
 		break;
-	case 7:
+	case 7: // mehr Kontrast
 		break;
-	case 8:
+	case 8: // Rotebene
 		break;
-	case 9:
+	case 9: // Grünebene
 		break;
-	case 10:
+	case 10: // Blauebene
 		break;
-	case 11:
+	case 11: // Histogramm
 		break;
-	case 12:
+	case 12: // Schärfen
 		break;
-	case 13:
+	case 13: // Unschärfe
 		break;
-	case 14:
+	case 14: // Emboss
 		break;
-	case 15:
+	case 15: // Kantenerkennung
 		break;
-	case 16:
+	case 16: // Flip horizontal
 		break;
-	case 17:
+	case 17: // Flip vertikal
 		break;
-	case 18:
+	case 18: // Schmelzen
 		break;
-	case 19:
+	case 19: // Ölgemälde
 		break;
-	case 20:
+	case 20: // Mosaik
 		break;
-	case 21:
+	case 21: // inverse FFT
 		break;
 	default: // Do nothing
 		break;
