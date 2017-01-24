@@ -28,6 +28,7 @@ protected:
 
 	CDIB m_dib;
 	CMenu menu;
+	bool histogram;
 
 	// Generierte Funktionen für die Meldungstabellen
 	virtual BOOL OnInitDialog();
@@ -40,4 +41,5 @@ public:
 	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 	BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	void create_popup_menu();
+	void draw_histogram();
 };

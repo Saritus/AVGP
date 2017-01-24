@@ -46,6 +46,7 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 		AfxMessageBox(L"Keine bmp-Datei");
 		OnCancel();
 	}
+	histogram = false;
 
 	create_popup_menu();
 
@@ -70,6 +71,9 @@ void CPixelgrafikenDlg::OnPaint()
 	CRect rect;
 	GetClientRect(&rect);
 	m_dib.Draw(&dc, 0, 0, rect.Width(), rect.Height());
+	if (histogram) {
+		draw_histogram();
+	}
 
 	if (IsIconic())
 	{
@@ -160,6 +164,7 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		m_dib.rgb('b');
 		break;
 	case 11: // Histogramm
+		histogram = !histogram;
 		break;
 	case 12: // Schärfen
 		m_dib.matrix(sharpen_matrix, 1, 1);
@@ -241,4 +246,18 @@ void CPixelgrafikenDlg::create_popup_menu() {
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
 	menu.AppendMenu(MF_STRING, 21, L"(inverse) FFT");
+}
+
+void CPixelgrafikenDlg::draw_histogram()
+{
+	float h[256] = { 0.f }; int x = 10, y = 105;
+	CClientDC dc(this);
+	m_dib.histogramm(h, 20.f);
+	dc.MoveTo(x, y); dc.LineTo(x + 255 + 2, y); // Rahmen zeichnen
+	dc.LineTo(x + 255 + 2, y - 101); dc.LineTo(x, y - 101); dc.LineTo(x, y);
+	CPen p(PS_SOLID, 1, RGB(255, 255, 0)); dc.SelectObject(&p);
+	for (int i = 0; i < 255; i++) { // Histogramm zeichnen
+		dc.MoveTo(x + i + 1, y - 1);
+		dc.LineTo(x + i + 1, y - 1 - (100 * h[i]));
+	}
 }
