@@ -140,9 +140,17 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	case 1002: // Speichern
 		if (FileDlg.DoModal() == IDOK) // this is the line which gives the errors
 		{
-			CString agendaName = FileDlg.GetFileName(); //filename
-			CString agendaPath = FileDlg.GetFolderPath(); //filepath (folders)
-			m_dib.Save(agendaPath + "\\" + agendaName);
+			if (FileDlg.GetFileExt() == L"bmp") {
+				CString agendaName = FileDlg.GetFileName(); //filename
+				CString agendaPath = FileDlg.GetFolderPath(); //filepath (folders)
+				m_dib.Save(agendaPath + "\\" + agendaName);
+			}
+			else if (FileDlg.GetFileExt() == L"jpg") {
+				// TODO: save as jpg
+			}
+			else {
+				AfxMessageBox(L"File extension is not supported");
+			}
 		}
 		break;
 	case 1003: // Aufhellen
