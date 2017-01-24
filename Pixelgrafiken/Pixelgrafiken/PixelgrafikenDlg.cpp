@@ -213,10 +213,13 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		m_dib.slur(10);
 		break;
 	case 1019: // Ölgemälde
+		// TODO:
 		break;
 	case 1020: // Mosaik
+		// TODO:
 		break;
 	case 1021: // inverse FFT
+		// TODO:
 		break;
 	default: // Do nothing
 		break;
