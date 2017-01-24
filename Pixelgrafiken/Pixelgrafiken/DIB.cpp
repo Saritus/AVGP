@@ -54,9 +54,16 @@ bool CDIB::Load(char* fname) {
 }
 
 bool CDIB::Save(char* fname) {
+	CString filename(fname);
+	return Save(filename);
+}
+
+bool CDIB::Save(CString fname)
+{
+	CStringA const_fname(fname);
 	if (!m_pBMFH) return false;
 	FILE* fp;
-	if ((fp = fopen(fname, "wb")) == NULL) {
+	if ((fp = fopen(const_fname, "wb")) == NULL) {
 		AfxMessageBox(L"Unable to open CDIB-File");
 		return false;
 	}
