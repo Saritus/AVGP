@@ -42,10 +42,6 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	if (!m_dib.Load("bild.bmp")) {
-		AfxMessageBox(L"Keine bmp-Datei");
-		OnCancel();
-	}
 	histogram = false;
 
 	create_popup_menu();
@@ -130,22 +126,37 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	int emboss_matrix[9] = { -1,0,0,0,0,0,0,0,1 }; // 14
 	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 }; // 15
 
-	char strFilter[] = { "Windows Bitmap (*.bmp)|*.bmp|" };
-	CFileDialog FileDlg(FALSE, CString(".bmp"), NULL, 0, CString(strFilter));
+	char strFilter[] = { "Windows Bitmap (*.bmp)|*.bmp|JPEG File (*.jpg)|*.jpg|" };
+	CFileDialog SaveFileDlg(FALSE, CString(".bmp"), NULL, 0, CString(strFilter));
+	CFileDialog OpenFileDlg(TRUE, CString(".bmp"), NULL, 0, CString(strFilter));
 
 	switch (wParam)
 	{
 	case 1001: // Laden
+		if (OpenFileDlg.DoModal() == IDOK)
+		{
+			if (OpenFileDlg.GetFileExt() == L"bmp") {
+				CString agendaName = OpenFileDlg.GetFileName(); //filename
+				CString agendaPath = OpenFileDlg.GetFolderPath(); //filepath (folders)
+				m_dib.Load(agendaPath + "\\" + agendaName);
+			}
+			else if (OpenFileDlg.GetFileExt() == L"jpg") {
+				// TODO: load jpg
+			}
+			else {
+				AfxMessageBox(L"File extension is not supported");
+			}
+		}
 		break;
 	case 1002: // Speichern
-		if (FileDlg.DoModal() == IDOK) // this is the line which gives the errors
+		if (SaveFileDlg.DoModal() == IDOK)
 		{
-			if (FileDlg.GetFileExt() == L"bmp") {
-				CString agendaName = FileDlg.GetFileName(); //filename
-				CString agendaPath = FileDlg.GetFolderPath(); //filepath (folders)
+			if (SaveFileDlg.GetFileExt() == L"bmp") {
+				CString agendaName = SaveFileDlg.GetFileName(); //filename
+				CString agendaPath = SaveFileDlg.GetFolderPath(); //filepath (folders)
 				m_dib.Save(agendaPath + "\\" + agendaName);
 			}
-			else if (FileDlg.GetFileExt() == L"jpg") {
+			else if (SaveFileDlg.GetFileExt() == L"jpg") {
 				// TODO: save as jpg
 			}
 			else {
