@@ -116,8 +116,33 @@ void CPixelgrafikenDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 {
 	CMenu menu;
 	VERIFY(menu.CreatePopupMenu());
-	menu.AppendMenu(MF_STRING, 0, L"Load");
-	menu.AppendMenu(MF_STRING, 0, L"Exit");
+	menu.AppendMenu(MF_STRING, 0, L"Laden ...");
+	menu.AppendMenu(MF_STRING, 0, L"Speichern ...");
+	// Seperatorline
+	menu.AppendMenu(MF_STRING, 0, L"Aufhellen");
+	menu.AppendMenu(MF_STRING, 0, L"Abdunkeln");
+	menu.AppendMenu(MF_STRING, 0, L"Graustufen");
+	menu.AppendMenu(MF_STRING, 0, L"Negativ");
+	menu.AppendMenu(MF_STRING, 0, L"mehr Kontrast");
+	// Seperatorline
+	menu.AppendMenu(MF_STRING, 0, L"Rotebene");
+	menu.AppendMenu(MF_STRING, 0, L"Grünebene");
+	menu.AppendMenu(MF_STRING, 0, L"Blauebene");
+	// Seperatorline
+	menu.AppendMenu(MF_STRING, 0, L"Histogramm");
+	// Seperatorline
+	menu.AppendMenu(MF_STRING, 0, L"Schärfen");
+	menu.AppendMenu(MF_STRING, 0, L"Unschärfe");
+	menu.AppendMenu(MF_STRING, 0, L"Emboss");
+	menu.AppendMenu(MF_STRING, 0, L"Kantenerkennung");
+	// Seperatorline
+	menu.AppendMenu(MF_STRING, 0, L"Flip horizontal");
+	menu.AppendMenu(MF_STRING, 0, L"Flip vertikal");
+	menu.AppendMenu(MF_STRING, 0, L"Schmelzen");
+	menu.AppendMenu(MF_STRING, 0, L"Ölgemälde");
+	menu.AppendMenu(MF_STRING, 0, L"Mosaik");
+	// Seperatorline
+	menu.AppendMenu(MF_STRING, 0, L"(inverse) FFT");
 	menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_LEFTBUTTON, point.x, point.y, this);
 }
 
