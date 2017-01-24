@@ -34,7 +34,6 @@ BEGIN_MESSAGE_MAP(CPixelgrafikenDlg, CDialogEx)
 	ON_WM_CONTEXTMENU()
 	ON_WM_MENUSELECT()
 
-	ON_BN_CLICKED(IDC_BUTTON2, &CPixelgrafikenDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CPixelgrafikenDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
@@ -114,14 +113,6 @@ void CPixelgrafikenDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 void CPixelgrafikenDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
 {
 	CDialogEx::OnMenuSelect(nItemID, nFlags, hSysMenu);
-}
-
-
-void CPixelgrafikenDlg::OnBnClickedButton2()
-{
-	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 };
-	m_dib.matrix(edge_matrix, 1, 1);
-	RedrawWindow();
 }
 
 

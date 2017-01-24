@@ -38,7 +38,6 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
-	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton3();
 	BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	void create_popup_menu();
