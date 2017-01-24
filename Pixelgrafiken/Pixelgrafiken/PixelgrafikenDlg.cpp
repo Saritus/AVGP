@@ -202,20 +202,28 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	case 2: // Speichern
 		break;
 	case 3: // Aufhellen
+		m_dib.brighten(10);
 		break;
 	case 4: // Abdunkeln
+		// TODO: abdunkeln
 		break;
 	case 5: // Graustufen
+		m_dib.grey();
 		break;
 	case 6: // Negativ
+		m_dib.negative();
 		break;
 	case 7: // mehr Kontrast
+		m_dib.contrast(1.1f);
 		break;
 	case 8: // Rotebene
+		m_dib.rgb('r');
 		break;
 	case 9: // Grünebene
+		m_dib.rgb('g');
 		break;
 	case 10: // Blauebene
+		m_dib.rgb('b');
 		break;
 	case 11: // Histogramm
 		break;
@@ -242,5 +250,6 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	default: // Do nothing
 		break;
 	}
+	RedrawWindow();
 	return CDialog::OnCommand(wParam, lParam);
 }
