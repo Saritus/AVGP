@@ -241,6 +241,21 @@ void CDirectSound::smsFft(float *fftBuffer, long fftFrameSize, long sign) {
 	}
 }
 
+void CDirectSound::calcParts(int transformLength)
+{
+	long bin, k;
+	cosPart = new float[transformLength];
+	sinPart = new float[transformLength];
+	double arg, sign = -1.; /* sign = -1 -> FFT, 1 -> inverse FFT */
+	for (bin = 0; bin < transformLength / 2; bin++) {
+		cosPart[bin] = sinPart[bin] = 0.;
+		for (k = 0; k < transformLength; k++) {
+			arg = 2.*(float)bin*M_PI*(float)k / (float)transformLength;
+			sinPart[bin] += inputData[k] * sign * sin(arg);
+			cosPart[bin] += inputData[k] * cos(arg);
+		}
+	}
+}
 void CDirectSound::DrawFFT(CDC *pdc, CRect r) {
 	COLORREF c = RGB(0, 255, 0); CRgn rgn;
 	pdc->FillSolidRect(&r, RGB(255, 255, 255));
