@@ -26,9 +26,15 @@ int CDIB::DibHeight() {
 }
 
 bool CDIB::Load(char* fname) {
+	CString filename(fname);
+	return Load(filename);
+}
+
+bool CDIB::Load(CString fname) {
+	CStringA const_fname(fname);
 	if (m_pBMFH != 0) delete[] m_pBMFH; // DIB must be empty
 	FILE* fp;
-	if ((fp = fopen(fname, "rb")) == NULL) {
+	if ((fp = fopen(const_fname, "rb")) == NULL) {
 		AfxMessageBox(L"Unable to open CDIB-File");
 		return false;
 	}
