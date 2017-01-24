@@ -137,10 +137,10 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	case 2: // Speichern
 		break;
 	case 3: // Aufhellen
-		m_dib.brighten(20);
+		m_dib.brighten(10);
 		break;
 	case 4: // Abdunkeln
-		m_dib.brighten(-20);
+		m_dib.brighten(-10);
 		break;
 	case 5: // Graustufen
 		m_dib.grey();

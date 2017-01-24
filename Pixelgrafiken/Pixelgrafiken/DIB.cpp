@@ -114,7 +114,7 @@ int CDIB::StorageWidth() {
 void CDIB::brighten(int value) {
 	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
 		return; // do nothing (not supported)
-	if ((value > 0) && (value < 100)) { // brighten
+	if ((value > 0) && (value <= 100)) { // brighten
 		BYTE *t; int sw = StorageWidth();
 		for (int i = 0; i < DibHeight(); i++) {
 			t = (BYTE*)GetPixelAddress(0, i);
@@ -125,7 +125,7 @@ void CDIB::brighten(int value) {
 			}
 		}
 	}
-	else if ((value < 0) && (value > -100)) { // darken
+	else if ((value < 0) && (value >= -100)) { // darken
 		BYTE *t; int sw = StorageWidth();
 		for (int i = 0; i < DibHeight(); i++) {
 			t = (BYTE*)GetPixelAddress(0, i);
