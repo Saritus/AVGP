@@ -256,6 +256,20 @@ void CDirectSound::calcParts(int transformLength)
 		}
 	}
 }
+
+void CDirectSound::calcMagnitude(int transformLength, int sampleRate)
+{
+	long bin;
+	for (bin = 0; bin < transformLength / 2; bin++) {
+		/* frequency */
+		frequency[bin] = (float)bin * sampleRate / (float)transformLength;
+		/* magnitude */
+		magnitude[bin] = 20. * log10(2. *
+			sqrt(sinPart[bin] * sinPart[bin] +
+				cosPart[bin] * cosPart[bin]) / (float)transformLength);
+	}
+}
+
 void CDirectSound::DrawFFT(CDC *pdc, CRect r) {
 	COLORREF c = RGB(0, 255, 0); CRgn rgn;
 	pdc->FillSolidRect(&r, RGB(255, 255, 255));
