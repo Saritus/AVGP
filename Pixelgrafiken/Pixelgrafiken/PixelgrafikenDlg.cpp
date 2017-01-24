@@ -121,14 +121,14 @@ void CPixelgrafikenDlg::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
 
 BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 {
-	int sharpen_matrix[9] = { -1,-1,-1,-1,9,-1,-1,-1,-1 }; // 12
-	int soften_matrix[9] = { 6,12,6,12,25,12,6,12,6 }; // 13
-	int emboss_matrix[9] = { -1,0,0,0,0,0,0,0,1 }; // 14
-	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 }; // 15
-
 	char strFilter[] = { "Windows Bitmap (*.bmp)|*.bmp|JPEG File (*.jpg)|*.jpg|" };
-	CFileDialog SaveFileDlg(FALSE, CString(".bmp"), NULL, 0, CString(strFilter));
-	CFileDialog OpenFileDlg(TRUE, CString(".bmp"), NULL, 0, CString(strFilter));
+	CFileDialog OpenFileDlg(TRUE, CString(".bmp"), NULL, 0, CString(strFilter)); // 1001
+	CFileDialog SaveFileDlg(FALSE, CString(".bmp"), NULL, 0, CString(strFilter)); // 1002
+
+	int sharpen_matrix[9] = { -1,-1,-1,-1,9,-1,-1,-1,-1 }; // 1012
+	int soften_matrix[9] = { 6,12,6,12,25,12,6,12,6 }; // 1013
+	int emboss_matrix[9] = { -1,0,0,0,0,0,0,0,1 }; // 1014
+	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 }; // 1015
 
 	switch (wParam)
 	{
