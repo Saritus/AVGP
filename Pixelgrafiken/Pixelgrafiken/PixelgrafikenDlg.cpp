@@ -130,65 +130,79 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	int emboss_matrix[9] = { -1,0,0,0,0,0,0,0,1 }; // 14
 	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 }; // 15
 
+	char strFilter[] = { "Windows Bitmap (*.bmp)|*.bmp|" };
+	CFileDialog FileDlg(FALSE, CString(".bmp"), NULL, 0, CString(strFilter));
+
 	switch (wParam)
 	{
-	case 1: // Laden
+	case 1001: // Laden
 		break;
-	case 2: // Speichern
+	case 1002: // Speichern
+
+		if (FileDlg.DoModal() == IDOK) // this is the line which gives the errors
+		{
+			CString agendaName = FileDlg.GetFileName(); //filename
+			CString agendaPath = FileDlg.GetFolderPath(); //filepath (folders)
+			CString agenda = agendaPath + "\\" + agendaName;
+			char* filename = (char*)(LPCTSTR)(agenda);
+
+			m_dib.Save(filename);
+		}
+
 		break;
-	case 3: // Aufhellen
+	case 1003: // Aufhellen
 		m_dib.brighten(10);
 		break;
-	case 4: // Abdunkeln
+	case 1004: // Abdunkeln
 		m_dib.brighten(-10);
 		break;
-	case 5: // Graustufen
+	case 1005: // Graustufen
 		m_dib.grey();
 		break;
-	case 6: // Negativ
+	case 1006: // Negativ
 		m_dib.negative();
 		break;
-	case 7: // mehr Kontrast
+	case 1007: // mehr Kontrast
 		m_dib.contrast(1.1f);
 		break;
-	case 8: // Rotebene
+	case 1008: // Rotebene
 		m_dib.rgb('r');
 		break;
-	case 9: // Grünebene
+	case 1009: // Grünebene
 		m_dib.rgb('g');
 		break;
-	case 10: // Blauebene
+	case 1010: // Blauebene
 		m_dib.rgb('b');
 		break;
-	case 11: // Histogramm
+	case 1011: // Histogramm
 		histogram = !histogram;
 		break;
-	case 12: // Schärfen
+	case 1012: // Schärfen
 		m_dib.matrix(sharpen_matrix, 1, 1);
 		break;
-	case 13: // Unschärfe
+	case 1013: // Unschärfe
 		m_dib.matrix(soften_matrix, 1, 97);
 		break;
-	case 14: // Emboss
+	case 1014: // Emboss
 		m_dib.matrix(emboss_matrix, 1, 1, 127);
 		break;
-	case 15: // Kantenerkennung
+	case 1015: // Kantenerkennung
 		m_dib.matrix(edge_matrix, 1, 1);
 		break;
-	case 16: // Flip horizontal
+	case 1016: // Flip horizontal
 		m_dib.flip('h');
 		break;
-	case 17: // Flip vertikal
+	case 1017: // Flip vertikal
 		m_dib.flip('v');
 		break;
-	case 18: // Schmelzen
+	case 1018: // Schmelzen
 		m_dib.slur(10);
 		break;
-	case 19: // Ölgemälde
+	case 1019: // Ölgemälde
 		break;
-	case 20: // Mosaik
+	case 1020: // Mosaik
 		break;
-	case 21: // inverse FFT
+	case 1021: // inverse FFT
 		break;
 	default: // Do nothing
 		break;
@@ -199,51 +213,51 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 
 void CPixelgrafikenDlg::create_popup_menu() {
 	VERIFY(menu.CreatePopupMenu());
-	menu.AppendMenu(MF_STRING, 1, L"Laden ...");
-	menu.AppendMenu(MF_STRING, 2, L"Speichern ...");
+	menu.AppendMenu(MF_STRING, 1001, L"Laden ...");
+	menu.AppendMenu(MF_STRING, 1002, L"Speichern ...");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 3, L"Aufhellen");
-	menu.AppendMenu(MF_STRING, 4, L"Abdunkeln");
-	menu.AppendMenu(MF_STRING, 5, L"Graustufen");
-	menu.AppendMenu(MF_STRING, 6, L"Negativ");
-	menu.AppendMenu(MF_STRING, 7, L"mehr Kontrast");
+	menu.AppendMenu(MF_STRING, 1003, L"Aufhellen");
+	menu.AppendMenu(MF_STRING, 1004, L"Abdunkeln");
+	menu.AppendMenu(MF_STRING, 1005, L"Graustufen");
+	menu.AppendMenu(MF_STRING, 1006, L"Negativ");
+	menu.AppendMenu(MF_STRING, 1007, L"mehr Kontrast");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 8, L"Rotebene");
-	menu.AppendMenu(MF_STRING, 9, L"Grünebene");
-	menu.AppendMenu(MF_STRING, 10, L"Blauebene");
+	menu.AppendMenu(MF_STRING, 1008, L"Rotebene");
+	menu.AppendMenu(MF_STRING, 1009, L"Grünebene");
+	menu.AppendMenu(MF_STRING, 1010, L"Blauebene");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 11, L"Histogramm");
+	menu.AppendMenu(MF_STRING, 10011, L"Histogramm");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 12, L"Schärfen");
-	menu.AppendMenu(MF_STRING, 13, L"Unschärfe");
-	menu.AppendMenu(MF_STRING, 14, L"Emboss");
-	menu.AppendMenu(MF_STRING, 15, L"Kantenerkennung");
+	menu.AppendMenu(MF_STRING, 1012, L"Schärfen");
+	menu.AppendMenu(MF_STRING, 1013, L"Unschärfe");
+	menu.AppendMenu(MF_STRING, 1014, L"Emboss");
+	menu.AppendMenu(MF_STRING, 1015, L"Kantenerkennung");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 16, L"Flip horizontal");
-	menu.AppendMenu(MF_STRING, 17, L"Flip vertikal");
-	menu.AppendMenu(MF_STRING, 18, L"Schmelzen");
-	menu.AppendMenu(MF_STRING, 19, L"Ölgemälde");
-	menu.AppendMenu(MF_STRING, 20, L"Mosaik");
+	menu.AppendMenu(MF_STRING, 1016, L"Flip horizontal");
+	menu.AppendMenu(MF_STRING, 1017, L"Flip vertikal");
+	menu.AppendMenu(MF_STRING, 1018, L"Schmelzen");
+	menu.AppendMenu(MF_STRING, 1019, L"Ölgemälde");
+	menu.AppendMenu(MF_STRING, 1020, L"Mosaik");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 21, L"(inverse) FFT");
+	menu.AppendMenu(MF_STRING, 1021, L"(inverse) FFT");
 }
 
 void CPixelgrafikenDlg::draw_histogram()
