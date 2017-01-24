@@ -252,7 +252,7 @@ void CPixelgrafikenDlg::create_popup_menu() {
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
-	menu.AppendMenu(MF_STRING, 10011, L"Histogramm");
+	menu.AppendMenu(MF_STRING, 1011, L"Histogramm");
 
 	// Seperatorline
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
