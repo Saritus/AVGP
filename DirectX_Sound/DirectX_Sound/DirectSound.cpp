@@ -264,6 +264,7 @@ void CDirectSound::calcMagnitude(float *fftVektor, long transformLength)
 {
 	for (int bin = 0; bin < transformLength / 2; bin++) {
 		/* frequency */
+		float sampleRate = 22050;
 		frequency[bin] = (float)bin * sampleRate / (float)transformLength;
 		/* magnitude */
 		magnitude[bin] = 20. * log10(2. *
