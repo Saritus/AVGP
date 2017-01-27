@@ -251,17 +251,17 @@ void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
 		float fftVektor[transformLength * 2];
 
 		// TODO: fill fftVektor
-		m_ds.fillFFTBuffer(fftVektor, transformLength);
+		//m_ds.fillFFTBuffer(fftVektor, transformLength);
 
 		// Samples in fftVektor normalisieren
 		// TODO:
 
-		m_ds.smsFft(fftVektor, transformLength, -1);
+		//m_ds.smsFft(fftVektor, transformLength, -1);
 
 		// magnitude-Vektor berechnen
-		m_ds.calcMagnitude(fftVektor, transformLength);
+		//m_ds.calcMagnitude(fftVektor, transformLength);
 
-		m_ds.DrawFFT(&dc, CRect(10, 70, 310, 120), transformLength);
+		//m_ds.DrawFFT(&dc, CRect(10, 70, 310, 120), transformLength);
 
 	}
 	CDialog::OnTimer(nIDEvent);
