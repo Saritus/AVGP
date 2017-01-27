@@ -21,8 +21,8 @@ public:
 
 	// FFT
 	void smsFft(float *fftBuffer, long fftFrameSize, long sign);
-	void DrawFFT(CDC *pdc, CRect r);
-	void calcMagnitude(float* fftVektor);
+	void DrawFFT(CDC *pdc, CRect r, long fftFrameSize);
+	void calcMagnitude(float *fftVektor, long fftFrameSize);
 
 private:
 	DSBUFFERDESC dsbd; // buffer description

@@ -241,7 +241,7 @@ void CDirectSound::smsFft(float *fftBuffer, long fftFrameSize, long sign) {
 	}
 }
 
-void CDirectSound::DrawFFT(CDC *pdc, CRect r) {
+void CDirectSound::DrawFFT(CDC *pdc, CRect r, long fftFrameSize) {
 	COLORREF c = RGB(0, 255, 0); CRgn rgn;
 	pdc->FillSolidRect(&r, RGB(255, 255, 255));
 	pdc->MoveTo(r.TopLeft()); // Rahmen zeichnen
@@ -260,7 +260,7 @@ void CDirectSound::DrawFFT(CDC *pdc, CRect r) {
 		(int)bandwidth, r.Height() - 1, c);
 }
 
-void CDirectSound::calcMagnitude(float *fftVektor)
+void CDirectSound::calcMagnitude(float *fftVektor, long fftFrameSize)
 {
 	for (int bin = 0; bin < transformLength / 2; bin++) {
 		/* frequency */
