@@ -26,8 +26,8 @@ public:
 	void fft();
 	void matrix(int* matrix, int matrixsize, int koeff, char offset = 0);
 	void flip(char c);
-	bool SaveJpeg(char* pszFileName, int quality);
-	bool LoadJpeg(char* pszFileName);
+	bool SaveJpeg(CString pszFileName, int quality);
+	bool LoadJpeg(CString pszFileName);
 protected:
 	BITMAPFILEHEADER *m_pBMFH; // Pointer to BITMAPFILEHEADER
 	BITMAPINFO* m_pBMI; // Pointer to BITMAPINFO struct

@@ -31,10 +31,9 @@ bool CDIB::Load(char* fname) {
 }
 
 bool CDIB::Load(CString fname) {
-	CStringA const_fname(fname);
 	if (m_pBMFH != 0) delete[] m_pBMFH; // DIB must be empty
 	FILE* fp;
-	if ((fp = fopen(const_fname, "rb")) == NULL) {
+	if ((fp = _wfopen(fname, L"rb")) == NULL) {
 		AfxMessageBox(L"Unable to open CDIB-File");
 		return false;
 	}
@@ -66,10 +65,9 @@ bool CDIB::Save(char* fname) {
 
 bool CDIB::Save(CString fname)
 {
-	CStringA const_fname(fname);
 	if (!m_pBMFH) return false;
 	FILE* fp;
-	if ((fp = fopen(const_fname, "wb")) == NULL) {
+	if ((fp = _wfopen(fname, L"wb")) == NULL) {
 		AfxMessageBox(L"Unable to open CDIB-File");
 		return false;
 	}
@@ -434,7 +432,7 @@ void CDIB::flip(char c) {
 	}
 }
 
-bool CDIB::SaveJpeg(char* pszFileName, int quality) {/*
+bool CDIB::SaveJpeg(CString pszFileName, int quality) {/*
 	if (m_pBMFH == 0) return false;
 
 	// ------------------------------------------------------------------
@@ -444,7 +442,7 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {/*
 	jpeg_create_compress(&cinfo);
 	// ------------------------------------------------------------------
 	FILE * outfile; // Ausgabedatei festlegen
-	if ((outfile = fopen(pszFileName, "wb")) == 0) {
+	if ((outfile =  _wfopen(pszFileName, L"wb")) == 0) {
 		CString s;
 		s.Format("can't open %s\n", pszFileName);
 		AfxMessageBox(s);
@@ -481,11 +479,11 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {/*
 	// ------------------------------------------------------------------
 	delete[] line;
 	jpeg_destroy_compress(&cinfo); // Ressourcen freigeben
-
-	return true;*/
+	*/
+	return true;
 }
 
-bool CDIB::LoadJpeg(char* pszFileName) {/*
+bool CDIB::LoadJpeg(CString pszFileName) {/*
 	if (m_pBMFH != 0) delete[] m_pBMFH; // CDIB sollte leer sein
 
 	// ------------------------------------------------------------------
@@ -495,7 +493,7 @@ bool CDIB::LoadJpeg(char* pszFileName) {/*
 	jpeg_create_decompress(&cinfo);
 	// ------------------------------------------------------------------
 	FILE * infile; // Datei öffnen
-	if ((infile = fopen(pszFileName, "rb")) == 0) {
+	if ((infile =  _wfopen(pszFileName, L"rb")) == 0) {
 		CString s;
 		s.Format("can't open %s", pszFileName);
 		AfxMessageBox(s);
@@ -553,6 +551,6 @@ bool CDIB::LoadJpeg(char* pszFileName) {/*
 	jpeg_finish_decompress(&cinfo); // Ressourcen freigeben
 	jpeg_destroy_decompress(&cinfo);
 	fclose(infile);
-
-	return true;*/
+	*/
+	return true;
 }
