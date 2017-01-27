@@ -273,7 +273,7 @@ void CDirectSound::calcMagnitude(float *fftVektor, long transformLength)
 	}
 }
 
-bool CDirectSound::fillFFTBuffer(long length)
+bool CDirectSound::fillFFTBuffer(float *fftVektor, long length)
 {
 	WAVEFORMATEX pcmwf;
 	if (!lpDSBPrimary) return false;
@@ -288,12 +288,13 @@ bool CDirectSound::fillFFTBuffer(long length)
 		&lpvPtr1, &dwBytes1, // get pointer 1
 		&lpvPtr2, &dwBytes2)) // get pointer 2 (the buffer is circular)
 		return false;
-	// write a sinus sound now
+	// fill fftvektor now
 	DWORD i; short int *t; // points to 16 Bit
-	for (i = 0, t = (short int*)lpvPtr1; i < (dwBytes1 + dwBytes2); i += 4, t += 2) {
+	for (i = 0, t = (short int*)lpvPtr1; i < 2 * length; i += 2, t += 2) {
 		if (i == dwBytes1)
 			t = (short int*)lpvPtr2;
-		*t = *(t + 1) = (short int)(sin(i / (pcmwf.nAvgBytesPerSec / (6.283185))) * 30000);
+		//*t = *(t + 1) = (short int)(sin(i / (pcmwf.nAvgBytesPerSec / (6.283185))) * 30000);
+		fftVektor[i] = *t;
 	}
 	// unlock memory
 	if (!this->UnlockBuffer(lpDSBPrimary,
