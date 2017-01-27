@@ -21,20 +21,13 @@ public:
 
 	// FFT
 	void smsFft(float *fftBuffer, long fftFrameSize, long sign);
-	void calcParts(int transformLength);
-	void calcMagnitude(int transformLength, int sampleRate);
 	void DrawFFT(CDC *pdc, CRect r);
+	void calcMagnitude(float* fftVektor);
 
 private:
 	DSBUFFERDESC dsbd; // buffer description
 	LPDIRECTSOUND lpds; // points to DirectSound-Interface
 	LPDIRECTSOUNDBUFFER lpDSBPrimary; // points to primary sound buffer
-
-	long fftFrameSize;
-
-	float* inputData;
-	float* cosPart;
-	float* sinPart;
 
 	float* frequency;
 	float* magnitude;

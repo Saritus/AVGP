@@ -210,7 +210,6 @@ int CDirectSound::GetPlayPosition(LPDIRECTSOUNDBUFFER buf) {
 }
 
 void CDirectSound::smsFft(float *fftBuffer, long fftFrameSize, long sign) {
-	this->fftFrameSize = fftFrameSize;
 	float wr, wi, arg, *p1, *p2, temp;
 	float tr, ti, ur, ui, *p1r, *p1i, *p2r, *p2i;
 	long i, bitm, j, le, le2, k;
@@ -242,35 +241,6 @@ void CDirectSound::smsFft(float *fftBuffer, long fftFrameSize, long sign) {
 	}
 }
 
-void CDirectSound::calcParts(int transformLength)
-{
-	long bin, k;
-	cosPart = new float[transformLength];
-	sinPart = new float[transformLength];
-	double arg, sign = -1.; /* sign = -1 -> FFT, 1 -> inverse FFT */
-	for (bin = 0; bin < transformLength / 2; bin++) {
-		cosPart[bin] = sinPart[bin] = 0.;
-		for (k = 0; k < transformLength; k++) {
-			arg = 2.*(float)bin*M_PI*(float)k / (float)transformLength;
-			sinPart[bin] += inputData[k] * sign * sin(arg);
-			cosPart[bin] += inputData[k] * cos(arg);
-		}
-	}
-}
-
-void CDirectSound::calcMagnitude(int transformLength, int sampleRate)
-{
-	long bin;
-	for (bin = 0; bin < transformLength / 2; bin++) {
-		/* frequency */
-		frequency[bin] = (float)bin * sampleRate / (float)transformLength;
-		/* magnitude */
-		magnitude[bin] = 20. * log10(2. *
-			sqrt(sinPart[bin] * sinPart[bin] +
-				cosPart[bin] * cosPart[bin]) / (float)transformLength);
-	}
-}
-
 void CDirectSound::DrawFFT(CDC *pdc, CRect r) {
 	COLORREF c = RGB(0, 255, 0); CRgn rgn;
 	pdc->FillSolidRect(&r, RGB(255, 255, 255));
@@ -288,4 +258,17 @@ void CDirectSound::DrawFFT(CDC *pdc, CRect r) {
 	for (int i = 0, x = r.left + 1; i < (fftFrameSize / 2); i++, x += (int)bandwidth + 1)
 		pdc->FillSolidRect(x, (int)(r.top + 1 + dbstep*(-magnitude[i])),
 		(int)bandwidth, r.Height() - 1, c);
+}
+
+void CDirectSound::calcMagnitude(float *fftVektor)
+{
+	for (int bin = 0; bin < transformLength / 2; bin++) {
+		/* frequency */
+		frequency[bin] = (float)bin * sampleRate / (float)transformLength;
+		/* magnitude */
+		magnitude[bin] = 20. * log10(2. *
+			sqrt(fftVektor[2 * bin] * fftVektor[2 * bin] + // cosPart
+				fftVektor[2 * bin + 1] * fftVektor[2 * bin + 1]) // sinPart
+			/ (float)transformLength);
+	}
 }
