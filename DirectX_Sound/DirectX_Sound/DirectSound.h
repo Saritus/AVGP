@@ -23,6 +23,7 @@ public:
 	void smsFft(float *fftBuffer, long fftFrameSize, long sign);
 	void DrawFFT(CDC *pdc, CRect r, long fftFrameSize);
 	void calcMagnitude(float *fftVektor, long fftFrameSize);
+	bool fillFFTBuffer(long length);
 
 private:
 	DSBUFFERDESC dsbd; // buffer description

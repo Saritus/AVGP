@@ -260,7 +260,7 @@ void CDirectSound::DrawFFT(CDC *pdc, CRect r, long fftFrameSize) {
 		(int)bandwidth, r.Height() - 1, c);
 }
 
-void CDirectSound::calcMagnitude(float *fftVektor, long fftFrameSize)
+void CDirectSound::calcMagnitude(float *fftVektor, long transformLength)
 {
 	for (int bin = 0; bin < transformLength / 2; bin++) {
 		/* frequency */
@@ -271,4 +271,33 @@ void CDirectSound::calcMagnitude(float *fftVektor, long fftFrameSize)
 				fftVektor[2 * bin + 1] * fftVektor[2 * bin + 1]) // sinPart
 			/ (float)transformLength);
 	}
+}
+
+bool CDirectSound::fillFFTBuffer(long length)
+{
+	WAVEFORMATEX pcmwf;
+	if (!lpDSBPrimary) return false;
+	if (!GetWaveFormat(lpDSBPrimary, &pcmwf))
+		return false;
+
+	DWORD offset;
+	lpDSBPrimary->GetCurrentPosition(&offset, 0);
+
+	void *lpvPtr1, *lpvPtr2; DWORD dwBytes1, dwBytes2;
+	if (!this->LockBuffer(lpDSBPrimary, offset, length,
+		&lpvPtr1, &dwBytes1, // get pointer 1
+		&lpvPtr2, &dwBytes2)) // get pointer 2 (the buffer is circular)
+		return false;
+	// write a sinus sound now
+	DWORD i; short int *t; // points to 16 Bit
+	for (i = 0, t = (short int*)lpvPtr1; i < (dwBytes1 + dwBytes2); i += 4, t += 2) {
+		if (i == dwBytes1)
+			t = (short int*)lpvPtr2;
+		*t = *(t + 1) = (short int)(sin(i / (pcmwf.nAvgBytesPerSec / (6.283185))) * 30000);
+	}
+	// unlock memory
+	if (!this->UnlockBuffer(lpDSBPrimary,
+		lpvPtr1, dwBytes1, // pointer 1
+		lpvPtr2, dwBytes2)) // pointer 2
+		return false;
 }
