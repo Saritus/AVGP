@@ -25,11 +25,6 @@ int CDIB::DibHeight() {
 	else return 0;
 }
 
-bool CDIB::Load(char* fname) {
-	CString filename(fname);
-	return Load(filename);
-}
-
 bool CDIB::Load(CString fname) {
 	if (m_pBMFH != 0) delete[] m_pBMFH; // DIB must be empty
 	FILE* fp;
@@ -56,11 +51,6 @@ bool CDIB::Load(CString fname) {
 	m_pBMI = (BITMAPINFO*)(m_pBMFH + 1);
 	m_pBits = (BYTE*)m_pBMFH + m_pBMFH->bfOffBits;
 	fclose(fp); return true;
-}
-
-bool CDIB::Save(char* fname) {
-	CString filename(fname);
-	return Save(filename);
 }
 
 bool CDIB::Save(CString fname)

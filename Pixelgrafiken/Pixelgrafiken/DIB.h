@@ -3,9 +3,7 @@ class CDIB {
 public:
 	CDIB();
 	~CDIB();
-	virtual bool Load(char* fname); // Load from file
 	virtual bool Load(CString fname); // Load from file
-	virtual bool Save(char* fname); // Save to file
 	virtual bool Save(CString fname); // Save to file
 	virtual void Draw(CDC* pDC, int x, int y);
 	virtual void Draw(CDC* pDC, int x, int y, int width, int height);
