@@ -247,16 +247,18 @@ void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
 	else if (nIDEvent == 2) {
 		CClientDC dc(this);
 
-		const int transformLength = 128;
+		const int transformLength = 1024; // ca. 50ms
 		float fftVektor[transformLength * 2];
 
+		// TODO: fill fftVektor
+
 		// Samples in fftVektor normalisieren
-		m_ds.calcParts(transformLength);
+		// TODO:
 
 		m_ds.smsFft(fftVektor, transformLength, -1);
 
 		// magnitude-Vektor berechnen
-		m_ds.calcMagnitude(transformLength, 22050);
+		m_ds.calcMagnitude(fftVektor);
 
 		m_ds.DrawFFT(&dc, CRect(10, 70, 310, 120));
 
@@ -424,7 +426,7 @@ void CDirectX_SoundDlg::OnBnClickedButton3()
 	rewind(fileptr);                      // Jump back to the beginning of the file
 
 	SetTimer(1, 200, NULL);
-	SetTimer(2, 1000 / 20, NULL);
+	SetTimer(2, 1000 / 20, NULL); // 1024 Samples
 	mode = 1; // 0 - Tonleiter, 1 - PCM-Datei
 }
 
