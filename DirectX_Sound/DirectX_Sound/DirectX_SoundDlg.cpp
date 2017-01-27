@@ -251,7 +251,7 @@ void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
 		float fftVektor[transformLength * 2];
 
 		// TODO: fill fftVektor
-		m_ds;
+		m_ds.fillFFTBuffer(fftVektor, transformLength);
 
 		// Samples in fftVektor normalisieren
 		// TODO:
