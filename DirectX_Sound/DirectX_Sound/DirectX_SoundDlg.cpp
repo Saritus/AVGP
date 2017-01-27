@@ -251,6 +251,7 @@ void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
 		float fftVektor[transformLength * 2];
 
 		// TODO: fill fftVektor
+		m_ds;
 
 		// Samples in fftVektor normalisieren
 		// TODO:
@@ -258,9 +259,9 @@ void CDirectX_SoundDlg::OnTimer(UINT_PTR nIDEvent)
 		m_ds.smsFft(fftVektor, transformLength, -1);
 
 		// magnitude-Vektor berechnen
-		m_ds.calcMagnitude(fftVektor);
+		m_ds.calcMagnitude(fftVektor, transformLength);
 
-		m_ds.DrawFFT(&dc, CRect(10, 70, 310, 120));
+		m_ds.DrawFFT(&dc, CRect(10, 70, 310, 120), transformLength);
 
 	}
 	CDialog::OnTimer(nIDEvent);
