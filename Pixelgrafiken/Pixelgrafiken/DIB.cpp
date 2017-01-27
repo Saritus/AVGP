@@ -434,8 +434,7 @@ void CDIB::flip(char c) {
 	}
 }
 
-/*
-bool CDIB::SaveJpeg(char* pszFileName, int quality) {
+bool CDIB::SaveJpeg(char* pszFileName, int quality) {/*
 	if (m_pBMFH == 0) return false;
 
 	// ------------------------------------------------------------------
@@ -483,12 +482,10 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {
 	delete[] line;
 	jpeg_destroy_compress(&cinfo); // Ressourcen freigeben
 
-	return true;
+	return true;*/
 }
-*/
 
-/*
-bool CDIB::LoadJpeg(char* pszFileName) {
+bool CDIB::LoadJpeg(char* pszFileName) {/*
 	if (m_pBMFH != 0) delete[] m_pBMFH; // CDIB sollte leer sein
 
 	// ------------------------------------------------------------------
@@ -557,6 +554,5 @@ bool CDIB::LoadJpeg(char* pszFileName) {
 	jpeg_destroy_decompress(&cinfo);
 	fclose(infile);
 
-	return true;
+	return true;*/
 }
-*/
