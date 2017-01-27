@@ -141,7 +141,7 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 				m_dib.Load(agendaPath + "\\" + agendaName);
 			}
 			else if (OpenFileDlg.GetFileExt() == L"jpg") {
-				// TODO: load jpg
+				m_dib.LoadJpeg(agendaPath + "\\" + agendaName);
 			}
 			else {
 				AfxMessageBox(L"File extension is not supported");
@@ -157,7 +157,7 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 				m_dib.Save(agendaPath + "\\" + agendaName);
 			}
 			else if (SaveFileDlg.GetFileExt() == L"jpg") {
-				// TODO: save as jpg
+				m_dib.SaveJpeg(agendaPath + "\\" + agendaName, 1);
 			}
 			else {
 				AfxMessageBox(L"File extension is not supported");
