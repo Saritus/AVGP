@@ -131,6 +131,8 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	int emboss_matrix[9] = { -1, 0, 0, 0, 0, 0, 0, 0, 1 }; // 1014
 	int edge_matrix[9] = { -1, -1, -1, -1, 8, -1, -1, -1, -1 }; // 1015
 
+	CFileDialog MergeFileDlg(TRUE, CString(".bmp"), NULL, 0, CString(strFilter)); // 1001
+
 	switch (wParam)
 	{
 	case 1001: // Laden
@@ -226,6 +228,26 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	case 1021: // inverse FFT
 		m_dib.fft();
 		break;
+	case 1022: // merge other CDIB
+		if (MergeFileDlg.DoModal() == IDOK)
+		{
+			CQualityDlg percentageDlg;
+			CString agendaName = MergeFileDlg.GetFileName(); //filename
+			CString agendaPath = MergeFileDlg.GetFolderPath(); //filepath (folders)
+			if (MergeFileDlg.GetFileExt() == L"bmp") {
+				if (percentageDlg.DoModal() == IDOK) {
+
+				}
+				m_dib.merge(agendaPath + "\\" + agendaName, percentageDlg.quality);
+			}
+			else if (MergeFileDlg.GetFileExt() == L"jpg") {
+				//m_dib.LoadJpeg(agendaPath + "\\" + agendaName);
+			}
+			else {
+				AfxMessageBox(L"File extension is not supported");
+			}
+		}
+		break;
 	default: // Do nothing
 		break;
 	}
@@ -280,6 +302,7 @@ void CPixelgrafikenDlg::create_popup_menu() {
 	menu.AppendMenu(MF_SEPARATOR, 0, L"");
 
 	menu.AppendMenu(MF_STRING, 1021, L"(inverse) FFT");
+	menu.AppendMenu(MF_STRING, 1022, L"Verschmelzen");
 }
 
 void CPixelgrafikenDlg::draw_histogram()

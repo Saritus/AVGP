@@ -370,6 +370,33 @@ void CDIB::fft() {
 	// TODO:
 }
 
+void CDIB::merge(CString filename, int percentage) {
+	CDIB other;
+	other.Load(filename);
+	merge(other, percentage);
+}
+
+void CDIB::merge(CDIB &other, int percentage) {
+	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
+		return;
+	if (other.DibHeight() != DibHeight())
+		return;
+	if (other.DibWidth() != DibWidth())
+		return;
+	double p = (double)percentage / 100;
+	BYTE *t, *o, *temp;
+	int sw = StorageWidth();
+	for (int i = 1; i < DibHeight(); i++) { // für alle Zeilen
+		t = (BYTE*)GetPixelAddress(0, i);
+		o = (BYTE*)other.GetPixelAddress(0, i);
+		for (int j = 0; j < sw; j += 3) { // und jedes Pixel der Zeile
+			*(t + j) = (1 - p)*(*(t + j)) + p*(*(o + j));
+			*(t + j + 1) = (1 - p)*(*(t + j + 1)) + p*(*(o + j + 1));
+			*(t + j + 2) = (1 - p)*(*(t + j + 2)) + p*(*(o + j + 2));
+		}
+	}
+}
+
 void CDIB::matrix(int* matrix, int matrixsize, int koeff, char offset) {
 	if ((m_pBMFH == 0) || (m_pBMI->bmiHeader.biBitCount != 24))
 		return;

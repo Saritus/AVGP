@@ -28,6 +28,8 @@ public:
 	void oil(int radius, int intensityLevels);
 	void mosaic();
 	void fft();
+	void merge(CString filename, int percentage);
+	void merge(CDIB &other, int percentage);
 	void matrix(int* matrix, int matrixsize, int koeff, char offset = 0);
 	void flip(char c);
 	bool SaveJpeg(CString pszFileName, int quality);
