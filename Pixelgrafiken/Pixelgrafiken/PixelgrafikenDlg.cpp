@@ -6,6 +6,7 @@
 #include "Pixelgrafiken.h"
 #include "PixelgrafikenDlg.h"
 #include "afxdialogex.h"
+#include "QualityDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -51,7 +52,7 @@ BOOL CPixelgrafikenDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Großes Symbol verwenden
 	SetIcon(m_hIcon, FALSE);		// Kleines Symbol verwenden
 
-									// TODO: Hier zusätzliche Initialisierung einfügen
+	// TODO: Hier zusätzliche Initialisierung einfügen
 
 	return TRUE;  // TRUE zurückgeben, wenn der Fokus nicht auf ein Steuerelement gesetzt wird
 }
@@ -125,10 +126,10 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	CFileDialog OpenFileDlg(TRUE, CString(".bmp"), NULL, 0, CString(strFilter)); // 1001
 	CFileDialog SaveFileDlg(FALSE, CString(".bmp"), NULL, 0, CString(strFilter)); // 1002
 
-	int sharpen_matrix[9] = { -1,-1,-1,-1,9,-1,-1,-1,-1 }; // 1012
-	int soften_matrix[9] = { 6,12,6,12,25,12,6,12,6 }; // 1013
-	int emboss_matrix[9] = { -1,0,0,0,0,0,0,0,1 }; // 1014
-	int edge_matrix[9] = { -1,-1,-1,-1,8,-1,-1,-1,-1 }; // 1015
+	int sharpen_matrix[9] = { -1, -1, -1, -1, 9, -1, -1, -1, -1 }; // 1012
+	int soften_matrix[9] = { 6, 12, 6, 12, 25, 12, 6, 12, 6 }; // 1013
+	int emboss_matrix[9] = { -1, 0, 0, 0, 0, 0, 0, 0, 1 }; // 1014
+	int edge_matrix[9] = { -1, -1, -1, -1, 8, -1, -1, -1, -1 }; // 1015
 
 	switch (wParam)
 	{
@@ -141,7 +142,7 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 				m_dib.Load(agendaPath + "\\" + agendaName);
 			}
 			else if (OpenFileDlg.GetFileExt() == L"jpg") {
-				// TODO: load jpg
+				m_dib.LoadJpeg(agendaPath + "\\" + agendaName);
 			}
 			else {
 				AfxMessageBox(L"File extension is not supported");
@@ -157,7 +158,11 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 				m_dib.Save(agendaPath + "\\" + agendaName);
 			}
 			else if (SaveFileDlg.GetFileExt() == L"jpg") {
-				// TODO: save as jpg
+				CQualityDlg saveDlg;
+				if (saveDlg.DoModal() == IDOK) {
+
+				}
+				m_dib.SaveJpeg(agendaPath + "\\" + agendaName, saveDlg.quality);
 			}
 			else {
 				AfxMessageBox(L"File extension is not supported");
@@ -210,7 +215,7 @@ BOOL CPixelgrafikenDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		m_dib.flip('v');
 		break;
 	case 1018: // Schmelzen
-		m_dib.slur(10);
+		m_dib.slur(90);
 		break;
 	case 1019: // Ölgemälde
 		m_dib.oil(5, 20);

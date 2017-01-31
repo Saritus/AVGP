@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DIB.h"
+#include <math.h>
 
 CDIB::CDIB() {
 	m_pBMFH = 0;
@@ -31,10 +32,9 @@ bool CDIB::Load(char* fname) {
 }
 
 bool CDIB::Load(CString fname) {
-	CStringA const_fname(fname);
 	if (m_pBMFH != 0) delete[] m_pBMFH; // DIB must be empty
 	FILE* fp;
-	if ((fp = fopen(const_fname, "rb")) == NULL) {
+	if ((fp = _wfopen(fname, L"rb")) == NULL) {
 		AfxMessageBox(L"Unable to open CDIB-File");
 		return false;
 	}
@@ -66,10 +66,9 @@ bool CDIB::Save(char* fname) {
 
 bool CDIB::Save(CString fname)
 {
-	CStringA const_fname(fname);
 	if (!m_pBMFH) return false;
 	FILE* fp;
-	if ((fp = fopen(const_fname, "wb")) == NULL) {
+	if ((fp = _wfopen(fname, L"wb")) == NULL) {
 		AfxMessageBox(L"Unable to open CDIB-File");
 		return false;
 	}
@@ -89,18 +88,18 @@ void CDIB::Draw(CDC* pDC, int x, int y) {
 void CDIB::Draw(CDC* pDC, int x, int y, int width, int height) {
 	if (m_pBMFH != 0)
 		StretchDIBits(pDC->GetSafeHdc(),
-			x, // Destination x
-			y, // Destination y
-			width, // Destination width
-			height, // Destination height
-			0, // Source x
-			0, // Source y
-			DibWidth(), // Source width
-			DibHeight(), // Source height
-			m_pBits, // Pointer to bits
-			m_pBMI, // BITMAPINFO
-			DIB_RGB_COLORS, // Options
-			SRCCOPY); // Raster operation code (ROP)
+		x, // Destination x
+		y, // Destination y
+		width, // Destination width
+		height, // Destination height
+		0, // Source x
+		0, // Source y
+		DibWidth(), // Source width
+		DibHeight(), // Source height
+		m_pBits, // Pointer to bits
+		m_pBMI, // BITMAPINFO
+		DIB_RGB_COLORS, // Options
+		SRCCOPY); // Raster operation code (ROP)
 }
 
 void CDIB::Draw(CDC* pDC, CRect rect) {
@@ -212,7 +211,7 @@ void CDIB::contrast(float alpha) {
 		t = (BYTE*)GetPixelAddress(0, i);
 		for (j = 0; j < sw; j += 3)
 			median += (int)((0.1145*(*(t + j)) +
-				0.5866*(*(t + j + 1)) + 0.2989*(*(t + j + 2))));
+			0.5866*(*(t + j + 1)) + 0.2989*(*(t + j + 2))));
 	}
 	median /= (DibHeight()*DibWidth());
 	for (i = 0; i < 256; i++) {
@@ -360,7 +359,7 @@ void CDIB::oil(int radius, int intensityLevels) {
 }
 
 double CDIB::dist(int x1, int y1, int x2, int y2) {
-	return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+	return sqrt((double)((x1 - x2)*(x1 - x2)) + ((y1 - y2, 2)*(y1 - y2, 2)));
 }
 
 void CDIB::mosaic() {
@@ -434,7 +433,7 @@ void CDIB::flip(char c) {
 	}
 }
 
-bool CDIB::SaveJpeg(char* pszFileName, int quality) {/*
+bool CDIB::SaveJpeg(CString pszFileName, int quality) {
 	if (m_pBMFH == 0) return false;
 
 	// ------------------------------------------------------------------
@@ -444,9 +443,9 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {/*
 	jpeg_create_compress(&cinfo);
 	// ------------------------------------------------------------------
 	FILE * outfile; // Ausgabedatei festlegen
-	if ((outfile = fopen(pszFileName, "wb")) == 0) {
+	if ((outfile = _wfopen(pszFileName, L"wb")) == 0) {
 		CString s;
-		s.Format("can't open %s\n", pszFileName);
+		s.Format(L"can't open %s\n", pszFileName);
 		AfxMessageBox(s);
 		return false;
 	}
@@ -482,10 +481,10 @@ bool CDIB::SaveJpeg(char* pszFileName, int quality) {/*
 	delete[] line;
 	jpeg_destroy_compress(&cinfo); // Ressourcen freigeben
 
-	return true;*/
+	return true;
 }
 
-bool CDIB::LoadJpeg(char* pszFileName) {/*
+bool CDIB::LoadJpeg(CString pszFileName) {
 	if (m_pBMFH != 0) delete[] m_pBMFH; // CDIB sollte leer sein
 
 	// ------------------------------------------------------------------
@@ -495,9 +494,9 @@ bool CDIB::LoadJpeg(char* pszFileName) {/*
 	jpeg_create_decompress(&cinfo);
 	// ------------------------------------------------------------------
 	FILE * infile; // Datei öffnen
-	if ((infile = fopen(pszFileName, "rb")) == 0) {
+	if ((infile = _wfopen(pszFileName, L"rb")) == 0) {
 		CString s;
-		s.Format("can't open %s", pszFileName);
+		s.Format(L"can't open %s", pszFileName);
 		AfxMessageBox(s);
 		return false;
 	}
@@ -554,5 +553,5 @@ bool CDIB::LoadJpeg(char* pszFileName) {/*
 	jpeg_destroy_decompress(&cinfo);
 	fclose(infile);
 
-	return true;*/
+	return true;
 }
