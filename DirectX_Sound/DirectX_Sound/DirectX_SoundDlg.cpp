@@ -148,24 +148,24 @@ void CDirectX_SoundDlg::OnBnClickedButton1()
 	/* // Frequenzen einzeln in Soundbuffer schreiben
 	void *lpvPtr1, *lpvPtr2; DWORD dwBytes1, dwBytes2;
 	if (!m_ds.LockBuffer(lpDSBSecondary, 0, 2, // we use the first 2 seconds
-		&lpvPtr1, // get pointer 1
-		&dwBytes1, // get bytes available there
-		&lpvPtr2, // get pointer 2 (the buffer is circular)
-		&dwBytes2)) // get bytes available there
-		return; // false;
+	&lpvPtr1, // get pointer 1
+	&dwBytes1, // get bytes available there
+	&lpvPtr2, // get pointer 2 (the buffer is circular)
+	&dwBytes2)) // get bytes available there
+	return; // false;
 	// write a sinus sound now (88040/63 = 1397 Hz)
 	DWORD i; short int *t; // points to 16 Bit
 	for (i = 0, t = (short int*)lpvPtr1; i<(dwBytes1 + dwBytes2); i += 4, t += 2) {
-		if (i == dwBytes1) t = (short int*)lpvPtr2;
-		// 2 channels with 16 Bit each
-		*t = *(t + 1) = (short int)(sin(i / 10.0) * 30000);
+	if (i == dwBytes1) t = (short int*)lpvPtr2;
+	// 2 channels with 16 Bit each
+	*t = *(t + 1) = (short int)(sin(i / 10.0) * 30000);
 	}
 	if (!m_ds.UnlockBuffer(lpDSBSecondary,
-		lpvPtr1, // pointer 1
-		dwBytes1, // bytes written there
-		lpvPtr2, // pointer 2
-		dwBytes2)) // bytes written there
-		return; // false;
+	lpvPtr1, // pointer 1
+	dwBytes1, // bytes written there
+	lpvPtr2, // pointer 2
+	dwBytes2)) // bytes written there
+	return; // false;
 	*/
 
 	m_ds.GenerateSound(lpDSBSecondary, 0, 2, 264);
@@ -258,7 +258,7 @@ void CDirectX_SoundDlg::Tonleiter() {
 				return;
 			return;
 		}
-		
+
 		if (((CButton*)GetDlgItem(IDC_CHECK1))->GetCheck()) {
 			// TODO: Use guitar sound for major scale
 			m_ds.GenerateSound(lpDSBSecondary, buffnr * 2, 2, ton[j]);
@@ -361,7 +361,7 @@ void CDirectX_SoundDlg::OnBnClickedButton5()
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	m_ds.Stop(lpDSBSecondary);
 	m_ds.GenerateSound(lpDSBSecondary, 0, 4, 0);
-	
+
 	for (int i = 0; i < 3; i++) {
 		m_ds.Stop(lpDSBTri[i]);
 	}
@@ -389,7 +389,7 @@ void CDirectX_SoundDlg::OnBnClickedButton4()
 			m_ds.GenerateSound(lpDSBTri[i], 0, 2, ton[2 * i]);
 		}
 	}
-	
+
 	for (int i = 0; i < 3; i++) {
 		if (!m_ds.Play(lpDSBTri[i], true))
 			OnCancel();

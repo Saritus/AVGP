@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MCIObject.h"
 
-
 CMCIObject::CMCIObject() {
 	// Membervariablen initialisieren
 	m_op.dwCallback = 0;
@@ -28,7 +27,7 @@ bool CMCIObject::OpenFile(LPCWSTR pszFileName)
 		MCIError();
 		return false;
 	}
-	
+
 	MCI_SET_PARMS t;
 	t.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
 	if ((m_Result = mciSendCommand(m_op.wDeviceID,
@@ -61,7 +60,7 @@ bool CMCIObject::OpenAudioCD(LPCWSTR drive, BYTE &tracks) {
 		MCIError();
 		return false;
 	}
-	
+
 	// Ask for number of tracks on CD
 	MCI_STATUS_PARMS status;
 	status.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;

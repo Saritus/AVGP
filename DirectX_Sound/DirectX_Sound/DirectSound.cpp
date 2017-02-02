@@ -137,7 +137,7 @@ bool CDirectSound::GenerateSound(LPDIRECTSOUNDBUFFER buf, DWORD offset, DWORD le
 		return false;
 	// write a sinus sound now
 	DWORD i; short int *t; // points to 16 Bit
-	for (i = 0, t = (short int*)lpvPtr1; i<(dwBytes1 + dwBytes2); i += 4, t += 2) {
+	for (i = 0, t = (short int*)lpvPtr1; i < (dwBytes1 + dwBytes2); i += 4, t += 2) {
 		if (i == dwBytes1)
 			t = (short int*)lpvPtr2;
 		*t = *(t + 1) = (short int)(sin(i / (pcmwf.nAvgBytesPerSec / (6.283185*f))) * 30000);

@@ -8,18 +8,18 @@
 // CDirectX_SoundDlg-Dialogfeld
 class CDirectX_SoundDlg : public CDialogEx
 {
-// Konstruktion
+	// Konstruktion
 public:
 	CDirectX_SoundDlg(CWnd* pParent = NULL);	// Standardkonstruktor
 
-// Dialogfelddaten
+	// Dialogfelddaten
 	enum { IDD = IDD_DIRECTX_SOUND_DIALOG };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV-Unterstützung
 
 
-// Implementierung
+	// Implementierung
 protected:
 	HICON m_hIcon;
 	CDirectSound m_ds;

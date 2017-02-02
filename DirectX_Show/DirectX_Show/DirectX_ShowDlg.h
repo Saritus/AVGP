@@ -10,18 +10,18 @@
 // CDirectX_ShowDlg-Dialogfeld
 class CDirectX_ShowDlg : public CDialogEx
 {
-// Konstruktion
+	// Konstruktion
 public:
 	CDirectX_ShowDlg(CWnd* pParent = NULL);	// Standardkonstruktor
 
-// Dialogfelddaten
+	// Dialogfelddaten
 	enum { IDD = IDD_DIRECTX_SHOW_DIALOG };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV-Unterstützung
 
 
-// Implementierung
+	// Implementierung
 protected:
 	HICON m_hIcon;
 
@@ -37,7 +37,7 @@ public:
 	afx_msg LONG GetIt(UINT wparam, LONG lparam);
 
 
-	
+
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnBnClickedButton2();

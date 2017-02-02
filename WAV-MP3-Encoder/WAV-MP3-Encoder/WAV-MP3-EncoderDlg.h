@@ -8,18 +8,18 @@
 // CWAVMP3EncoderDlg-Dialogfeld
 class CWAVMP3EncoderDlg : public CDialogEx
 {
-// Konstruktion
+	// Konstruktion
 public:
 	CWAVMP3EncoderDlg(CWnd* pParent = NULL);	// Standardkonstruktor
 
-// Dialogfelddaten
+	// Dialogfelddaten
 	enum { IDD = IDD_WAVMP3ENCODER_DIALOG };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV-Unterstützung
 
 
-// Implementierung
+	// Implementierung
 protected:
 	HICON m_hIcon;
 

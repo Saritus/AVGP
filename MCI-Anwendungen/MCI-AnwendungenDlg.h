@@ -8,18 +8,18 @@
 // CMCIAnwendungenDlg-Dialogfeld
 class CMCIAnwendungenDlg : public CDialogEx
 {
-// Konstruktion
+	// Konstruktion
 public:
 	CMCIAnwendungenDlg(CWnd* pParent = NULL);	// Standardkonstruktor
 
-// Dialogfelddaten
+	// Dialogfelddaten
 	enum { IDD = IDD_MCIANWENDUNGEN_DIALOG };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV-Unterstützung
 
 
-// Implementierung
+	// Implementierung
 protected:
 	HICON m_hIcon;
 	CMCIObject mci;

@@ -269,7 +269,7 @@ void CDirectX_3DDlg::OnBnClickedButton2()
 		o[1].Rotate(-0.01f, -0.01f, 0.0f);
 
 		evaluate_keys();
-			
+
 		m_d3d.BeginRender();
 		if (!m_d3d.Render(o, 2)) {
 			AfxMessageBox(L"Szene konnte nicht gerendert werden"); return;

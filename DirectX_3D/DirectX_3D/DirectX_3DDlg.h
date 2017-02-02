@@ -9,18 +9,18 @@
 // CDirectX_3DDlg-Dialogfeld
 class CDirectX_3DDlg : public CDialogEx
 {
-// Konstruktion
+	// Konstruktion
 public:
 	CDirectX_3DDlg(CWnd* pParent = NULL);	// Standardkonstruktor
 
-// Dialogfelddaten
+	// Dialogfelddaten
 	enum { IDD = IDD_DIRECTX_3D_DIALOG };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV-Unterstützung
 
 
-// Implementierung
+	// Implementierung
 protected:
 	HICON m_hIcon;
 
